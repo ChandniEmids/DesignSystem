@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component Inventory — ClearPath FDO</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css" />
+  <style>
+/* ── Page header ── */
+.page-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+.page-subtitle { font-size: 14px; color: var(--text-secondary); margin-top: 8px; }
+
+/* ── Section ── */
+.section { margin-top: 64px; }
+.section:first-of-type { margin-top: 0; }
+.section-heading {
+  font-size: 11px; font-weight: 700; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: .08em;
+  padding-bottom: 16px; border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+}
+
+/* ── Demo canvas ── */
+.demo-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
+.demo-block {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.demo-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: .04em; text-transform: uppercase; }
+
+/* ────────────────────────────
+   COMPONENT STYLES (verbatim)
+──────────────────────────── */
+
+/* Buttons */
+.btn-primary {
+  height: 40px; background: var(--cta-gradient); color: white; border: none;
+  border-radius: 8px; font-family: inherit; font-size: 14px; font-weight: 600;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 0 24px;
+  box-shadow: 0 2px 8px rgba(20,58,195,.25);
+  transition: opacity .15s, transform .1s, box-shadow .15s;
+}
+.btn-primary:hover { opacity: .92; box-shadow: 0 4px 12px rgba(20,58,195,.35); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled { opacity: .55; cursor: not-allowed; }
+
+.btn-secondary {
+  height: 40px; background: var(--bg-surface); color: var(--text-primary);
+  border: 1.5px solid var(--border-input); border-radius: 8px;
+  font-family: inherit; font-size: 14px; font-weight: 500;
+  cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 0 24px; transition: background .15s;
+}
+.btn-secondary:hover { background: var(--nav-item-hover-bg); }
+
+.action-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 32px; padding: 0 16px; border-radius: 8px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid transparent; transition: all .13s; white-space: nowrap;
+}
+.action-btn-success { background: #f0fdf4; color: #16a34a; border-color: #bbf7d0; }
+.action-btn-success:hover { background: #dcfce7; border-color: #86efac; }
+.action-btn-danger  { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+.action-btn-danger:hover  { background: #fee2e2; border-color: #fca5a5; }
+.action-btn-warning { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+.action-btn-warning:hover { background: #fef3c7; border-color: #fbbf24; }
+.action-btn-neutral { background: var(--nav-item-hover-bg); color: var(--text-secondary); border-color: var(--border-input); }
+.action-btn-neutral:hover { background: var(--border-subtle); color: var(--text-primary); }
+
+/* Inputs */
+.field { display: flex; flex-direction: column; gap: 8px; }
+.field label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.field input, .field select, .field textarea {
+  height: 40px; padding: 0 12px;
+  border: 1.5px solid var(--border-input); border-radius: 8px;
+  font-family: inherit; font-size: 14px; color: var(--text-primary);
+  background: var(--bg-input); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.field textarea { height: auto; padding: 10px 12px; resize: vertical; }
+.field input::placeholder, .field textarea::placeholder { color: var(--text-muted); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(20,58,195,.12);
+}
+.field input.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.10); }
+.field-error { font-size: 12px; color: #ef4444; }
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  padding-right: 34px; cursor: pointer; appearance: none;
+}
+.password-wrap { position: relative; }
+.password-wrap input { padding-right: 40px; width: 100%; }
+.toggle-pw {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; padding: 2px;
+}
+.toggle-pw:hover { color: var(--text-secondary); }
+
+/* Search bar */
+.search-bar { display: flex; gap: 8px; align-items: center; background: var(--bg-input); border: 1.5px solid var(--border-input); border-radius: 8px; padding: 0 16px; height: 40px; }
+.search-bar:focus-within { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(20,58,195,.12); }
+.search-bar i { color: var(--text-muted); font-size: 16px; flex-shrink: 0; }
+.search-bar input { flex: 1; border: none; outline: none; background: transparent; font-size: 14px; color: var(--text-primary); font-family: inherit; }
+.search-bar input::placeholder { color: var(--text-muted); }
+.search-kbd { font-size: 10px; font-weight: 600; color: var(--text-muted); background: var(--border-subtle); padding: 2px 6px; border-radius: 4px; flex-shrink: 0; }
+
+/* Checkbox */
+.check-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+.check-label input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--brand-blue); cursor: pointer; }
+
+/* Toggle switch */
+.tgl { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+.tgl input { opacity: 0; width: 0; height: 0; position: absolute; }
+.tgl-track { position: absolute; inset: 0; border-radius: 99px; background: var(--border-input); cursor: pointer; transition: background .2s; }
+.tgl input:checked + .tgl-track { background: #16a34a; }
+.tgl-track::after { content: ''; position: absolute; left: 3px; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.tgl input:checked + .tgl-track::after { transform: translateX(18px); }
+
+/* Password strength */
+.pw-strength { display: flex; gap: 8px; margin-top: 8px; }
+.pw-bar { height: 4px; flex: 1; border-radius: 2px; background: var(--border-input); }
+.pw-bar.weak   { background: #ef4444; }
+.pw-bar.fair   { background: #f59e0b; }
+.pw-bar.strong { background: #16a34a; }
+.pw-label { font-size: 12px; color: var(--text-muted); margin-top: 8px; }
+
+/* Status chips */
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 99px; white-space: nowrap; }
+.chip-ongoing  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.chip-completed { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.chip-cancelled { background: #f3f4f6; color: var(--text-secondary); border: 1px solid #e5e7eb; }
+.chip-future    { background: #F5F7FF; color: #143AC3; border: 1.5px dashed #A5B8FC; }
+.chip-pending   { background: #fffbeb; color: #92400e; border: 1px solid #fcd34d; }
+.chip-upcoming  { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+.pulse-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: pulse-dot 1.5s ease-in-out infinite; }
+
+
+/* Appointment type tags */
+.type-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; }
+[data-type="tour"]    .type-tag, .type-tag[data-type="tour"]    { background: #FFF3EE; color: #9A3412; }
+[data-type="counsel"] .type-tag, .type-tag[data-type="counsel"] { background: #E8F6FA; color: #0C5E73; }
+[data-type="group"]   .type-tag, .type-tag[data-type="group"]   { background: #FCF0FD; color: #A21CAF; }
+[data-type="psych"]   .type-tag, .type-tag[data-type="psych"]   { background: #F2F9E8; color: #4A6B00; }
+[data-type="medical"] .type-tag, .type-tag[data-type="medical"] { background: #F1F5F9; color: #1E293B; }
+
+/* Availability badges */
+.avail-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 99px; }
+.avail-badge.avail { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.avail-badge.busy  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.avail-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; }
+.avail-dot.green { background: #22c55e; }
+.avail-dot.red   { background: #ef4444; }
+
+/* Live badge */
+.live-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; color: #0f766e; background: #f0fdfa; border: 1px solid #99f6e4; padding: 2px 8px; border-radius: 99px; }
+.cancel-reason-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: #fff1f2; color: #b91c1c; border: 1px solid #fecaca; }
+.lab-cap-chip { display: inline-flex; align-items: center; font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 99px; background: #F1F5F9; color: #1E293B; border: 1px solid #E2E8F0; }
+.conflict-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.patient-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 99px; background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
+.patient-pill.lead { background: #fff7ed; color: #9a3412; border-color: #fed7aa; }
+.pt-filter-chip { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 0 10px; height: 26px; border-radius: 99px; background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border-input); cursor: pointer; transition: background .15s, border-color .15s, color .15s; }
+.pt-filter-chip:hover { background: var(--nav-item-hover-bg); color: var(--text-primary); }
+.pt-filter-chip.active { background: #EEF2FF; color: var(--brand-blue); border-color: var(--brand-blue); font-weight: 600; }
+.time-slot { padding:5px 11px; border-radius:8px; font-size:11.5px; font-weight:600; border:1.5px solid var(--border-input); cursor:pointer; color:var(--text-secondary); background:var(--bg-surface); transition:all .15s ease; white-space:nowrap; letter-spacing:.01em; }
+.time-slot:hover:not(.taken) { border-color:var(--teal-400); color:var(--teal-700); background:var(--teal-50); }
+.time-slot.selected { border:2px solid var(--teal-600); background:var(--teal-600); color:white; box-shadow:0 0 0 2px rgba(13,148,136,.15); }
+.time-slot.taken { background:var(--border-subtle); color:var(--text-muted); cursor:not-allowed; border-color:var(--border-subtle); text-decoration:line-through; opacity:.6; }
+.live-dot   { width: 6px; height: 6px; border-radius: 50%; background: #0d9488; animation: pulse-dot 1.5s ease-in-out infinite; }
+
+/* Card eyebrow */
+.card-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: #0d9488; background: #F0FDFA; border: 1px solid #CCFBF1; border-radius: 99px; padding: 3px 10px; }
+
+/* Alerts */
+.alert-error { display: flex; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 8px; padding: 16px; font-size: 13px; color: #991b1b; gap: 8px; align-items: center; }
+.alert-success { display: flex; background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 8px; padding: 16px; font-size: 13px; color: #065f46; gap: 8px; align-items: flex-start; }
+.alert-warning { display: flex; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px; font-size: 12px; font-weight: 500; color: #92400e; gap: 8px; align-items: center; }
+
+/* Toast */
+.toast { display: flex; align-items: center; gap: 8px; background: var(--text-primary); color: white; font-size: 13px; font-weight: 500; padding: 16px; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,.2); min-width: 260px; max-width: 360px; }
+.toast-success { background: #065f46; }
+.toast-error   { background: #7f1d1d; }
+
+/* Security note */
+.security-note { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: var(--text-muted); }
+
+/* Divider */
+.divider { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
+.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border-subtle); }
+
+/* Spinner */
+.spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: white; border-radius: 50%; animation: spin .6s linear infinite; }
+.spinner-dark { width: 16px; height: 16px; border: 2px solid var(--border-input); border-top-color: var(--brand-blue); border-radius: 50%; animation: spin .6s linear infinite; }
+ }
+
+/* Skeleton */
+.skeleton { border-radius: 4px; background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%); background-size: 800px 100%; animation: shimmer 1.5s infinite; }
+ 100%{background-position:400px 0} }
+
+/* User avatar */
+.user-avatar-lg { width: 40px; height: 40px; border-radius: 50%; background: var(--brand-path); color: white; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+
+/* Appointment card */
+.appt-card {
+  background: var(--bg-surface); border-radius: 8px;
+  border-left: 3px solid;
+  padding: 16px; cursor: pointer;
+  transition: box-shadow .15s, transform .15s;
+  width: 240px;
+}
+.appt-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); transform: translateY(-1px); }
+.appt-card-tour    { border-color: #9A3412; background: #FFF3EE; }
+.appt-card-counsel { border-color: #0C5E73; background: #E8F6FA; }
+.appt-card-group   { border-color: #A21CAF; background: #FCF0FD; }
+.appt-card-psych   { border-color: #4A6B00; background: #F2F9E8; }
+.appt-card-medical { border-color: #1E293B; background: #F1F5F9; }
+.appt-card-type { font-size: 12px; font-weight: 700; margin-bottom: 0; }
+.appt-card-tour    .appt-card-type { color: #9A3412; }
+.appt-card-counsel .appt-card-type { color: #0C5E73; }
+.appt-card-group   .appt-card-type { color: #A21CAF; }
+.appt-card-psych   .appt-card-type { color: #4A6B00; }
+.appt-card-medical .appt-card-type { color: #1E293B; }
+.appt-card-patient { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+.appt-card-meta { font-size: 11px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; margin-top: 0; }
+.appt-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+
+/* Type card */
+.type-card {
+  background: var(--bg-surface); border: 1.5px solid var(--border-subtle);
+  border-radius: 8px; padding: 24px 16px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  width: 175px;
+}
+.type-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.07); }
+.type-card.selected { border: 2px solid #0d9488; box-shadow: 0 0 0 3px rgba(13,148,136,.12); }
+.type-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.type-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+/* Staff card */
+.staff-card {
+  display: flex; align-items: center; gap: 8px;
+  padding: 16px; border-radius: 8px; cursor: pointer;
+  border: 1.5px solid var(--border-subtle); background: var(--bg-surface);
+  transition: all .18s; position: relative; width: 220px;
+}
+.staff-card:hover { border-color: #2dd4bf; background: #f0fdfa; }
+.staff-card.selected { border: 2px solid #0d9488; background: #f0fdfa; box-shadow: 0 0 0 3px rgba(13,148,136,.1); }
+.staff-avatar { width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; }
+.staff-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.staff-role { font-size: 11px; color: var(--text-secondary); margin-top: 0; }
+.staff-status { position: absolute; top: 8px; right: 8px; display: flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 99px; }
+.staff-status.avail { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.staff-status.busy  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+
+/* Room card */
+.room-card {
+  background: var(--bg-surface); border: 1.5px solid var(--border-subtle);
+  border-radius: 8px; padding: 16px; cursor: pointer;
+  transition: all .2s; position: relative; width: 200px;
+}
+.room-card:hover { border-color: #2dd4bf; box-shadow: 0 4px 16px rgba(0,0,0,.06); transform: translateY(-1px); }
+.room-card.selected { border: 2px solid #0d9488; background: #f0fdfa; box-shadow: 0 0 0 3px rgba(13,148,136,.1); }
+.room-status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 99px; margin-bottom: 8px; }
+.room-status-badge.avail { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+.room-status-badge.busy  { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+.room-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 0; }
+.room-type { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.room-capacity { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+.room-features { display: flex; flex-wrap: wrap; gap: 8px; }
+.room-feature { font-size: 10px; font-weight: 500; color: var(--text-muted); background: var(--border-subtle); padding: 2px 7px; border-radius: 99px; }
+
+/* Time slot */
+.time-slot-pill { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-weight: 600; border: 1.5px solid var(--border-input); cursor: pointer; color: var(--text-secondary); background: var(--bg-surface); transition: all .15s; }
+.time-slot-pill:hover { border-color: #2dd4bf; color: #0f766e; background: #f0fdfa; }
+.time-slot-pill.selected { border: 2px solid #0d9488; background: #0d9488; color: white; }
+.time-slot-pill.taken { background: var(--border-subtle); color: var(--text-muted); cursor: not-allowed; border-color: var(--border-subtle); text-decoration: line-through; opacity: .6; }
+
+/* Stepper */
+.stepper-rail-demo { width: 220px; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 24px 0; background: var(--bg-surface); }
+.step-item { display: flex; align-items: flex-start; gap: 8px; padding: 8px; border-radius: 8px; cursor: pointer; margin: 0 8px; }
+.step-item:hover:not(.active) { background: var(--nav-item-hover-bg); }
+.step-item.active { background: #f0fdfa; }
+.step-item.completed .step-num { background: #0d9488; border-color: #0d9488; color: white; }
+.step-connector { width: 2px; height: 24px; background: var(--border-subtle); margin: 0 0 0 27px; border-radius: 2px; }
+.step-connector.done { background: #2dd4bf; }
+.step-num { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--border-input); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-muted); background: var(--bg-surface); }
+.step-item.active .step-num { border-color: #0d9488; background: #0d9488; color: white; }
+.step-info { flex: 1; padding-top: 0; }
+.step-label { font-size: 10px; font-weight: 700; color: var(--text-muted); letter-spacing: .08em; text-transform: uppercase; }
+.step-item.active .step-label { color: #0f766e; }
+.step-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 0; }
+.step-item.active .step-title { color: #115e59; }
+.step-desc { font-size: 11px; color: var(--text-muted); margin-top: 0; }
+.step-item.active .step-desc { color: #0d9488; }
+
+/* Step pills */
+.step-pills { display: flex; gap: 8px; align-items: center; }
+.step-pill { height: 4px; border-radius: 4px; }
+.step-pill.done   { width: 16px; background: #2dd4bf; }
+.step-pill.active { width: 32px; background: #0d9488; }
+.step-pill.todo   { width: 16px; background: var(--border-input); }
+
+/* Breadcrumb */
+.breadcrumb { display: flex; align-items: center; gap: 8px; }
+.breadcrumb span { font-size: 12px; color: var(--text-muted); }
+.breadcrumb span.current { color: var(--text-primary); font-weight: 500; }
+.breadcrumb i { font-size: 10px; color: var(--text-muted); }
+
+/* Attendance module */
+.att-module { border-radius: 8px; border: 1.5px solid var(--border-subtle); overflow: hidden; width: 300px; }
+.att-module-head { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; background: var(--bg-surface); border-bottom: 1px solid var(--border-subtle); }
+.att-module-title { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .06em; }
+.att-present-badge { font-size: 11px; font-weight: 700; color: #16a34a; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 2px 8px; border-radius: 99px; }
+.att-mark-all { font-size: 11px; font-weight: 600; color: var(--brand-blue); background: none; border: none; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+.att-mark-all:hover { background: #F0F3FF; }
+.att-row { display: flex; align-items: center; gap: 8px; padding: 8px 16px; cursor: pointer; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface); transition: background .12s; }
+.att-row:last-child { border-bottom: none; }
+.att-row:hover { background: var(--nav-item-hover-bg); }
+.att-row.att-present { background: #f0fdf4; }
+.att-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: var(--nav-active-bg); color: var(--brand-blue); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+.att-row.att-present .att-avatar { background: #dcfce7; color: #16a34a; }
+.att-name { flex: 1; font-size: 12px; font-weight: 500; color: var(--text-primary); }
+.att-row.att-present .att-name { color: #15803d; font-weight: 600; }
+.att-cb { width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0; border: 1.5px solid var(--border-input); background: var(--bg-surface); display: flex; align-items: center; justify-content: center; transition: all .12s; }
+.att-row.att-present .att-cb { background: #16a34a; border-color: #16a34a; }
+
+/* Visitor check-in */
+.visitor-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; border: 1.5px solid var(--border-subtle); border-radius: 8px; background: var(--bg-surface); width: 300px; }
+.visitor-info { display: flex; align-items: center; gap: 8px; }
+.visitor-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, #d97706, #b45309); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+.visitor-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.visitor-sub  { font-size: 11px; color: var(--text-secondary); margin-top: 0; }
+
+/* Detail panel header */
+.panel-header { display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface); border-radius: 8px 8px 0 0; }
+.panel-close { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; background: none; border: none; color: var(--text-muted); }
+.panel-close:hover { background: var(--nav-item-hover-bg); color: var(--text-primary); }
+
+/* Modal */
+.modal-demo { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 24px; width: 400px; box-shadow: 0 8px 40px rgba(0,0,0,.14); }
+.modal-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.modal-subtitle { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+
+/* Filter bar */
+.filter-bar-demo { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; width: 100%; }
+.filter-select { height: 32px; padding: 0 10px; border: 1.5px solid var(--border-input); border-radius: 8px; font-size: 12px; color: var(--text-primary); background: var(--bg-input); outline: none; font-family: inherit; appearance: none; padding-right: 28px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+.filter-select:focus { border-color: var(--brand-blue); }
+
+/* User dropdown */
+.dropdown-demo { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.10); min-width: 200px; overflow: hidden; }
+.dropdown-info { padding: 16px; border-bottom: 1px solid var(--border-subtle); }
+.dropdown-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.dropdown-email { font-size: 11px; color: var(--text-muted); margin-top: 0; }
+.dropdown-item { display: flex; align-items: center; gap: 8px; padding: 8px 16px; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: background .12s; border: none; background: none; font-family: inherit; width: 100%; }
+.dropdown-item:hover { background: var(--nav-item-hover-bg); color: var(--text-primary); }
+.dropdown-item.logout { color: #ef4444; }
+.dropdown-item.logout:hover { background: #fef2f2; color: #dc2626; }
+
+/* Section card */
+.section-card { background: var(--bg-surface); border-radius: 8px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.05); }
+.section-label-inner { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+/* ── Color System ── */
+.cs-group-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle); }
+.cs-swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.cs-swatch { display: flex; flex-direction: column; gap: 8px; }
+.cs-block { width: 64px; height: 52px; border-radius: 8px; border: 1px solid rgba(0,0,0,.07); flex-shrink: 0; }
+.cs-token { font-size: 10px; font-weight: 700; color: var(--text-primary); white-space: nowrap; }
+.cs-hex   { font-size: 10px; color: var(--text-muted); font-family: 'Courier New', monospace; }
+.cs-use   { font-size: 9px; color: var(--text-muted); max-width: 72px; line-height: 1.35; }
+.cs-appt-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
+.cs-appt-row:last-child { border-bottom: none; }
+.cs-appt-swatch { width: 24px; height: 24px; border-radius: 5px; border: 1.5px solid; flex-shrink: 0; }
+.cs-convention { font-size: 12px; color: var(--text-secondary); background: var(--border-subtle); border: 1px solid var(--border-input); border-radius: 8px; padding: 16px; margin-bottom: 32px; line-height: 1.75; }
+.cs-convention code { font-size: 11px; font-family: 'Courier New', monospace; background: rgba(0,0,0,.06); padding: 1px 5px; border-radius: 3px; }
+
+/* ── Button System ── */
+.btn-ghost { height:40px; background:transparent; color:var(--text-secondary); border:1.5px solid transparent; border-radius:8px; font-family:inherit; font-size:14px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:0 16px; transition:all .15s; }
+.btn-ghost:hover { background:var(--nav-item-hover-bg); color:var(--text-primary); }
+.btn-ghost:disabled { opacity:.5; cursor:not-allowed; }
+.btn-icon { width:36px; height:36px; background:transparent; color:var(--text-muted); border:1.5px solid transparent; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all .15s; flex-shrink:0; padding:0; font-family:inherit; }
+.btn-icon:hover { background:var(--nav-item-hover-bg); color:var(--text-primary); border-color:var(--border-input); }
+.btn-add { height:40px; width:100%; background:#f0fdfa; color:#0f766e; border:1.5px dashed #2dd4bf; border-radius:8px; font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:all .15s; }
+.btn-add:hover { background:#ccfbf1; border-color:#0d9488; }
+.btn-sm { height:32px !important; padding:0 12px !important; font-size:12px !important; }
+.btn-lg { height:48px !important; padding:0 28px !important; font-weight:700 !important; }
+
+/* Button audit display */
+.btab { width:100%; border-collapse:collapse; }
+.btab th { font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:.07em; text-align:left; padding:0 16px 8px 0; border-bottom:2px solid var(--border-subtle); white-space:nowrap; }
+.btab td { padding:8px 16px 8px 0; border-bottom:1px solid var(--border-subtle); vertical-align:top; font-size:12px; color:var(--text-primary); line-height:1.5; }
+.btab tr:last-child td { border-bottom:none; }
+.btab td:first-child { font-weight:600; white-space:nowrap; }
+.bp { display:inline-block; font-size:10px; font-weight:700; padding:2px 7px; border-radius:3px; white-space:nowrap; }
+.bp-err { background:#fef2f2; color:#b91c1c; }
+.bp-warn { background:#fffbeb; color:#92400e; }
+.bp-ok  { background:#f0fdf4; color:#15803d; }
+.bcode { font-size:11px; font-family:'Courier New',monospace; background:var(--border-subtle); padding:1px 5px; border-radius:3px; }
+.btn-state-item { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.btn-state-lbl { font-size:9px; color:var(--text-muted); font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+
+/* ── Group Headers ── */
+.group-header { padding: 32px 0 24px; margin-top: 64px; }
+.group-header.first { margin-top: 0; padding-top: 0; }
+.group-tag { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 3px 10px; border-radius: 99px; margin-bottom: 8px; }
+.group-tag-foundation { background: #F0F3FF; color: var(--brand-blue); }
+.group-tag-components { background: #f0fdfa; color: #0f766e; }
+.group-title { font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+.group-desc { font-size: 13px; color: var(--text-secondary); margin-top: 8px; }
+
+/* ── Typography System ── */
+.ts-table { width: 100%; border-collapse: collapse; }
+.ts-table th { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; text-align: left; padding: 0 16px 8px 0; border-bottom: 2px solid var(--border-subtle); white-space: nowrap; }
+.ts-table td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+.ts-table tr:last-child td { border-bottom: none; }
+.ts-table tr.ts-group-sep td { border-top: 2px solid var(--border-subtle); padding-top: 16px; }
+.ts-preview { min-width: 220px; max-width: 280px; color: var(--text-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.ts-token { display: inline-block; font-size: 11px; font-weight: 600; font-family: 'Courier New', monospace; color: var(--brand-blue); background: var(--nav-active-bg); padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+.ts-spec { font-size: 11px; color: var(--text-muted); font-family: 'Courier New', monospace; white-space: nowrap; }
+.ts-use { font-size: 11px; color: var(--text-secondary); max-width: 200px; line-height: 1.4; }
+.ts-badge { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 4px; text-transform: uppercase; letter-spacing: .04em; margin-left: 8px; vertical-align: middle; }
+.ts-badge-h { background: #F0F3FF; color: var(--brand-blue); }
+.ts-badge-b { background: #f3f4f6; color: var(--text-muted); }
+.ts-family-row { display: flex; gap: 32px; flex-wrap: wrap; margin-bottom: 24px; }
+.ts-family-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 8px; min-width: 220px; }
+.ts-family-label { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; }
+.ts-family-name { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.ts-family-meta { font-size: 11px; color: var(--text-secondary); }
+.ts-family-sample { font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6; }
+.ts-weight-row { display: flex; gap: 24px; flex-wrap: wrap; }
+.ts-weight-item { display: flex; flex-direction: column; gap: 8px; }
+.ts-weight-demo { font-size: 18px; color: var(--text-primary); }
+.ts-weight-label { font-size: 10px; color: var(--text-muted); font-family: 'Courier New', monospace; }
+
+/* ── Design-system page layout overrides ── */
+#appMain { background: rgba(255, 255, 255, 0.60); display: flex; flex-direction: column; overflow-x: visible; }
+
+/* ── Doc Documentation Layout ── */
+.doc-subheader {
+  position: sticky; top: var(--header-height); z-index: 40;
+  background: var(--bg-header); border-bottom: 1px solid #e5e7eb;
+  height: 64px; padding: 0 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0; gap: 24px;
+}
+.doc-subheader-left { display: flex; flex-direction: column; gap: 0; }
+.doc-subheader-title { font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.01em; }
+.doc-subheader-sub { font-size: 12px; color: var(--text-secondary); }
+.doc-subheader-search { position: relative; width: 260px; flex-shrink: 0; }
+.doc-subheader-search i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none; }
+.doc-subheader-search input {
+  width: 100%; height: 40px; padding: 0 12px 0 40px;
+  border: 1.5px solid var(--border-input); border-radius: 8px;
+  font-size: 14px; font-family: inherit; color: var(--text-primary);
+  background: var(--bg-input); outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.doc-subheader-search input:focus { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(20,58,195,.12); background: #fff; }
+.doc-subheader-search input::placeholder { color: var(--text-muted); }
+
+.doc-layout { display: block; flex: 1; }
+
+.doc-sidenav {
+  width: 200px; flex-shrink: 0;
+  position: sticky; top: calc(var(--header-height) + 64px);
+  height: calc(100vh - var(--header-height) - 64px);
+  overflow-y: auto; overflow-x: hidden;
+  border-right: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 16px 0 40px;
+}
+.doc-nav-group-label {
+  font-size: 10px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .08em;
+  padding: 16px 16px 6px;
+}
+.doc-nav-link {
+  display: flex; align-items: center;
+  font-size: 13px; font-weight: 500;
+  color: var(--nav-item-color); padding: 7px 16px;
+  text-decoration: none; border-left: 2px solid transparent;
+  transition: all .15s;
+}
+.doc-nav-link:hover { color: var(--text-primary); background: #f9fafb; }
+.doc-nav-link.active { color: var(--brand-blue); border-left-color: var(--brand-blue); background: var(--nav-active-bg); font-weight: 600; }
+
+.doc-content { flex: 1; padding: 40px; max-width: 1280px; min-width: 0; }
+
+.doc-section { scroll-margin-top: 144px; }
+.doc-section-divider { border: none; border-top: 1px solid #e5e7eb; margin: 64px 0 0; }
+
+/* No-results message */
+.doc-no-results { display: none; padding: 48px 0; text-align: center; color: var(--text-muted); font-size: 14px; }
+
+/* ── Color System Documentation ── */
+.cs-doc-sub { font-size: 15px; font-weight: 700; color: var(--text-primary); margin: 32px 0 12px; padding-top: 32px; letter-spacing: -0.01em; border-top: 1px solid #e5e7eb; }
+.cs-doc-sub.first { border-top: none; padding-top: 0; margin-top: 0; }
+.cs-doc-body { font-size: 13px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 16px; }
+.cs-principles { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+.cs-principle-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px; flex: 1; min-width: 160px; }
+.cs-principle-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+.cs-principle-body { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+.cs-prim-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-size: 12px; }
+.cs-prim-table th { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; text-align: left; padding: 0 16px 8px 0; border-bottom: 2px solid var(--border-subtle); white-space: nowrap; }
+.cs-prim-table td { padding: 8px 16px 8px 0; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+.cs-prim-table tr:last-child td { border-bottom: none; }
+.cs-prim-table td:first-child { font-weight: 600; font-family: 'Courier New', monospace; white-space: nowrap; color: var(--text-primary); }
+.cs-swatch-dot { display: inline-block; width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(0,0,0,.09); vertical-align: middle; flex-shrink: 0; }
+.cs-group-sep td { background: var(--border-subtle); font-size: 10px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .08em; padding: 6px 0; }
+.cs-sem-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cs-sem-table th { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; text-align: left; padding: 0 16px 8px 0; border-bottom: 2px solid var(--border-subtle); white-space: nowrap; }
+.cs-sem-table td { padding: 9px 16px 9px 0; border-bottom: 1px solid var(--border-subtle); vertical-align: top; line-height: 1.5; }
+.cs-sem-table tr:last-child td { border-bottom: none; }
+.cs-sem-table td:first-child { font-weight: 600; font-family: 'Courier New', monospace; white-space: nowrap; color: var(--brand-blue); }
+.cs-val { display: inline-flex; align-items: center; gap: 6px; }
+.cs-na { color: var(--text-muted); font-style: italic; }
+.cs-usage-list { list-style: none; padding: 0; margin: 0 0 8px; display: flex; flex-direction: column; gap: 6px; }
+.cs-usage-list li { font-size: 13px; color: var(--text-secondary); line-height: 1.55; padding-left: 16px; position: relative; }
+.cs-usage-list li::before { content: '—'; position: absolute; left: 0; color: var(--text-muted); }
+.cs-states-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.cs-states-table th { font-size: 10px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; text-align: left; padding: 0 16px 8px 0; border-bottom: 2px solid var(--border-subtle); white-space: nowrap; }
+.cs-states-table td { padding: 9px 16px 9px 0; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; font-size: 12px; color: var(--text-primary); }
+.cs-states-table tr:last-child td { border-bottom: none; }
+.cs-states-table td:first-child { font-weight: 700; white-space: nowrap; }
+.cs-section-divider { border: none; border-top: 1px solid var(--border-subtle); margin: 32px 0; }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" id="compSearch" placeholder="Search components…" oninput="filterComponents(this.value)" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="#sec-icons" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+
+      <!-- Sticky doc sub-header -->
+      <div class="doc-subheader">
+        <div class="doc-subheader-left">
+          <div class="doc-subheader-title">Color System</div>
+        </div>
+      </div>
+
+      <!-- Doc layout -->
+      <div class="doc-layout">
+
+        <!-- Doc content area -->
+        <div class="doc-content" id="docContent">
+
+          <div class="doc-no-results" id="noResults">No components match your search.</div>
+
+      <!-- ══════════ FOUNDATION ══════════ -->
+      <!-- <div class="group-header first doc-section" id="foundation">
+        <div class="group-tag group-tag-foundation"><i class="ti ti-palette" style="font-size:11px;"></i> Foundation</div>
+        <div class="group-title">Foundation</div>
+        <div class="group-desc">Design tokens — color, typography, and spacing that underpin every component.</div>
+      </div> -->
+
+            
+
+      <!-- ─────────────────── TYPOGRAPHY ─────────────────── -->
+      <div class="section doc-section" id="sec-typography">
+        <div class="section-heading">Typography</div>
+
+        <!-- Font Families -->
+        <div class="ts-family-row">
+          <div class="ts-family-card">
+            <div class="ts-family-label">Primary — UI &amp; Body</div>
+            <div class="ts-family-name" style="font-family:'Manrope', sans-serif;">Manrope</div>
+            <div class="ts-family-meta">Google Fonts · <code style="font-size:11px;font-family:monospace;">font-family:'Manrope', sans-serif</code></div>
+            <div class="ts-family-sample" style="font-family:'Manrope', sans-serif;">
+              A B C D E F G H I J K L M N<br>
+              a b c d e f g h i j k l m n<br>
+              0 1 2 3 4 5 6 7 8 9
+            </div>
+          </div>
+          <div class="ts-family-card">
+            <div class="ts-family-label">Monospace — Code &amp; Tokens</div>
+            <div class="ts-family-name" style="font-family:'Courier New',monospace;">Courier New</div>
+            <div class="ts-family-meta">System fallback · <code style="font-size:11px;font-family:monospace;">font-family:'Courier New',monospace</code></div>
+            <div class="ts-family-sample" style="font-family:'Courier New',monospace;">
+              #143AC3 · primary-500<br>
+              rgba(20,58,195,.15)<br>
+              H1 · 32px 700 · 120% lh
+            </div>
+          </div>
+          <div class="ts-family-card" style="min-width:180px;">
+            <div class="ts-family-label">Font Weights</div>
+            <div class="ts-weight-row" style="margin-top:8px;">
+              <div class="ts-weight-item">
+                <div class="ts-weight-demo" style="font-weight:400;">Ag</div>
+                <div class="ts-weight-label">400 · Regular</div>
+              </div>
+              <div class="ts-weight-item">
+                <div class="ts-weight-demo" style="font-weight:500;">Ag</div>
+                <div class="ts-weight-label">500 · Medium</div>
+              </div>
+              <div class="ts-weight-item">
+                <div class="ts-weight-demo" style="font-weight:600;">Ag</div>
+                <div class="ts-weight-label">600 · Semibold</div>
+              </div>
+              <div class="ts-weight-item">
+                <div class="ts-weight-demo" style="font-weight:700;">Ag</div>
+                <div class="ts-weight-label">700 · Bold</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Type Scale Table -->
+        <div class="demo-block" style="padding:24px 28px;overflow-x:auto;">
+          <table class="ts-table">
+            <thead>
+              <tr>
+                <th style="min-width:200px;">Preview</th>
+                <th>Token name</th>
+                <th>Size (px)</th>
+                <th>Font weight</th>
+                <th>Line height</th>
+                <th>Letter spacing</th>
+                <th>Transform</th>
+                <th>Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- ── Headings ── -->
+              <tr>
+                <td class="ts-preview" style="font-size:32px;font-weight:700;line-height:1.2;">ClearPath</td>
+                <td><span class="ts-token">H1</span><span class="ts-badge ts-badge-h">H</span></td>
+                <td class="ts-spec">32px</td>
+                <td class="ts-spec">700</td>
+                <td class="ts-spec">120%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Main Page Headers</td>
+              </tr>
+              <tr>
+                <td class="ts-preview" style="font-size:28px;font-weight:700;line-height:1.2;">Appointments</td>
+                <td><span class="ts-token">H2</span><span class="ts-badge ts-badge-h">H</span></td>
+                <td class="ts-spec">28px</td>
+                <td class="ts-spec">700</td>
+                <td class="ts-spec">120%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Primary Section Titles</td>
+              </tr>
+              <tr>
+                <td class="ts-preview" style="font-size:24px;font-weight:700;line-height:1.2;">New Appointment</td>
+                <td><span class="ts-token">H3</span><span class="ts-badge ts-badge-h">H</span></td>
+                <td class="ts-spec">24px</td>
+                <td class="ts-spec">700</td>
+                <td class="ts-spec">120%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Sub-sections / Modals</td>
+              </tr>
+              <tr>
+                <td class="ts-preview" style="font-size:20px;font-weight:700;line-height:1.2;">Patient Details</td>
+                <td><span class="ts-token">H4</span><span class="ts-badge ts-badge-h">H</span></td>
+                <td class="ts-spec">20px</td>
+                <td class="ts-spec">700</td>
+                <td class="ts-spec">120%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Component Headers</td>
+              </tr>
+              <tr>
+                <td class="ts-preview" style="font-size:16px;font-weight:700;line-height:1.2;">Room 3A · Available</td>
+                <td><span class="ts-token">H5</span><span class="ts-badge ts-badge-h">H</span></td>
+                <td class="ts-spec">16px</td>
+                <td class="ts-spec">700</td>
+                <td class="ts-spec">120%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Standard Labels / Small Headers</td>
+              </tr>
+
+              <!-- ── Body ── -->
+              <tr class="ts-group-sep">
+                <td class="ts-preview" style="font-size:14px;font-weight:400;line-height:1.43;color:var(--text-primary);">Manage patient appointments across the facility.</td>
+                <td><span class="ts-token">Body (M)</span><span class="ts-badge ts-badge-b">B</span></td>
+                <td class="ts-spec">14px</td>
+                <td class="ts-spec">400</td>
+                <td class="ts-spec">143%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Default UI / Data Text</td>
+              </tr>
+              <tr>
+                <td class="ts-preview" style="font-size:12px;font-weight:400;line-height:1.43;color:var(--text-secondary);">HIPAA-compliant · Encrypted connection</td>
+                <td><span class="ts-token">Body (S)</span><span class="ts-badge ts-badge-b">B</span></td>
+                <td class="ts-spec">12px</td>
+                <td class="ts-spec">400</td>
+                <td class="ts-spec">143%</td>
+                <td class="ts-spec">0</td>
+                <td class="ts-spec">—</td>
+                <td class="ts-use">Meta-data / Helper Text</td>
+              </tr>
+
+
+            </tbody>
+          </table>
+
+          <!-- Legend -->
+          <div style="display:flex;gap:16px;margin-top:24px;padding-top:16px;border-top:1px solid var(--border-subtle);flex-wrap:wrap;">
+            <span style="font-size:11px;color:var(--text-muted);">Legend:</span>
+            <span style="font-size:11px;color:var(--text-secondary);display:flex;align-items:center;gap:5px;"><span class="ts-badge ts-badge-h" style="margin:0;">H</span> Heading</span>
+            <span style="font-size:11px;color:var(--text-secondary);display:flex;align-items:center;gap:5px;"><span class="ts-badge ts-badge-b" style="margin:0;">B</span> Body</span>
+          </div>
+        </div>
+
+        <!-- Line Heights & Spacing reference -->
+        <!-- <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+          <div class="demo-block">
+            <div class="demo-label">Line Heights</div>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+              <div style="display:flex;align-items:baseline;gap:16px;">
+                <span class="ts-spec" style="width:32px;">1.0</span>
+                <div style="font-size:13px;font-weight:600;color:var(--text-primary);line-height:1;background:linear-gradient(transparent calc(1em - 1px),rgba(20,58,195,.12) calc(1em - 1px),rgba(20,58,195,.12) calc(1em),transparent calc(1em));padding:2px 0;">Badges · chips · overlines — single-line only</div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:16px;">
+                <span class="ts-spec" style="width:32px;">1.3</span>
+                <div style="font-size:13px;color:var(--text-primary);line-height:1.3;">Heading text that may<br>wrap to two lines</div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:16px;">
+                <span class="ts-spec" style="width:32px;">1.4</span>
+                <div style="font-size:13px;color:var(--text-primary);line-height:1.4;">Label text, compact<br>reading comfort</div>
+              </div>
+              <div style="display:flex;align-items:baseline;gap:16px;">
+                <span class="ts-spec" style="width:32px;">1.5</span>
+                <div style="font-size:13px;color:var(--text-primary);line-height:1.5;">Body text — standard<br>comfortable reading</div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-block">
+            <div class="demo-label">Letter Spacing</div>
+            <div style="display:flex;flex-direction:column;gap:16px;margin-top:8px;">
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span class="ts-spec" style="width:48px;">-0.01em</span>
+                <span style="font-size:15px;font-weight:700;color:var(--text-primary);letter-spacing:-0.01em;">ClearPath FDO</span>
+                <span style="font-size:11px;color:var(--text-muted);">Headings, logo</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span class="ts-spec" style="width:48px;">0</span>
+                <span style="font-size:14px;color:var(--text-primary);letter-spacing:0;">Body and label text</span>
+                <span style="font-size:11px;color:var(--text-muted);">Default</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span class="ts-spec" style="width:48px;">.04em</span>
+                <span style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;">Type tag</span>
+                <span style="font-size:11px;color:var(--text-muted);">Type tags, nano labels</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span class="ts-spec" style="width:48px;">.06em</span>
+                <span style="font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:.06em;text-transform:uppercase;">Main</span>
+                <span style="font-size:11px;color:var(--text-muted);">Overline (nav section, section label)</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;">
+                <span class="ts-spec" style="width:48px;">.08em</span>
+                <span style="font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;">Available</span>
+                <span style="font-size:11px;color:var(--text-muted);">Overline-sm (badges, micro labels)</span>
+              </div>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Icons section -->
+        <div class="section doc-section" id="sec-icons" style="margin-top:64px;margin-bottom:0;">
+          <div class="section-heading">Icons</div>
+          <div class="demo-row" style="align-items:flex-start;">
+
+            <div class="demo-block">
+              <div class="demo-label">Library — Tabler Icons (Outline)</div>
+              <div style="font-size:12px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">
+                CDN: <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">@tabler/icons-webfont@latest</code><br>
+                Syntax: <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">&lt;i class="ti ti-[name]"&gt;&lt;/i&gt;</code>
+              </div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
+                <div style="display:flex;align-items:center;gap:8px;background:var(--border-subtle);border-radius:6px;padding:4px 8px;">
+                  <i class="ti ti-calendar" style="font-size:12px;"></i>
+                  <span style="font-size:10px;color:var(--text-muted);">12px xs</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:var(--border-subtle);border-radius:6px;padding:4px 8px;">
+                  <i class="ti ti-calendar" style="font-size:16px;"></i>
+                  <span style="font-size:10px;color:var(--text-muted);">16px sm/default</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:var(--border-subtle);border-radius:6px;padding:4px 8px;">
+                  <i class="ti ti-calendar" style="font-size:20px;"></i>
+                  <span style="font-size:10px;color:var(--text-muted);">20px md</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;background:var(--border-subtle);border-radius:6px;padding:4px 8px;">
+                  <i class="ti ti-calendar" style="font-size:24px;"></i>
+                  <span style="font-size:10px;color:var(--text-muted);">24px lg</span>
+                </div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:16px;">
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-calendar" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">calendar</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-users" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">users</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-stethoscope" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">stethoscope</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-door" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">door</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-chart-bar" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">chart-bar</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-settings" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">settings</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-search" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">search</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-filter" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">filter</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-plus" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">plus</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-x" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">x</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-check" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">check</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-alert-triangle" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">alert-triangle</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-clock" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">clock</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-trash" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">trash</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-eye" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">eye</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-shield-check" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">shield-check</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-circle-check" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">circle-check</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-alert-circle" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">alert-circle</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-login" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">login</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-lock" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">lock</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-user" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">user</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-chevron-right" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">chevron-right</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-brain" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">brain</span>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <i class="ti ti-building" style="font-size:20px;color:var(--text-secondary);"></i>
+                  <span style="font-size:9px;color:var(--text-muted);">building</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ══════════ COMPONENTS ══════════ -->
+      <!-- <div class="group-header doc-section" id="components">
+        <div class="group-tag group-tag-components"><i class="ti ti-components" style="font-size:11px;"></i> Components</div>
+        <div class="group-title">Components</div>
+        <div class="group-desc">Interactive UI patterns built on foundation tokens — buttons, inputs, cards, and overlays.</div>
+      </div> -->
+
+      <!-- ─────────────────── BUTTONS ─────────────────── -->
+      <div class="section doc-section" id="sec-buttons">
+        <div class="section-heading">Buttons</div>
+
+        <!-- Note -->
+        <div class="cs-convention" style="margin-bottom:20px;">
+          <strong style="color:var(--text-primary);">Unified system:</strong>&nbsp;
+          8 canonical types consolidated from 20+ class variants found across screens.
+          3 sizes: <code>btn-sm</code> 32px · default 40px · <code>btn-lg</code> 48px.
+          Focus ring: <code>box-shadow: 0 0 0 3px rgba(20,58,195,.15)</code> on all interactive buttons.
+        </div>
+
+        <!-- ─── 1. Core Buttons ─── -->
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">1 · Core</div>
+        <div class="demo-row" style="margin-bottom:24px;">
+
+          <div class="demo-block">
+            <div class="demo-label">Primary &nbsp;<code class="bcode">btn-primary</code></div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+              <div class="btn-state-item">
+                <button class="btn-primary"><i class="ti ti-plus" style="font-size:15px;"></i> New Appointment</button>
+                <span class="btn-state-lbl">default</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-primary" style="opacity:.92;box-shadow:0 4px 12px rgba(20,58,195,.35);">Hover</button>
+                <span class="btn-state-lbl">hover</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-primary" style="transform:translateY(1px);box-shadow:none;">Active</button>
+                <span class="btn-state-lbl">active</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-primary" disabled><div class="spinner"></div><span>Saving…</span></button>
+                <span class="btn-state-lbl">loading</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-primary" disabled>Disabled</button>
+                <span class="btn-state-lbl">disabled</span>
+              </div>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn-primary" style="width:100%;"><i class="ti ti-plus" style="font-size:15px;"></i> New Appointment</button>
+              <div style="text-align:center;margin-top:8px;"><span class="btn-state-lbl">full-width</span></div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Secondary &nbsp;<code class="bcode">btn-secondary</code></div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+              <div class="btn-state-item">
+                <button class="btn-secondary"><i class="ti ti-chevron-left" style="font-size:15px;"></i> Back</button>
+                <span class="btn-state-lbl">default</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-secondary" style="background:var(--nav-item-hover-bg);">Hover</button>
+                <span class="btn-state-lbl">hover</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-secondary" style="background:var(--border-subtle);">Active</button>
+                <span class="btn-state-lbl">active</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-secondary" disabled style="opacity:.5;cursor:not-allowed;">Disabled</button>
+                <span class="btn-state-lbl">disabled</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Ghost &nbsp;<code class="bcode">btn-ghost</code></div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;">
+              <div class="btn-state-item">
+                <button class="btn-ghost"><i class="ti ti-filter" style="font-size:15px;"></i> Filters</button>
+                <span class="btn-state-lbl">default</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-ghost" style="background:var(--nav-item-hover-bg);color:var(--text-primary);">Hover</button>
+                <span class="btn-state-lbl">hover</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-ghost" disabled>Disabled</button>
+                <span class="btn-state-lbl">disabled</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Merges: <code class="bcode">action-btn-ghost</code> <code class="bcode">action-btn-print</code> <code class="bcode">action-btn-neutral</code> <code class="bcode">action-btn-secondary</code></div>
+          </div>
+
+        </div>
+
+        <!-- ─── 2. Contextual Action Buttons ─── -->
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">2 · Contextual &nbsp;<span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px;">36px · semantic color · detail panels &amp; modals</span></div>
+        <div class="demo-row" style="margin-bottom:24px;">
+          <div class="demo-block">
+            <div class="demo-label">Variants &amp; States</div>
+            <div style="display:grid;grid-template-columns:auto auto auto auto 1fr;gap:8px 12px;align-items:center;">
+              <span style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;grid-column:1;">Type</span>
+              <span style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Default</span>
+              <span style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Hover</span>
+              <span style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Disabled</span>
+              <span style="font-size:10px;color:var(--text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em;">Token</span>
+
+              <span style="font-size:11px;color:var(--text-secondary);">Success</span>
+              <button class="action-btn action-btn-success"><i class="ti ti-check" style="font-size:13px;"></i> Mark Complete</button>
+              <button class="action-btn action-btn-success" style="background:#dcfce7;border-color:#86efac;">Mark Complete</button>
+              <button class="action-btn action-btn-success" style="opacity:.5;cursor:not-allowed;" disabled>Mark Complete</button>
+              <code class="bcode">action-btn-success</code>
+
+              <span style="font-size:11px;color:var(--text-secondary);">Danger</span>
+              <button class="action-btn action-btn-danger"><i class="ti ti-x" style="font-size:13px;"></i> Cancel</button>
+              <button class="action-btn action-btn-danger" style="background:#fee2e2;border-color:#fca5a5;">Cancel</button>
+              <button class="action-btn action-btn-danger" style="opacity:.5;cursor:not-allowed;" disabled>Cancel</button>
+              <code class="bcode">action-btn-danger</code>
+
+              <span style="font-size:11px;color:var(--text-secondary);">Warning</span>
+              <button class="action-btn action-btn-warning"><i class="ti ti-calendar" style="font-size:13px;"></i> Reschedule</button>
+              <button class="action-btn action-btn-warning" style="background:#fef3c7;border-color:#fbbf24;">Reschedule</button>
+              <button class="action-btn action-btn-warning" style="opacity:.5;cursor:not-allowed;" disabled>Reschedule</button>
+              <code class="bcode">action-btn-warning</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── 3. Special Purpose ─── -->
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">3 · Special Purpose</div>
+        <div class="demo-row" style="margin-bottom:24px;">
+
+          <div class="demo-block">
+            <div class="demo-label">Icon Button &nbsp;<code class="bcode">btn-icon</code></div>
+            <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
+              <div class="btn-state-item">
+                <button class="btn-icon"><i class="ti ti-x" style="font-size:16px;"></i></button>
+                <span class="btn-state-lbl">close</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-icon"><i class="ti ti-trash" style="font-size:16px;"></i></button>
+                <span class="btn-state-lbl">delete</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-icon"><i class="ti ti-eye" style="font-size:16px;"></i></button>
+                <span class="btn-state-lbl">eye</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-icon" style="background:var(--nav-item-hover-bg);color:var(--text-primary);border-color:var(--border-input);"><i class="ti ti-x" style="font-size:16px;"></i></button>
+                <span class="btn-state-lbl">hover</span>
+              </div>
+              <div class="btn-state-item">
+                <button class="btn-icon" style="background:#fef2f2;color:#b91c1c;"><i class="ti ti-trash" style="font-size:16px;"></i></button>
+                <span class="btn-state-lbl">danger hover</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">36×36px. Merges: <code class="bcode">panel-close</code> <code class="bcode">btn-remove-pt</code> <code class="bcode">toggle-pw</code></div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Add Button &nbsp;<code class="bcode">btn-add</code></div>
+            <div style="width:220px;display:flex;flex-direction:column;gap:8px;">
+              <div class="btn-state-item" style="width:100%;">
+                <button class="btn-add"><i class="ti ti-plus" style="font-size:14px;"></i> Add Item</button>
+                <span class="btn-state-lbl">default</span>
+              </div>
+              <div class="btn-state-item" style="width:100%;">
+                <button class="btn-add" style="background:#ccfbf1;border-color:#0d9488;">Add Item</button>
+                <span class="btn-state-lbl">hover</span>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">Full-width · dashed border · teal. Renames: <code class="bcode">btn-add-pt</code></div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Text / Link Button</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div>
+                <button style="background:none;border:none;cursor:pointer;font-size:12px;font-weight:600;color:var(--brand-blue);padding:0;font-family:inherit;display:inline-flex;align-items:center;gap:8px;"><i class="ti ti-x" style="font-size:11px;"></i>Clear filters</button>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:8px;">inline · no padding</div>
+              </div>
+              <div>
+                <button style="background:none;border:none;cursor:pointer;font-size:11px;font-weight:600;color:var(--brand-blue);padding:3px 8px;border-radius:5px;font-family:inherit;">Mark all</button>
+                <div style="font-size:10px;color:var(--text-muted);margin-top:8px;">with hover bg (#F0F3FF)</div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;color:var(--text-muted);">No formal class — use sparingly. 2 instances in codebase.</div>
+          </div>
+
+        </div>
+
+        <!-- ─── 4. Size Scale ─── -->
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">4 · Size Scale</div>
+        <div class="demo-block" style="margin-bottom:24px;">
+          <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;">
+            <div class="btn-state-item">
+              <button class="btn-primary btn-sm"><i class="ti ti-plus" style="font-size:12px;"></i> Add</button>
+              <span class="btn-state-lbl">sm · 32px · 12px</span>
+            </div>
+            <div class="btn-state-item">
+              <button class="btn-primary"><i class="ti ti-plus" style="font-size:15px;"></i> New Appointment</button>
+              <span class="btn-state-lbl">md default · 40px · 14px</span>
+            </div>
+            <div class="btn-state-item">
+              <button class="btn-primary btn-lg"><i class="ti ti-check" style="font-size:16px;"></i> Confirm Booking</button>
+              <span class="btn-state-lbl">lg · 48px · 14px 700</span>
+            </div>
+            <div style="margin-left:8px;padding-left:24px;border-left:1px solid var(--border-subtle);">
+              <table style="font-size:11px;border-collapse:collapse;">
+                <tr><td style="padding:3px 12px 3px 0;font-weight:600;color:var(--text-primary);"><code class="bcode">btn-sm</code></td><td style="color:var(--text-secondary);">32px · 12px · <code class="bcode">0 12px</code></td></tr>
+                <tr><td style="padding:3px 12px 3px 0;font-weight:600;color:var(--text-primary);">default</td><td style="color:var(--text-secondary);">40px · 14px · <code class="bcode">0 24px</code></td></tr>
+                <tr><td style="padding:3px 12px 3px 0;font-weight:600;color:var(--text-primary);"><code class="bcode">btn-lg</code></td><td style="color:var(--text-secondary);">48px · 14px 700 · <code class="bcode">0 28px</code></td></tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ─── 5. System Audit ─── -->
+        <div style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">5 · System Audit</div>
+        <div class="demo-block" style="padding:24px 28px;overflow-x:auto;">
+          <table class="btab">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Variants</th>
+                <th>Sizes</th>
+                <th>States</th>
+                <th>Properties</th>
+                <th>Issues Found</th>
+                <th>Recommendation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code class="bcode">btn-primary</code></td>
+                <td style="color:var(--text-secondary);">Main CTA — submit form, new appt, confirm booking</td>
+                <td style="color:var(--text-secondary);">1 — gradient fill, white text</td>
+                <td style="color:var(--text-secondary);">md 40px · lg 48px</td>
+                <td style="color:var(--text-secondary);">default · hover (op+shadow) · active (↕1px) · loading · disabled (op.55)</td>
+                <td style="color:var(--text-secondary);">icon-left · label · spinner · full-width · shadow</td>
+                <td><span class="bp bp-warn">warn</span>&nbsp; <code class="bcode">btn-next</code> and <code class="bcode">btn-confirm</code> are duplicates — <code class="bcode">btn-confirm</code> also switches to teal gradient (#0d9488) and uses 48px, breaking brand consistency</td>
+                <td style="color:var(--text-secondary);">Use <code class="bcode">btn-primary btn-lg</code> for confirm. Delete <code class="bcode">btn-next</code> and <code class="bcode">btn-confirm</code></td>
+              </tr>
+              <tr>
+                <td><code class="bcode">btn-secondary</code></td>
+                <td style="color:var(--text-secondary);">Alternative action — back, discard, cancel modal</td>
+                <td style="color:var(--text-secondary);">1 — white bg, border</td>
+                <td style="color:var(--text-secondary);">md 40px</td>
+                <td style="color:var(--text-secondary);">default · hover (bg) · active · disabled (op.5)</td>
+                <td style="color:var(--text-secondary);">icon-left · label · full-width</td>
+                <td><span class="bp bp-warn">warn</span>&nbsp; <code class="bcode">btn-back</code> in new-appointment pages is an exact visual duplicate defined separately — same height, border, hover, padding</td>
+                <td style="color:var(--text-secondary);">Delete <code class="bcode">btn-back</code>. Replace all usages with <code class="bcode">btn-secondary</code></td>
+              </tr>
+              <tr>
+                <td><code class="bcode">btn-ghost</code></td>
+                <td style="color:var(--text-secondary);">Tertiary — filters, view toggles, low-priority actions</td>
+                <td style="color:var(--text-secondary);">1 — transparent bg, no border</td>
+                <td style="color:var(--text-secondary);">md 40px · sm 32px</td>
+                <td style="color:var(--text-secondary);">default · hover (bg) · disabled (op.5)</td>
+                <td style="color:var(--text-secondary);">icon-left · label</td>
+                <td><span class="bp bp-err">error</span>&nbsp; 4 near-identical classes: <code class="bcode">action-btn-ghost</code> <code class="bcode">action-btn-print</code> <code class="bcode">action-btn-neutral</code> <code class="bcode">action-btn-secondary</code> — all transparent/near-white bg with same hover behavior</td>
+                <td style="color:var(--text-secondary);">Create single <code class="bcode">btn-ghost</code>. Delete all 4 duplicates</td>
+              </tr>
+              <tr>
+                <td><code class="bcode">action-btn-success</code></td>
+                <td style="color:var(--text-secondary);">Confirm appointment completion</td>
+                <td style="color:var(--text-secondary);">1 — green tint bg/border</td>
+                <td style="color:var(--text-secondary);">sm 36px (fixed)</td>
+                <td style="color:var(--text-secondary);">default · hover · disabled (op.5)</td>
+                <td style="color:var(--text-secondary);">icon-left · label · full-width in panel</td>
+                <td><span class="bp bp-ok">ok</span>&nbsp; Consistent across files. Missing explicit <code class="bcode">:disabled</code> rule in appointments.html — relies on opacity only</td>
+                <td style="color:var(--text-secondary);">Add <code class="bcode">:disabled { opacity:.5; cursor:not-allowed; pointer-events:none; }</code> to base <code class="bcode">.action-btn</code></td>
+              </tr>
+              <tr>
+                <td><code class="bcode">action-btn-danger</code></td>
+                <td style="color:var(--text-secondary);">Cancel / destructive appointment action</td>
+                <td style="color:var(--text-secondary);">1 — red tint bg/border</td>
+                <td style="color:var(--text-secondary);">sm 36px (fixed)</td>
+                <td style="color:var(--text-secondary);">default · hover · disabled (op.5)</td>
+                <td style="color:var(--text-secondary);">icon-left · label · full-width in panel</td>
+                <td><span class="bp bp-warn">warn</span>&nbsp; Text color inconsistency: <code class="bcode">#b91c1c</code> (error-700) in Components-inventory.html vs <code class="bcode">#dc2626</code> (error-600) in appointments.html — lighter shade used on one page</td>
+                <td style="color:var(--text-secondary);">Standardize to <code class="bcode">#b91c1c</code> (error-700) across all files</td>
+              </tr>
+              <tr>
+                <td><code class="bcode">action-btn-warning</code></td>
+                <td style="color:var(--text-secondary);">Reschedule — cautionary, reversible action</td>
+                <td style="color:var(--text-secondary);">1 — amber tint bg/border</td>
+                <td style="color:var(--text-secondary);">sm 36px (fixed)</td>
+                <td style="color:var(--text-secondary);">default · hover · disabled (op.5)</td>
+                <td style="color:var(--text-secondary);">icon-left · label · full-width in panel</td>
+                <td><span class="bp bp-ok">ok</span>&nbsp; Consistent across all files</td>
+                <td style="color:var(--text-secondary);">No change. Consider migrating 36px → 32px (<code class="bcode">btn-sm</code>) in size standardization pass</td>
+              </tr>
+              <tr>
+                <td><code class="bcode">btn-icon</code></td>
+                <td style="color:var(--text-secondary);">Icon-only — close panel, remove item, toggle password visibility</td>
+                <td style="color:var(--text-secondary);">default · danger-hover variant</td>
+                <td style="color:var(--text-secondary);">36×36px · 28×28px (sm)</td>
+                <td style="color:var(--text-secondary);">default · hover (bg+border) · danger hover (red bg)</td>
+                <td style="color:var(--text-secondary);">icon only · no label · tooltip recommended for a11y</td>
+                <td><span class="bp bp-err">error</span>&nbsp; No canonical class exists. <code class="bcode">panel-close</code>, <code class="bcode">btn-remove-pt</code>, and <code class="bcode">toggle-pw</code> are 3 separate one-off implementations of the same visual pattern</td>
+                <td style="color:var(--text-secondary);">Create <code class="bcode">btn-icon</code> class. Add <code class="bcode">aria-label</code> to every instance. Replace all 3 one-offs</td>
+              </tr>
+              <tr>
+                <td><code class="bcode">btn-add</code></td>
+                <td style="color:var(--text-secondary);">Add item to list — patient, note, room attachment</td>
+                <td style="color:var(--text-secondary);">1 — dashed teal border, teal bg</td>
+                <td style="color:var(--text-secondary);">40px · full-width only</td>
+                <td style="color:var(--text-secondary);">default · hover (bg darkens, border solid) · disabled</td>
+                <td style="color:var(--text-secondary);">icon-left · label · full-width · dashed border</td>
+                <td><span class="bp bp-warn">warn</span>&nbsp; Class currently named <code class="bcode">btn-add-pt</code> — too specific to patients. Same pattern can apply to adding rooms, notes, providers</td>
+                <td style="color:var(--text-secondary);">Rename to <code class="bcode">btn-add</code>. Pattern is reusable — do not couple name to content type</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Height inconsistency callout -->
+          <div style="margin-top:24px;padding:16px;background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;font-size:12px;color:#92400e;line-height:1.7;">
+            <strong style="font-weight:700;"><i class="ti ti-alert-triangle" style="font-size:13px;margin-right:5px;"></i>Height inconsistency (critical):</strong>
+            5 different button heights found across all screens —
+            <code style="font-family:monospace;font-size:11px;">24px</code> (btn-remove-pt) ·
+            <code style="font-family:monospace;font-size:11px;">36px</code> (action-btn) ·
+            <code style="font-family:monospace;font-size:11px;">40px</code> (btn-primary/secondary) ·
+            <code style="font-family:monospace;font-size:11px;">44px</code> (btn-view-calendar) ·
+            <code style="font-family:monospace;font-size:11px;">48px</code> (btn-confirm).
+            Standardize to 3: <strong>32px · 40px · 48px</strong> via <code style="font-family:monospace;font-size:11px;">btn-sm</code> / default / <code style="font-family:monospace;font-size:11px;">btn-lg</code>.
+            Action buttons (36px) → migrate to <code style="font-family:monospace;font-size:11px;">btn-sm</code>.
+            btn-view-calendar (44px) → use <code style="font-family:monospace;font-size:11px;">btn-lg</code>.
+          </div>
+        </div>
+
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── FORM INPUTS ─────────────────── -->
+      <div class="section doc-section" id="sec-forms">
+        <div class="section-heading">Form Inputs</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="demo-block" style="width:240px;">
+            <div class="demo-label">Text Input</div>
+            <div class="field">
+              <label>Email address</label>
+              <input type="email" placeholder="you@facility.org" />
+            </div>
+            <div class="field" style="margin-top:16px;">
+              <label>Error state</label>
+              <input type="email" class="error" value="bad-email" />
+              <span class="field-error"><i class="ti ti-alert-circle" style="font-size:11px;margin-right:3px;"></i>Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <div class="demo-block" style="width:240px;">
+            <div class="demo-label">Password Input</div>
+            <div class="field">
+              <label>Password</label>
+              <div class="password-wrap">
+                <input type="password" id="demoPassword" placeholder="Enter password" />
+                <button type="button" class="toggle-pw" onclick="toggleDemoPw(this)">
+                  <i class="ti ti-eye" style="font-size:17px;"></i>
+                </button>
+              </div>
+              <div class="pw-strength">
+                <div class="pw-bar weak"></div>
+                <div class="pw-bar fair"></div>
+                <div class="pw-bar strong"></div>
+              </div>
+              <span class="pw-label" style="color:#16a34a;">Strong</span>
+            </div>
+          </div>
+
+          <div class="demo-block" style="width:240px;">
+            <div class="demo-label">Select</div>
+            <div class="field">
+              <label>Role</label>
+              <select>
+                <option>Select role…</option>
+                <option selected>Therapist</option>
+                <option>Counselor</option>
+                <option>Administrator</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="demo-block" style="width:240px;">
+            <div class="demo-label">Textarea</div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea rows="3" placeholder="Add session notes…"></textarea>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Checkbox &amp; Toggle</div>
+            <label class="check-label"><input type="checkbox" checked /> Keep me signed in</label>
+            <label class="check-label" style="margin-top:8px;"><input type="checkbox" /> Agree to terms</label>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:16px;">
+              <label class="tgl">
+                <input type="checkbox" checked />
+                <div class="tgl-track"></div>
+              </label>
+              <span style="font-size:13px;color:var(--text-secondary);">Checked-in</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-top:8px;">
+              <label class="tgl">
+                <input type="checkbox" />
+                <div class="tgl-track"></div>
+              </label>
+              <span style="font-size:13px;color:var(--text-secondary);">Not checked-in</span>
+            </div>
+          </div>
+
+          <div class="demo-block" style="width:280px;">
+            <div class="demo-label">Search Bar</div>
+            <div class="search-bar">
+              <i class="ti ti-search"></i>
+              <input type="text" placeholder="Search records…" />
+              <span class="search-kbd">⌘K</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── BADGE / CHIP ─────────────────── -->
+      <div class="section doc-section" id="sec-badges">
+        <div class="section-heading">Badge / Chip</div>
+
+        <!-- Rule reminder -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+          <div style="padding:12px 16px;border-radius:8px;background:#F5F7FF;border:1px solid #c7d2fe;font-size:12px;color:var(--text-secondary);line-height:1.6;">
+            <strong style="color:var(--brand-blue);display:block;margin-bottom:2px;">Badge — read-only</strong>
+            System sets it. User cannot click it. Always pill-shaped (border-radius: 999px).
+          </div>
+          <div style="padding:12px 16px;border-radius:8px;background:#F0FDFA;border:1px solid #99f6e4;font-size:12px;color:var(--text-secondary);line-height:1.6;">
+            <strong style="color:var(--brand-path);display:block;margin-bottom:2px;">Chip — interactive</strong>
+            User clicks it to change something. Has hover, focus, selected states. Matches button border-radius (8px).
+          </div>
+        </div>
+
+        <!-- ── 1. BADGE ── -->
+        <div class="demo-label" style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:16px;border-bottom:2px solid var(--brand-blue);padding-bottom:6px;display:inline-block;">1 — Badge</div>
+
+        <div class="demo-row">
+
+          <!-- Status badges -->
+          <div class="demo-block">
+            <div class="demo-label">Appointment Status
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Appointment cards · Detail panel header</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span class="chip chip-ongoing"><span class="pulse-dot"></span> Ongoing</span>
+              <span class="chip chip-completed"><i class="ti ti-circle-check" style="font-size:11px;"></i> Completed</span>
+              <span class="chip chip-cancelled"><i class="ti ti-x" style="font-size:11px;"></i> Cancelled</span>
+              <span class="chip chip-future">Future</span>
+              <span class="chip chip-pending"><i class="ti ti-clock" style="font-size:11px;"></i> Pending</span>
+              <span class="chip chip-upcoming"><i class="ti ti-clock" style="font-size:11px;"></i> Upcoming</span>
+            </div>
+          </div>
+
+          <!-- Appointment type tags -->
+          <div class="demo-block">
+            <div class="demo-label">Appointment Type — Full Label
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Appointment cards · Detail panel</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;background:#ffffff;padding:12px;border-radius:8px;border:1px solid #f3f4f6;">
+              <span class="type-tag" data-type="tour"><i class="ti ti-building" style="font-size:11px;"></i> Facility Tour</span>
+              <span class="type-tag" data-type="counsel"><i class="ti ti-heart" style="font-size:11px;"></i> Counselling Session</span>
+              <span class="type-tag" data-type="group"><i class="ti ti-users" style="font-size:11px;"></i> Group Therapy</span>
+              <span class="type-tag" data-type="psych"><i class="ti ti-brain" style="font-size:11px;"></i> Psychological Evaluation</span>
+              <span class="type-tag" data-type="medical"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Medical Test</span>
+            </div>
+          </div>
+
+          <!-- Appointment type tags — short label on service type card -->
+          <div class="demo-block">
+            <div class="demo-label">Appointment Type — Short Label
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">New appointment · Service type selection cards</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;background:#ffffff;padding:12px;border-radius:8px;border:1px solid #f3f4f6;">
+              <span class="type-tag" data-type="tour">New Lead</span>
+              <span class="type-tag" data-type="counsel">Individual</span>
+              <span class="type-tag" data-type="group">Group</span>
+              <span class="type-tag" data-type="psych">Evaluation</span>
+              <span class="type-tag" data-type="medical">Medical</span>
+            </div>
+          </div>
+
+          <!-- Availability badges -->
+          <div class="demo-block">
+            <div class="demo-label">Availability
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Room grid · Staff cards</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span class="avail-badge avail"><span class="avail-dot green"></span> Available</span>
+              <span class="avail-badge busy"><span class="avail-dot red"></span> Busy</span>
+              <span class="live-badge"><span class="live-dot"></span> Live</span>
+            </div>
+          </div>
+
+          <!-- Attendance -->
+          <div class="demo-block">
+            <div class="demo-label">Attendance &amp; Check-in
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Detail panel · Attendance module</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;"><i class="ti ti-circle-check" style="font-size:11px;"></i> Present</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca;"><i class="ti ti-x" style="font-size:11px;"></i> Absent</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:99px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;"><i class="ti ti-circle-check" style="font-size:11px;"></i> Checked in</span>
+            </div>
+          </div>
+
+          <!-- Cancel reason -->
+          <div class="demo-block">
+            <div class="demo-label">Cancel Reason
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Detail panel · Cancelled appointments only</span>
+            </div>
+            <span class="cancel-reason-chip"><i class="ti ti-info-circle" style="font-size:11px;"></i> User request</span>
+          </div>
+
+          <!-- Lab capabilities -->
+          <div class="demo-block">
+            <div class="demo-label">Lab Capabilities
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Resource detail panels · Capability tagging</span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span class="lab-cap-chip">Blood Draw</span>
+              <span class="lab-cap-chip">Imaging</span>
+              <span class="lab-cap-chip">ECG</span>
+            </div>
+          </div>
+
+          <!-- Conflict warning -->
+          <div class="demo-block">
+            <div class="demo-label">Conflict Warning
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Search results · Scheduling flows · Validation states</span>
+            </div>
+            <span class="conflict-chip"><i class="ti ti-alert-triangle" style="font-size:11px;"></i> Scheduling conflict</span>
+          </div>
+
+          <!-- Card eyebrow -->
+          <div class="demo-block">
+            <div class="demo-label">Card Eyebrow &amp; Security Note
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Sign-in page · Auth screens</span>
+            </div>
+            <span class="card-eyebrow"><i class="ti ti-shield-check" style="font-size:11px;"></i> Front Desk Office</span>
+            <div class="security-note" style="margin-top:12px;">
+              <i class="ti ti-lock" style="font-size:11px;"></i> HIPAA-compliant · Encrypted connection
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── 2. CHIP ── -->
+        <div class="demo-label" style="font-size:13px;font-weight:700;color:var(--text-primary);margin:32px 0 16px;border-bottom:2px solid var(--brand-path);padding-bottom:6px;display:inline-block;">2 — Chip</div>
+
+        <div class="demo-row">
+
+          <!-- Filter chips -->
+          <div class="demo-block">
+            <div class="demo-label">Filter Chips
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">List views · Multi-criteria filter bars · Role/department filter</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="pt-filter-chip">All</span>
+              <span class="pt-filter-chip active">Active</span>
+              <span class="pt-filter-chip">Pending</span>
+              <span class="pt-filter-chip">Category A</span>
+              <span class="pt-filter-chip">Category B</span>
+              <span class="pt-filter-chip">Role A</span>
+              <span class="pt-filter-chip">Role B</span>
+              <span class="pt-filter-chip">Dept A</span>
+            </div>
+          </div>
+
+          <!-- Input chips (removable) -->
+          <div class="demo-block">
+            <div class="demo-label">Input Chips — Removable
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Multi-select fields · Selected values as removable tokens</span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+              <span class="patient-pill">Alex M. <button onclick="" style="background:none;border:none;cursor:pointer;padding:0;margin-left:2px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+              <span class="patient-pill">Jordan K. <button onclick="" style="background:none;border:none;cursor:pointer;padding:0;margin-left:2px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span class="patient-pill lead">Riley D. <button onclick="" style="background:none;border:none;cursor:pointer;padding:0;margin-left:2px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+              <span class="patient-pill lead">Casey P. <button onclick="" style="background:none;border:none;cursor:pointer;padding:0;margin-left:2px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+            </div>
+            <div style="margin-top:6px;font-size:10px;color:var(--text-muted);">Teal = Default variant &nbsp;·&nbsp; Orange = Secondary variant</div>
+          </div>
+
+          <!-- Time slot chips -->
+          <div class="demo-block">
+            <div class="demo-label">Choice Chips — Time Slots
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Single-select slot pickers · Exclusive option groups</span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
+              <span class="time-slot taken">8:00 AM</span>
+              <span class="time-slot">8:30 AM</span>
+              <span class="time-slot">9:00 AM</span>
+              <span class="time-slot selected">9:30 AM</span>
+              <span class="time-slot">10:00 AM</span>
+              <span class="time-slot taken">10:30 AM</span>
+              <span class="time-slot">11:00 AM</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── ALERTS & FEEDBACK ─────────────────── -->
+      <div class="section doc-section" id="sec-alerts">
+        <div class="section-heading">Alerts &amp; Feedback</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="demo-block" style="flex:1;min-width:280px;max-width:400px;">
+            <div class="demo-label">Alerts</div>
+            <div class="alert-error">
+              <i class="ti ti-alert-circle" style="font-size:16px;flex-shrink:0;"></i>
+              <span>Invalid email or password. Please try again.</span>
+            </div>
+            <div class="alert-success" style="margin-top:8px;">
+              <i class="ti ti-circle-check" style="font-size:18px;color:#16a34a;flex-shrink:0;margin-top:1px;"></i>
+              <span>Account created! Check your email to verify your address.</span>
+            </div>
+            <div class="alert-warning" style="margin-top:8px;">
+              <i class="ti ti-alert-triangle" style="font-size:15px;flex-shrink:0;"></i>
+              <span>Some availability data may be stale. Re-verifying…</span>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Toast Notifications</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="toast toast-success">
+                <i class="ti ti-circle-check" style="font-size:16px;flex-shrink:0;"></i>
+                Appointment booked successfully
+              </div>
+              <div class="toast toast-error">
+                <i class="ti ti-alert-circle" style="font-size:16px;flex-shrink:0;"></i>
+                Failed to save. Please try again.
+              </div>
+              <div class="toast">
+                <i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0;"></i>
+                Appointment updated
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Loading States</div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <div style="background:#143AC3;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                <div class="spinner"></div>
+              </div>
+              <div class="spinner-dark"></div>
+            </div>
+            <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+              <div class="skeleton" style="height:16px;width:200px;"></div>
+              <div class="skeleton" style="height:14px;width:150px;"></div>
+              <div class="skeleton" style="height:14px;width:180px;"></div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Divider</div>
+            <div style="width:240px;">
+              <div class="divider">or</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── NAVIGATION ─────────────────── -->
+      <div class="section doc-section" id="sec-navigation">
+        <div class="section-heading">Navigation</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="demo-block" style="width:240px;">
+            <div class="demo-label">Nav Items</div>
+            <div style="display:flex;flex-direction:column;gap:0;">
+              <a href="#" class="nav-item" style="position:static;margin:0;border-radius:8px;">
+                <i class="ti ti-calendar" style="font-size:16px;"></i> Appointments
+              </a>
+              <a href="#" class="nav-item active" style="position:static;margin:0;border-radius:8px;">
+                <i class="ti ti-users" style="font-size:16px;"></i> Patients
+              </a>
+              <a href="#" class="nav-item" style="position:static;margin:0;border-radius:8px;">
+                <i class="ti ti-stethoscope" style="font-size:16px;"></i> Providers
+              </a>
+              <a href="#" class="nav-item" style="position:static;margin:0;border-radius:8px;color:var(--text-secondary);">
+                <i class="ti ti-help-circle" style="font-size:16px;"></i> Help &amp; Support
+              </a>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Breadcrumb</div>
+            <div class="breadcrumb">
+              <span>Appointments</span>
+              <i class="ti ti-chevron-right"></i>
+              <span>New</span>
+              <i class="ti ti-chevron-right"></i>
+              <span class="current">Select Type</span>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Step Pills</div>
+            <div class="step-pills">
+              <div class="step-pill done"></div>
+              <div class="step-pill done"></div>
+              <div class="step-pill active"></div>
+              <div class="step-pill todo"></div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">User Dropdown</div>
+            <div class="dropdown-demo">
+              <div class="dropdown-info">
+                <div class="dropdown-name">Jane Doe</div>
+                <div class="dropdown-email">jane.doe@clearpath.com</div>
+              </div>
+              <button class="dropdown-item"><i class="ti ti-user" style="font-size:14px;"></i> Profile</button>
+              <button class="dropdown-item"><i class="ti ti-settings" style="font-size:14px;"></i> Settings</button>
+              <button class="dropdown-item logout"><i class="ti ti-logout" style="font-size:14px;"></i> Sign out</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── APPOINTMENT CARDS ─────────────────── -->
+      <div class="section doc-section" id="sec-cards">
+        <div class="section-heading">Appointment Cards</div>
+        <div class="demo-row">
+
+          <div class="appt-card appt-card-counsel">
+            <div class="appt-card-header">
+              <div class="appt-card-type">Counselling Session</div>
+              <span class="chip chip-ongoing" style="font-size:10px;padding:2px 7px;"><span class="pulse-dot"></span> Ongoing</span>
+            </div>
+            <div class="appt-card-patient">Emily R. Hartman</div>
+            <div class="appt-card-meta"><i class="ti ti-door" style="font-size:11px;"></i> Room 3A</div>
+            <div class="appt-card-meta"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Dr. Patel</div>
+          </div>
+
+          <div class="appt-card appt-card-group">
+            <div class="appt-card-header">
+              <div class="appt-card-type">Group Therapy</div>
+              <span class="chip chip-upcoming" style="font-size:10px;padding:2px 7px;"><i class="ti ti-clock" style="font-size:10px;"></i> Upcoming</span>
+            </div>
+            <div class="appt-card-patient"><i class="ti ti-users" style="font-size:11px;margin-right:4px;color:var(--text-secondary);"></i>6 patients</div>
+            <div class="appt-card-meta"><i class="ti ti-door" style="font-size:11px;"></i> Room 7B</div>
+            <div class="appt-card-meta"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Dr. Nguyen</div>
+          </div>
+
+          <div class="appt-card appt-card-psych">
+            <div class="appt-card-header">
+              <div class="appt-card-type">Psychological Evaluation</div>
+              <span class="chip chip-completed" style="font-size:10px;padding:2px 7px;"><i class="ti ti-circle-check" style="font-size:10px;"></i> Completed</span>
+            </div>
+            <div class="appt-card-patient">Marcus T. Lee</div>
+            <div class="appt-card-meta"><i class="ti ti-door" style="font-size:11px;"></i> Room 2C</div>
+            <div class="appt-card-meta"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Dr. Sharma</div>
+          </div>
+
+          <div class="appt-card appt-card-tour">
+            <div class="appt-card-header">
+              <div class="appt-card-type">Facility Tour</div>
+              <span class="chip chip-future" style="font-size:10px;padding:2px 7px;">Future</span>
+            </div>
+            <div class="appt-card-patient">Sarah L. Brooks</div>
+            <div class="appt-card-meta"><i class="ti ti-door" style="font-size:11px;"></i> Main Lobby</div>
+            <div class="appt-card-meta"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Coordinator</div>
+          </div>
+
+          <div class="appt-card appt-card-medical">
+            <div class="appt-card-header">
+              <div class="appt-card-type">Medical Test</div>
+              <span class="chip chip-cancelled" style="font-size:10px;padding:2px 7px;"><i class="ti ti-x" style="font-size:10px;"></i> Cancelled</span>
+            </div>
+            <div class="appt-card-patient">David J. Kim</div>
+            <div class="appt-card-meta"><i class="ti ti-door" style="font-size:11px;"></i> Lab 1</div>
+            <div class="appt-card-meta"><i class="ti ti-stethoscope" style="font-size:11px;"></i> Dr. Ortega</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─────────────────── SELECTION CARDS ─────────────────── -->
+      <div class="section doc-section" id="sec-selection-cards">
+        <div class="section-heading">Selection Cards</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="demo-block">
+            <div class="demo-label">Appointment Type Cards</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <div class="type-card">
+                <div class="type-icon" style="background:#E8F6FA;color:#0C5E73;"><i class="ti ti-heart" style="font-size:20px;"></i></div>
+                <div class="type-name">Counselling Session</div>
+              </div>
+              <div class="type-card selected" style="border-color:#0d9488;background:#f0fdfa;">
+                <div class="type-icon" style="background:#FCF0FD;color:#A21CAF;"><i class="ti ti-users" style="font-size:20px;"></i></div>
+                <div class="type-name" style="color:#0d9488;">Group Therapy</div>
+                <i class="ti ti-circle-check" style="font-size:16px;color:#0d9488;"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Staff Cards</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="staff-card">
+                <div class="staff-avatar" style="background:#6366f1;">SP</div>
+                <div>
+                  <div class="staff-name">Dr. Sarah Patel</div>
+                  <div class="staff-role">Counselor</div>
+                </div>
+                <div class="staff-status avail"><span class="avail-dot green"></span>Available</div>
+              </div>
+              <div class="staff-card selected">
+                <div class="staff-avatar" style="background:#0891b2;">RN</div>
+                <div>
+                  <div class="staff-name">Dr. Raj Nguyen</div>
+                  <div class="staff-role">Therapist</div>
+                </div>
+                <div class="staff-status avail"><span class="avail-dot green"></span>Available</div>
+              </div>
+              <div class="staff-card" style="opacity:.5;cursor:not-allowed;">
+                <div class="staff-avatar" style="background:#64748b;">MO</div>
+                <div>
+                  <div class="staff-name">Dr. Maria Ortega</div>
+                  <div class="staff-role">Psychiatrist</div>
+                </div>
+                <div class="staff-status busy"><span class="avail-dot red"></span>Busy</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Room Cards</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="room-card">
+                <div class="room-status-badge avail"><span class="avail-dot green"></span>Available</div>
+                <div class="room-name">Room 3A</div>
+                <div class="room-type">Counselling Room</div>
+                <div class="room-capacity"><i class="ti ti-users" style="font-size:12px;"></i> 2 persons</div>
+                <div class="room-features">
+                  <span class="room-feature">Quiet</span>
+                  <span class="room-feature">Private</span>
+                </div>
+              </div>
+              <div class="room-card selected">
+                <div class="room-status-badge avail"><span class="avail-dot green"></span>Available</div>
+                <div class="room-name">Room 7B</div>
+                <div class="room-type">Group Room</div>
+                <div class="room-capacity"><i class="ti ti-users" style="font-size:12px;"></i> 12 persons</div>
+                <div class="room-features">
+                  <span class="room-feature">Projector</span>
+                  <span class="room-feature">Whiteboard</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-block">
+            <div class="demo-label">Time Slots</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;max-width:240px;">
+              <div class="time-slot-pill">9:00 AM</div>
+              <div class="time-slot-pill selected">10:00 AM</div>
+              <div class="time-slot-pill">11:00 AM</div>
+              <div class="time-slot-pill taken">12:00 PM</div>
+              <div class="time-slot-pill">1:00 PM</div>
+              <div class="time-slot-pill taken">2:00 PM</div>
+              <div class="time-slot-pill">3:00 PM</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── STEPPER ─────────────────── -->
+      <div class="section doc-section" id="sec-patterns">
+        <div class="section-heading">Stepper (Multi-step Wizard)</div>
+        <div class="demo-row">
+          <div class="stepper-rail-demo">
+            <div class="step-item completed">
+              <div class="step-num"><i class="ti ti-check" style="font-size:12px;"></i></div>
+              <div class="step-info">
+                <div class="step-label">Step 1</div>
+                <div class="step-title">Appointment Type</div>
+                <div class="step-desc">Select type &amp; record</div>
+              </div>
+            </div>
+            <div class="step-connector done"></div>
+            <div class="step-item active">
+              <div class="step-num">2</div>
+              <div class="step-info">
+                <div class="step-label">Step 2</div>
+                <div class="step-title">Schedule</div>
+                <div class="step-desc">Date, time &amp; room</div>
+              </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div class="step-info">
+                <div class="step-label">Step 3</div>
+                <div class="step-title">Review</div>
+                <div class="step-desc">Confirm &amp; book</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── PANELS & MODALS ─────────────────── -->
+      <div class="section doc-section" id="sec-overlays">
+        <div class="section-heading">Panels &amp; Modals</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="demo-block" style="padding:0;overflow:hidden;width:320px;border-radius:8px;">
+            <div class="panel-header">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                  <span class="type-tag" data-type="counsel">Counselling Session</span>
+                  <span class="chip chip-ongoing" style="font-size:10px;padding:2px 7px;"><span class="pulse-dot"></span>Ongoing</span>
+                </div>
+                <div style="font-size:16px;font-weight:700;color:var(--text-primary);">Emily R. Hartman</div>
+              </div>
+              <button class="panel-close"><i class="ti ti-x" style="font-size:15px;"></i></button>
+            </div>
+            <div style="padding:16px;background:var(--bg-surface);border-bottom:1px solid var(--border-subtle);">
+              <div style="font-size:12px;color:var(--text-secondary);display:flex;flex-direction:column;gap:8px;">
+                <div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-calendar" style="font-size:14px;color:var(--text-muted);"></i> Today, 10:00 AM – 11:00 AM</div>
+                <div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-door" style="font-size:14px;color:var(--text-muted);"></i> Room 3A</div>
+                <div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-stethoscope" style="font-size:14px;color:var(--text-muted);"></i> Dr. Sarah Patel</div>
+              </div>
+            </div>
+            <div style="padding:16px;background:var(--bg-surface);display:flex;flex-direction:column;gap:8px;">
+              <button class="action-btn action-btn-success" style="width:100%;"><i class="ti ti-check" style="font-size:13px;"></i> Mark Complete</button>
+              <button class="action-btn action-btn-warning" style="width:100%;"><i class="ti ti-calendar" style="font-size:13px;"></i> Reschedule</button>
+              <button class="action-btn action-btn-danger" style="width:100%;"><i class="ti ti-x" style="font-size:13px;"></i> Cancel Appointment</button>
+            </div>
+          </div>
+
+          <div class="modal-demo">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+              <div>
+                <div class="modal-title">Cancel Appointment</div>
+                <div class="modal-subtitle">This action cannot be undone.</div>
+              </div>
+              <button class="panel-close"><i class="ti ti-x" style="font-size:15px;"></i></button>
+            </div>
+            <div class="field" style="margin-bottom:16px;">
+              <label>Reason for cancellation</label>
+              <select><option>No-show</option><option>Staff unavailable</option><option>User request</option></select>
+            </div>
+            <div style="display:flex;gap:8px;justify-content:flex-end;">
+              <button class="btn-secondary" style="padding:0 16px;">Keep Appointment</button>
+              <button class="action-btn action-btn-danger" style="padding:0 20px;">Confirm Cancel</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─────────────────── FILTER BAR ─────────────────── -->
+      <div class="section doc-section" id="sec-filter-bar">
+        <div class="section-heading">Filter Bar</div>
+        <div class="filter-bar-demo">
+          <i class="ti ti-filter" style="font-size:14px;color:var(--text-muted);"></i>
+          <select class="filter-select"><option>All Types</option><option>Counselling Session</option><option>Group Therapy</option></select>
+          <select class="filter-select"><option>All Providers</option><option>Dr. Patel</option><option>Dr. Nguyen</option></select>
+          <select class="filter-select"><option>All Rooms</option><option>Room 3A</option><option>Room 7B</option></select>
+          <select class="filter-select"><option>All Statuses</option><option>Ongoing</option><option>Completed</option><option>Cancelled</option></select>
+          <button style="font-size:12px;font-weight:600;color:var(--brand-blue);background:none;border:none;cursor:pointer;padding:0 4px;white-space:nowrap;">Clear filters</button>
+        </div>
+      </div>
+
+      <hr class="doc-section-divider" />
+
+      <!-- ─────────────────── ATTENDANCE & VISITOR ─────────────────── -->
+      <div class="section doc-section" id="sec-checkin">
+        <div class="section-heading">Attendance &amp; Check-in</div>
+        <div class="demo-row" style="align-items:flex-start;">
+
+          <div class="att-module">
+            <div class="att-module-head">
+              <div class="att-module-title"><i class="ti ti-users" style="font-size:12px;"></i> Attendance</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="att-present-badge">2 / 4</span>
+                <button class="att-mark-all">Mark all</button>
+              </div>
+            </div>
+            <div>
+              <div class="att-row att-present">
+                <div class="att-avatar">EH</div>
+                <span class="att-name">Emily Hartman</span>
+                <div class="att-cb"><i class="ti ti-check" style="font-size:11px;color:white;"></i></div>
+              </div>
+              <div class="att-row att-present">
+                <div class="att-avatar">JW</div>
+                <span class="att-name">James Wilson</span>
+                <div class="att-cb"><i class="ti ti-check" style="font-size:11px;color:white;"></i></div>
+              </div>
+              <div class="att-row">
+                <div class="att-avatar">ML</div>
+                <span class="att-name">Marcus Lee</span>
+                <div class="att-cb"></div>
+              </div>
+              <div class="att-row">
+                <div class="att-avatar">SB</div>
+                <span class="att-name">Sarah Brooks</span>
+                <div class="att-cb"></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="demo-label" style="margin-bottom:12px;">Visitor Check-in</div>
+            <div class="visitor-row">
+              <div class="visitor-info">
+                <div class="visitor-avatar">MB</div>
+                <div>
+                  <div class="visitor-name">Michael Brooks</div>
+                  <div class="visitor-sub">Family member · Visitor</div>
+                </div>
+              </div>
+              <label class="tgl">
+                <input type="checkbox" checked />
+                <div class="tgl-track"></div>
+              </label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+
+        </div><!-- /#docContent -->
+      </div><!-- /.doc-layout -->
+
+    </main>
+  </div>
+
+  <script>
+    function toggleDemoPw(btn) {
+      const input = document.getElementById('demoPassword');
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      const icon = btn.querySelector('i');
+      icon.className = show ? 'ti ti-eye-off' : 'ti ti-eye';
+      icon.style.fontSize = '17px';
+    }
+  </script>
+  <script>
+    /* ── Search filter ── */
+    function filterComponents(query) {
+      var q = query.toLowerCase().trim();
+      var sections = document.querySelectorAll('.doc-section');
+      var visibleCount = 0;
+      sections.forEach(function(sec) {
+        if (!q) { sec.style.display = ''; visibleCount++; return; }
+        var text = sec.textContent.toLowerCase();
+        if (text.includes(q)) { sec.style.display = ''; visibleCount++; }
+        else { sec.style.display = 'none'; }
+      });
+      var noResults = document.getElementById('noResults');
+      noResults.style.display = (q && visibleCount === 0) ? 'block' : 'none';
+    }
+
+    /* ── Active nav link via IntersectionObserver ── */
+    (function() {
+      var links = document.querySelectorAll('.doc-nav-link');
+      var sectionIds = Array.from(links).map(function(l) { return l.getAttribute('href').replace('#',''); });
+      var activeId = null;
+
+      function setActive(id) {
+        if (id === activeId) return;
+        activeId = id;
+        links.forEach(function(l) {
+          var target = l.getAttribute('href').replace('#','');
+          l.classList.toggle('active', target === id);
+        });
+      }
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: '-' + (64 + 64 + 8) + 'px 0px -60% 0px', threshold: 0 });
+
+      sectionIds.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    })();
+  </script>
+
+  <script>
+    function pushToFigma() {
+      var btn = document.getElementById('figmaPushBtn');
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') {
+        btn.innerText = 'capture.js not ready';
+        return;
+      }
+      btn.innerText = 'Capturing…';
+      btn.disabled = true;
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) {
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console';
+        btn.disabled = false;
+      }).catch(function(err) {
+        btn.innerText = '✗ Error — check console';
+        btn.disabled = false;
+        console.error(err);
+      });
+    }
+  </script>
+
+  <!-- Figma push button — fixed bottom-right -->
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;">
+    <button id="figmaPushBtn" onclick="pushToFigma()" style="
+      display:flex;align-items:center;gap:8px;
+      height:40px;padding:0 20px;
+      background:linear-gradient(90deg,#143AC3,#5F50E5);
+      color:white;border:none;border-radius:8px;
+      font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4);
+      transition:opacity .15s;
+    ">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+      Push to Figma
+    </button>
+  </div>
+
+</body>
+</html>

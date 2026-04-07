@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Colors — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" id="compSearch" placeholder="Search components…" oninput="filterComponents(this.value)" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item active">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+
+      <!-- Sticky doc sub-header -->
+      <!-- <div class="doc-subheader">
+        <div class="doc-subheader-left">
+          <div class="doc-subheader-title">Color System</div>
+          <div class="doc-subheader-sub">Primitive palette, semantic tokens, and appointment type colors</div>
+        </div>
+      </div> -->
+
+      <!-- Doc layout -->
+      <div class="doc-layout">
+        <div class="doc-content" id="docContent">
+
+          <div class="doc-no-results" id="noResults">No components match your search.</div>
+
+          <!-- ─────────────────── COLOR SYSTEM ─────────────────── -->
+      <div class="section doc-section" id="sec-colors">
+
+        <div class="doc-subheader-left" style="margin-bottom:24px;">
+          <div class="doc-subheader-title">Color System</div>
+          <div class="doc-subheader-sub">Primitive palette, semantic tokens, and appointment type colors</div>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="tab-bar">
+          <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+          <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+        </div>
+
+        <!-- ── Tab: Overview ── -->
+        <div class="tab-panel active" id="tab-overview">
+
+        <!-- <div class="cs-doc-sub first">Overview</div> -->
+        <p class="cs-doc-body">
+          ClearPath FDO uses a two-layer color model: <strong style="color:var(--text-primary);">primitive colors</strong> define the raw palette, and
+          <strong style="color:var(--text-primary);">semantic tokens</strong> assign those primitives to roles in the UI.
+          Components always reference semantic tokens — never raw hex values — so theming and iteration remain contained.
+        </p>
+        <div class="cs-principles">
+          <div class="cs-principle-card">
+            <div class="cs-principle-title"><i class="ti ti-layout-grid" style="font-size:14px;color:var(--brand-blue);"></i> Consistency</div>
+            <div class="cs-principle-body">Every color decision traces back to a named token. No one-off hex values in components.</div>
+          </div>
+          <div class="cs-principle-card">
+            <div class="cs-principle-title"><i class="ti ti-eye" style="font-size:14px;color:var(--brand-blue);"></i> Accessibility</div>
+            <div class="cs-principle-body">All text-on-background pairs meet WCAG AA contrast (4.5:1 for body, 3:1 for large text).</div>
+          </div>
+          <div class="cs-principle-card">
+            <div class="cs-principle-title"><i class="ti ti-minimize" style="font-size:14px;color:var(--brand-blue);"></i> Minimalism</div>
+            <div class="cs-principle-body">The palette is intentionally small. New colors require explicit justification before being added.</div>
+          </div>
+          <div class="cs-principle-card">
+            <div class="cs-principle-title"><i class="ti ti-heartbeat" style="font-size:14px;color:var(--brand-blue);"></i> Clinical Trust</div>
+            <div class="cs-principle-body">Healthcare context demands restraint. Saturated and playful colors are reserved for status only.</div>
+          </div>
+        </div>
+
+        <hr class="cs-section-divider" />
+
+        <!-- ── 2. Primitive Colors ── -->
+        <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Primitive Colors</div>
+        <p class="cs-doc-body">
+          Raw color values organized by group. Scale runs
+          <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">50</code> (lightest) →
+          <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">950</code> (darkest).
+          Special suffixes: <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">-cta</code> for gradients,
+          <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">-surface</code> for named backgrounds.
+        </p>
+
+        <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:20px;">
+          <table class="cs-prim-table">
+            <thead>
+              <tr>
+                <th style="padding-left:16px;">Name</th>
+                <th>HEX</th>
+                <th>Scale</th>
+                <th>Usage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Primary — Brand</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#041212;"></span>&nbsp; Brand - 900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#041212</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#082424;"></span>&nbsp; Brand - 800</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#082424</td>
+                <td>800</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#104747;"></span>&nbsp; Brand - 700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#104747</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);">Hover dark state</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#1B7D7D;"></span>&nbsp; Brand - 600</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#1B7D7D</td>
+                <td>600</td>
+                <td style="color:var(--text-secondary);">Brand, nav active, focus ring</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#27B2B2;"></span>&nbsp; Brand - 500</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#27B2B2</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">CTA buttons, logo icon background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#68C9C9;"></span>&nbsp; Brand - 400</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#68C9C9</td>
+                <td>400</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#A9E0E0;border:1px solid #68C9C9;"></span>&nbsp; Brand - 300</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#A9E0E0</td>
+                <td>300</td>
+                <td style="color:var(--text-secondary);">Nav active background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#D4F0F0;border:1px solid #A9E0E0;"></span>&nbsp; Brand - 200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#D4F0F0</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Future status chip background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#E9F7F7;border:1px solid #D4F0F0;"></span>&nbsp; Brand - 100</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#E9F7F7</td>
+                <td>100</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:linear-gradient(90deg,#27B2B2,#268EAD);"></span>&nbsp; Brand - Gradient</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#27B2B2 → #268EAD</td>
+                <td>gradient</td>
+                <td style="color:var(--text-secondary);">CTA buttons, logo icon background</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Primary — Brand Dark</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#00080A;"></span>&nbsp; Brand-dark - 900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#00080A</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#001113;"></span>&nbsp; Brand-dark - 800</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#001113</td>
+                <td>800</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#002227;"></span>&nbsp; Brand-dark - 700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#002227</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#003B44;"></span>&nbsp; Brand-dark - 600</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#003B44</td>
+                <td>600</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#005461;"></span>&nbsp; Brand-dark - 500</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#005461</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">Hover dark state</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#4D8790;"></span>&nbsp; Brand-dark - 400</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#4D8790</td>
+                <td>400</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#99BBC0;border:1px solid #4D8790;"></span>&nbsp; Brand-dark - 300</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#99BBC0</td>
+                <td>300</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#CCDDDF;border:1px solid #99BBC0;"></span>&nbsp; Brand-dark - 200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#CCDDDF</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#E6EEEF;border:1px solid #CCDDDF;"></span>&nbsp; Brand-dark - 100</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#E6EEEF</td>
+                <td>100</td>
+                <td style="color:var(--text-secondary);"></td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Secondary — Brand Teal</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#115e59;"></span>&nbsp; teal-800</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#115e59</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);">Stepper active title</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#0f766e;"></span>&nbsp; teal-700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#0f766e</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);">Stepper label, live badge text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#0d9488;"></span>&nbsp; teal-600</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#0d9488</td>
+                <td>600</td>
+                <td style="color:var(--text-secondary);">Brand path, user avatar, live dot</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#2dd4bf;"></span>&nbsp; teal-400</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#2dd4bf</td>
+                <td>400</td>
+                <td style="color:var(--text-secondary);">Step connector done, card hover border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#ccfbf1;border:1px solid #a7f3e0;"></span>&nbsp; teal-100</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#ccfbf1</td>
+                <td>100</td>
+                <td style="color:var(--text-secondary);">Card eyebrow border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#f0fdfa;border:1px solid #ccfbf1;"></span>&nbsp; teal-50</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#f0fdfa</td>
+                <td>50</td>
+                <td style="color:var(--text-secondary);">Selected card bg, stepper active bg</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Neutral — Text, Borders, Surfaces</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#121219;"></span>&nbsp; neutral-900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#121219</td>
+                <td>950</td>
+                <td style="color:var(--text-secondary);">Primary body and heading text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#666689;"></span>&nbsp; neutral-600</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#666689</td>
+                <td>600</td>
+                <td style="color:var(--text-secondary);">Secondary text, labels, descriptions</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#374151;"></span>&nbsp; neutral-700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#374151</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">Nav item default text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#9ca3af;"></span>&nbsp; neutral-400</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#9ca3af</td>
+                <td>400</td>
+                <td style="color:var(--text-secondary);">Muted text, placeholders, icons</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#F0F0F7;"></span>&nbsp; neutral-200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#F0F0F7</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Input and select control border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#f3f4f6;"></span>&nbsp; neutral-100</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#f3f4f6</td>
+                <td>100</td>
+                <td style="color:var(--text-secondary);">Dividers, structural borders</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#F9F9FB;border:1px solid #f3f4f6;"></span>&nbsp; surface-base</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#F9F9FB</td>
+                <td>surface</td>
+                <td style="color:var(--text-secondary);">App header and sticky bar background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#f9fafb;border:1px solid #f3f4f6;"></span>&nbsp; neutral-75</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#f9fafb</td>
+                <td>75</td>
+                <td style="color:var(--text-secondary);">Hover states, nav hover background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span>&nbsp; white</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#ffffff</td>
+                <td>0</td>
+                <td style="color:var(--text-secondary);">Cards, inputs, modals, content surfaces</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Error — Red</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#7f1d1d;"></span>&nbsp; red-900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#7f1d1d</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);">Toast error background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#991b1b;"></span>&nbsp; red-800</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#991b1b</td>
+                <td>800</td>
+                <td style="color:var(--text-secondary);">Alert error text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#b91c1c;"></span>&nbsp; red-700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#b91c1c</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);">Ongoing chip text, busy badge text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#ef4444;"></span>&nbsp; red-500</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#ef4444</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">Input error border, pulse dot</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#fecaca;"></span>&nbsp; red-200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#fecaca</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Error state border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#fef2f2;border:1px solid #fecaca;"></span>&nbsp; red-50</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#fef2f2</td>
+                <td>50</td>
+                <td style="color:var(--text-secondary);">Error alert background, busy badge background</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Success — Green</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#065f46;"></span>&nbsp; green-900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#065f46</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);">Toast success background</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#15803d;"></span>&nbsp; green-800</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#15803d</td>
+                <td>800</td>
+                <td style="color:var(--text-secondary);">Availability badge text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#16a34a;"></span>&nbsp; green-700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#16a34a</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);">Toggle checked, action button text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#22c55e;"></span>&nbsp; green-500</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#22c55e</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">Available presence dot</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#bbf7d0;"></span>&nbsp; green-200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#bbf7d0</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Success state border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#f0fdf4;border:1px solid #bbf7d0;"></span>&nbsp; green-50</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#f0fdf4</td>
+                <td>50</td>
+                <td style="color:var(--text-secondary);">Success alert background, available badge background</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Warning — Amber</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#92400e;"></span>&nbsp; amber-900</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#92400e</td>
+                <td>900</td>
+                <td style="color:var(--text-secondary);">Warning text, pending chip text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#d97706;"></span>&nbsp; amber-600</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#d97706</td>
+                <td>600</td>
+                <td style="color:var(--text-secondary);">Visitor avatar gradient</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#f59e0b;"></span>&nbsp; amber-500</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#f59e0b</td>
+                <td>500</td>
+                <td style="color:var(--text-secondary);">Password strength — fair indicator</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#fcd34d;"></span>&nbsp; amber-200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#fcd34d</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Warning state border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#fffbeb;border:1px solid #fcd34d;"></span>&nbsp; amber-50</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#fffbeb</td>
+                <td>50</td>
+                <td style="color:var(--text-secondary);">Warning alert background, pending chip background</td>
+              </tr>
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Info — Blue</td></tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#1d4ed8;"></span>&nbsp; blue-700</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#1d4ed8</td>
+                <td>700</td>
+                <td style="color:var(--text-secondary);">Upcoming chip text</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#bfdbfe;"></span>&nbsp; blue-200</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#bfdbfe</td>
+                <td>200</td>
+                <td style="color:var(--text-secondary);">Upcoming chip border</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;"><span class="cs-swatch-dot" style="background:#eff6ff;border:1px solid #bfdbfe;"></span>&nbsp; blue-50</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">#eff6ff</td>
+                <td>50</td>
+                <td style="color:var(--text-secondary);">Upcoming chip background</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="cs-section-divider" />
+
+        <!-- ── 3. Semantic Tokens ── -->
+        <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Semantic Tokens</div>
+        <p class="cs-doc-body">
+          Semantic tokens map primitive colors to UI roles. Always use these CSS custom properties in component styles — never hardcode hex values.
+          Dark mode values are not yet implemented; the column is reserved for future theming.
+        </p>
+
+        <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:20px;">
+          <table class="cs-sem-table">
+            <thead>
+              <tr>
+                <th style="padding-left:16px;min-width:200px;">Token Name</th>
+                <th style="min-width:180px;">Purpose</th>
+                <th style="min-width:220px;">Light Value</th>
+                <th style="min-width:140px;">Dark Value</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- ── Brand ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Brand</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.brand</td>
+                <td style="color:var(--text-secondary);">Primary brand; active states; focus rings</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#27B2B2;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-500 · #27B2B2</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#005461;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-500 · #005461</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.brand.hover</td>
+                <td style="color:var(--text-secondary);">Hover state for primary interactive elements</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#104747;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-700 · #104747</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#002227;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-700 · #002227</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.brand.gradient</td>
+                <td style="color:var(--text-secondary);">Primary CTA buttons; logo icon fill</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:linear-gradient(90deg,#27B2B2,#268EAD);"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-Gradient · #27B2B2 → #268EAD</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Text ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Text</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.text.primary</td>
+                <td style="color:var(--text-secondary);">Body copy, headings, form labels</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#121219;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-900 · #121219</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.text.secondary</td>
+                <td style="color:var(--text-secondary);">Supporting text, descriptions, section labels</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#666689;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-600 · #666689</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.text.muted</td>
+                <td style="color:var(--text-secondary);">Placeholders, de-emphasised metadata</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#9ca3af;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-400 · #9ca3af</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Surface ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Surface</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.surface.1</td>
+                <td style="color:var(--text-secondary);">Cards, modals, panels, drawers — pure white</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.surface.2</td>
+                <td style="color:var(--text-secondary);">Hover fills, table row alternates — off-white</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f9fafb;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-75 · #f9fafb</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.surface.gradient</td>
+                <td style="color:var(--text-secondary);">App page canvas — gray-lavender gradient wash</td>
+                <td style="color:var(--text-secondary);font-size:11px;font-family:monospace;">linear-gradient over #FFF</td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Border ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Border</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.default</td>
+                <td style="color:var(--text-secondary);">General-purpose border for UI elements</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F0F0F7;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-200 · #F0F0F7</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.subtle</td>
+                <td style="color:var(--text-secondary);">Dividers, card edges, structural lines</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-100 · #f3f4f6</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.input</td>
+                <td style="color:var(--text-secondary);">Default form control outline</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F0F0F7;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-200 · #F0F0F7</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.focus</td>
+                <td style="color:var(--text-secondary);">Focus ring on inputs and interactive elements</td>
+                <td style="color:var(--text-secondary);font-size:11px;font-family:monospace;">rgba(80, 100, 229, 0.15)</td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.error</td>
+                <td style="color:var(--text-secondary);">Error state border on form controls</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-500 · #ef4444</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.success</td>
+                <td style="color:var(--text-secondary);">Success state border — confirmation, availability</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#bbf7d0;border:1px solid #86efac;"></span> <span style="font-family:monospace;color:var(--text-secondary);">success-200 · #bbf7d0</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.danger</td>
+                <td style="color:var(--text-secondary);">Danger state border — destructive actions, alerts</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#fecaca;border:1px solid #fca5a5;"></span> <span style="font-family:monospace;color:var(--text-secondary);">error-200 · #fecaca</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.border.warning</td>
+                <td style="color:var(--text-secondary);">Warning state border — caution messages, overdue</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#fcd34d;border:1px solid #fbbf24;"></span> <span style="font-family:monospace;color:var(--text-secondary);">warning-200 · #fcd34d</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">border.width</td>
+                <td style="color:var(--text-secondary);">Default border thickness — dividers, cards, containers</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">1px</td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">border.width.selected</td>
+                <td style="color:var(--text-secondary);">Border thickness for selected or active elements</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">2px</td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">border.width.focused</td>
+                <td style="color:var(--text-secondary);">Border thickness on focused input controls</td>
+                <td style="font-family:monospace;color:var(--text-secondary);">1.5px</td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Icon ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Icon</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.icon.default</td>
+                <td style="color:var(--text-secondary);">Default icon color in controls and nav</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#666689;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-600 · #666689</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.icon.muted</td>
+                <td style="color:var(--text-secondary);">Inactive, decorative, or secondary icons</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#9ca3af;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-400 · #9ca3af</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.icon.active</td>
+                <td style="color:var(--text-secondary);">Active state icons; primary action icons</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#1B7D7D;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-600 · #1B7D7D</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#003B44;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-600 · #003B44</span></span></td>
+              </tr>
+
+              <!-- ── Sidenav ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Sidenav</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.sidenav.bg.active</td>
+                <td style="color:var(--text-secondary);">Active nav item background fill</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#A9E0E0;border:1px solid #68C9C9;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-300 · #A9E0E0</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#99BBC0;border:1px solid #4D8790;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-300 · #99BBC0</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.sidenav.text.active</td>
+                <td style="color:var(--text-secondary);">Active nav item text and icon color</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#1B7D7D;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-600 · #1B7D7D</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#003B44;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-600 · #003B44</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.sidenav.border.active</td>
+                <td style="color:var(--text-secondary);">Active nav item left accent bar</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#1B7D7D;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-600 · #1B7D7D</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#003B44;"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-dark-600 · #003B44</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.sidenav.text.default</td>
+                <td style="color:var(--text-secondary);">Default nav item label color</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#374151;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-700 · #374151</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.sidenav.bg.hover</td>
+                <td style="color:var(--text-secondary);">Nav item hover background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f9fafb;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-75 · #f9fafb</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Header ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Header</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.header.bg</td>
+                <td style="color:var(--text-secondary);">App topbar background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F9F9FB;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">surface-base · #F9F9FB</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.header.border</td>
+                <td style="color:var(--text-secondary);">Header bottom divider line</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-100 · #f3f4f6</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Button ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Button</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.button.primary.bg</td>
+                <td style="color:var(--text-secondary);">Primary button fill (CTA gradient)</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:linear-gradient(90deg,#27B2B2,#268EAD);"></span> <span style="font-family:monospace;color:var(--text-secondary);">Brand-Gradient · #27B2B2 → #268EAD</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.button.primary.text</td>
+                <td style="color:var(--text-secondary);">Primary button label color</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.button.secondary.bg</td>
+                <td style="color:var(--text-secondary);">Secondary / ghost button fill</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.button.secondary.text</td>
+                <td style="color:var(--text-secondary);">Secondary button label color</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#121219;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-900 · #121219</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.button.danger.text</td>
+                <td style="color:var(--text-secondary);">Destructive action button label</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-500 · #ef4444</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Input ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Input</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.input.bg</td>
+                <td style="color:var(--text-secondary);">Form control background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.input.border.default</td>
+                <td style="color:var(--text-secondary);">Default input border</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F0F0F7;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-200 · #F0F0F7</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.input.border.focus</td>
+                <td style="color:var(--text-secondary);">Focus ring on active input</td>
+                <td style="color:var(--text-secondary);font-size:11px;font-family:monospace;">rgba(80, 100, 229, 0.15)</td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.input.border.error</td>
+                <td style="color:var(--text-secondary);">Error state border</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-500 · #ef4444</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.input.text.placeholder</td>
+                <td style="color:var(--text-secondary);">Placeholder text inside inputs</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#9ca3af;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-400 · #9ca3af</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Card ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Card</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.card.bg</td>
+                <td style="color:var(--text-secondary);">Card surface background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.card.border</td>
+                <td style="color:var(--text-secondary);">Card outer border</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-100 · #f3f4f6</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Modal ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Modal</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.modal.bg</td>
+                <td style="color:var(--text-secondary);">Modal dialog surface</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">white · #ffffff</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.modal.border</td>
+                <td style="color:var(--text-secondary);">Modal container border</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#f3f4f6;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-100 · #f3f4f6</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.modal.overlay</td>
+                <td style="color:var(--text-secondary);">Backdrop scrim behind modal</td>
+                <td style="color:var(--text-secondary);font-size:11px;font-family:monospace;">rgba(0, 0, 0, 0.40)</td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Form ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Form</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.form.label.text</td>
+                <td style="color:var(--text-secondary);">Form field label color</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#121219;"></span> <span style="font-family:monospace;color:var(--text-secondary);">neutral-900 · #121219</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.form.error.text</td>
+                <td style="color:var(--text-secondary);">Inline validation error message</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-500 · #ef4444</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.form.error.border</td>
+                <td style="color:var(--text-secondary);">Error border on invalid fields</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-500 · #ef4444</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.form.error.bg</td>
+                <td style="color:var(--text-secondary);">Error alert / inline error background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#fef2f2;border:1px solid #fecaca;"></span> <span style="font-family:monospace;color:var(--text-secondary);">red-50 · #fef2f2</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+              <!-- ── Appointment ── -->
+              <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Appointment</td></tr>
+              <tr>
+                <td style="padding-left:16px;">color.appointment.tour.text<br/>color.appointment.tour.bg</td>
+                <td style="color:var(--text-secondary);">Facility Tour — card text and background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#FFF3EE;border:1.5px solid #9A3412;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#9A3412 / #FFF3EE</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.appointment.counselling.text<br/>color.appointment.counselling.bg</td>
+                <td style="color:var(--text-secondary);">Counselling Session — card text and background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#E8F6FA;border:1.5px solid #0C5E73;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#0C5E73 / #E8F6FA</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.appointment.grouptherapy.text<br/>color.appointment.grouptherapy.bg</td>
+                <td style="color:var(--text-secondary);">Group Therapy — card text and background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#FCF0FD;border:1.5px solid #A21CAF;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#A21CAF / #FCF0FD</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.appointment.psychevaluation.text<br/>color.appointment.psychevaluation.bg</td>
+                <td style="color:var(--text-secondary);">Psychological Evaluation — card text and background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F2F9E8;border:1.5px solid #4A6B00;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#4A6B00 / #F2F9E8</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;">color.appointment.medicaltest.text<br/>color.appointment.medicaltest.bg</td>
+                <td style="color:var(--text-secondary);">Medical Test — card text and background</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F1F5F9;border:1.5px solid #1E293B;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#1E293B / #F1F5F9</span></span></td>
+                <td class="cs-na">—</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <hr class="cs-section-divider" />
+
+        <!-- ── 4. Usage Guidelines ── -->
+        <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Usage Guidelines</div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:8px;">
+          <div class="demo-block" style="gap:12px;">
+            <div class="cs-group-label">Text</div>
+            <ul class="cs-usage-list">
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.text.primary</code> for all body copy, headings, and form labels.</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.text.secondary</code> for supporting captions, section headers, and descriptions.</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.text.muted</code> only for placeholders and truly de-emphasized metadata.</li>
+            </ul>
+          </div>
+          <div class="demo-block" style="gap:12px;">
+            <div class="cs-group-label">Interactive &amp; Brand</div>
+            <ul class="cs-usage-list">
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.brand.blue</code> for nav active state, focus rings, and inline links.</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.brand.cta</code> <em>only</em> for the primary action button and logo icon.</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.brand.path</code> for teal brand accent: avatars, live dots, stepper progress.</li>
+            </ul>
+          </div>
+          <div class="demo-block" style="gap:12px;">
+            <div class="cs-group-label">Surfaces &amp; Borders</div>
+            <ul class="cs-usage-list">
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.surface.1</code> for all content surfaces — cards, modals, side panels, dropdowns.</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.border.subtle</code> for structural lines (section dividers, table row separators).</li>
+              <li>Use <code style="font-size:12px;font-family:monospace;background:var(--nav-bg-active);color:var(--brand-blue);padding:1px 5px;border-radius:3px;">color.border.input</code> only for form control outlines.</li>
+            </ul>
+          </div>
+          <div class="demo-block" style="gap:12px;">
+            <div class="cs-group-label">Status Colors</div>
+            <ul class="cs-usage-list">
+              <li>Use semantic groups (error, success, warning, info) only for status communication — not decoration.</li>
+              <li>Never repurpose primary or secondary colors to convey status.</li>
+              <li>Appointment type colors are a separate system — do not mix with UI status colors.</li>
+            </ul>
+          </div>
+        </div>
+
+
+        <hr class="cs-section-divider" />
+
+        <!-- ── 6. Appointment Type Colors ── -->
+        <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Appointment Type Colors</div>
+        <p class="cs-doc-body">
+          A dedicated token set for identifying appointment types visually. These colors exist solely to distinguish appointment categories — they carry no semantic meaning beyond type identification.
+        </p>
+
+        <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:16px;">
+          <table class="cs-prim-table">
+            <thead>
+              <tr>
+                <th style="padding-left:16px;min-width:200px;">Appointment Type</th>
+                <th style="min-width:260px;">Token Name</th>
+                <th style="min-width:180px;">Text Color</th>
+                <th style="min-width:180px;">Background</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding-left:16px;font-weight:600;color:var(--text-primary);">Facility Tour</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--brand-blue);">color.appointment.tour</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#9A3412;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#9A3412</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#FFF3EE;border:1px solid #9A3412;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#FFF3EE</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;font-weight:600;color:var(--text-primary);">Counselling Session</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--brand-blue);">color.appointment.counsel</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#0C5E73;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#0C5E73</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#E8F6FA;border:1px solid #0C5E73;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#E8F6FA</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;font-weight:600;color:var(--text-primary);">Group Therapy</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--brand-blue);">color.appointment.grouptherapy</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#A21CAF;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#A21CAF</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#FCF0FD;border:1px solid #A21CAF;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#FCF0FD</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;font-weight:600;color:var(--text-primary);">Psychological Evaluation</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--brand-blue);">color.appointment.psychevaluation</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#4A6B00;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#4A6B00</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F2F9E8;border:1px solid #4A6B00;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#F2F9E8</span></span></td>
+              </tr>
+              <tr>
+                <td style="padding-left:16px;font-weight:600;color:var(--text-primary);">Medical Test</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--brand-blue);">color.appointment.medicaltest</td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#1E293B;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#1E293B</span></span></td>
+                <td><span class="cs-val"><span class="cs-swatch-dot" style="background:#F1F5F9;border:1px solid #1E293B;"></span> <span style="font-family:monospace;color:var(--text-secondary);">#F1F5F9</span></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="demo-block" style="gap:6px;background:#fffbeb;border-color:#fcd34d;">
+          <div style="font-size:11px;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Strict Usage Rules</div>
+          <ul class="cs-usage-list" style="margin:0;">
+            <li>Use <em>only</em> to identify appointment type on cards, tags, and detail panels.</li>
+            <li>Never use for UI actions, status indicators, alerts, or any non-appointment context.</li>
+            <li>Cannot be reused elsewhere in the UI — not as hover states, borders, or decorative fills.</li>
+            <li>Do not mix with semantic tokens (error, success, warning, info) — they serve different purposes.</li>
+          </ul>
+        </div>
+
+        <hr class="cs-section-divider" />
+
+        </div><!-- /.tab-panel#tab-overview -->
+
+        <!-- ── Tab: Code ── -->
+        <div class="tab-panel" id="tab-code">
+
+          <div class="cs-doc-sub first" style="margin-top:0;padding-top:0;border-top:none;">Primitives</div>
+          <p class="cs-doc-body">Raw palette values defined in <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">global.css</code> Layer 1. Never reference these directly in component CSS — use semantic tokens instead.</p>
+
+          <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+            <table class="cs-prim-table">
+              <thead>
+                <tr>
+                  <th style="padding-left:16px;min-width:200px;">Variable</th>
+                  <th style="min-width:120px;">Value</th>
+                  <th style="min-width:160px;">Resolved</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Spacing (8px grid)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-1</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">8px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">8px</td><td style="color:var(--text-secondary);">Base unit</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-2</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">16px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">16px</td><td style="color:var(--text-secondary);">2×</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-3</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">24px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">24px</td><td style="color:var(--text-secondary);">3×</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-4</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">32px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">32px</td><td style="color:var(--text-secondary);">4×</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-5</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">40px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">40px</td><td style="color:var(--text-secondary);">5× — button/input height</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-6</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">48px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">48px</td><td style="color:var(--text-secondary);">6×</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-7</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">56px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">56px</td><td style="color:var(--text-secondary);">7×</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--space-8</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">64px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">64px</td><td style="color:var(--text-secondary);">8× — header height</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Blue / Indigo</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--blue-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F5F5FF</td><td><span class="cs-swatch-dot" style="background:#F5F5FF;border:1px solid #dce4ff;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F5F5FF</span></td><td style="color:var(--text-secondary);">Future chip background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--blue-100</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#EEEEFF</td><td><span class="cs-swatch-dot" style="background:#EEEEFF;border:1px solid #dce4ff;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#EEEEFF</span></td><td style="color:var(--text-secondary);">Nav active background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--blue-500</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</td><td><span class="cs-swatch-dot" style="background:#5064E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</span></td><td style="color:var(--text-secondary);">Brand blue</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--blue-600</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#2C3F85</td><td><span class="cs-swatch-dot" style="background:#2C3F85;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#2C3F85</span></td><td style="color:var(--text-secondary);">Hover dark state</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--indigo-500</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5F50E5</td><td><span class="cs-swatch-dot" style="background:#5F50E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5F50E5</span></td><td style="color:var(--text-secondary);">CTA gradient end</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Teal</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f0fdfa</td><td><span class="cs-swatch-dot" style="background:#f0fdfa;border:1px solid #ccfbf1;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f0fdfa</span></td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-100</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ccfbf1</td><td><span class="cs-swatch-dot" style="background:#ccfbf1;border:1px solid #99f6e4;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ccfbf1</span></td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-200</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#99f6e4</td><td><span class="cs-swatch-dot" style="background:#99f6e4;border:1px solid #2dd4bf;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#99f6e4</span></td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-400</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#2dd4bf</td><td><span class="cs-swatch-dot" style="background:#2dd4bf;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#2dd4bf</span></td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-500</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#14b8a6</td><td><span class="cs-swatch-dot" style="background:#14b8a6;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#14b8a6</span></td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-600</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0d9488</td><td><span class="cs-swatch-dot" style="background:#0d9488;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0d9488</span></td><td style="color:var(--text-secondary);">Brand path (logo, avatar)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-700</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0f766e</td><td><span class="cs-swatch-dot" style="background:#0f766e;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0f766e</span></td><td style="color:var(--text-secondary);">Stepper label, live badge</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--teal-800</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#115e59</td><td><span class="cs-swatch-dot" style="background:#115e59;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#115e59</span></td><td style="color:var(--text-secondary);">Stepper active title</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Neutral</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fafafa</td><td><span class="cs-swatch-dot" style="background:#fafafa;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fafafa</span></td><td style="color:var(--text-secondary);">Weekend background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-75</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f9fafb</td><td><span class="cs-swatch-dot" style="background:#f9fafb;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f9fafb</span></td><td style="color:var(--text-secondary);">Nav item hover</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-100</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f3f4f6</td><td><span class="cs-swatch-dot" style="background:#f3f4f6;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f3f4f6</span></td><td style="color:var(--text-secondary);">Subtle borders, dividers</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-200</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F0F0F7</td><td><span class="cs-swatch-dot" style="background:#F0F0F7;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F0F0F7</span></td><td style="color:var(--text-secondary);">Input borders</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-300</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</td><td><span class="cs-swatch-dot" style="background:#F1F5F9;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</span></td><td style="color:var(--text-secondary);">Scrollbar track</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-400</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9ca3af</td><td><span class="cs-swatch-dot" style="background:#9ca3af;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9ca3af</span></td><td style="color:var(--text-secondary);">Muted text, placeholders</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-500</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#cbd5e1</td><td><span class="cs-swatch-dot" style="background:#cbd5e1;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#cbd5e1</span></td><td style="color:var(--text-secondary);">Scrollbar thumb</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-600</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#666689</td><td><span class="cs-swatch-dot" style="background:#666689;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#666689</span></td><td style="color:var(--text-secondary);">Secondary text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-700</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#374151</td><td><span class="cs-swatch-dot" style="background:#374151;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#374151</span></td><td style="color:var(--text-secondary);">Nav item text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--neutral-900</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#121219</td><td><span class="cs-swatch-dot" style="background:#121219;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#121219</span></td><td style="color:var(--text-secondary);">Primary text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--white</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ffffff</td><td><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ffffff</span></td><td style="color:var(--text-secondary);">Pure white</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--surface-base</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F9F9FB</td><td><span class="cs-swatch-dot" style="background:#F9F9FB;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F9F9FB</span></td><td style="color:var(--text-secondary);">Header background named value</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Appointment Type Palette</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--orange-900</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9A3412</td><td><span class="cs-swatch-dot" style="background:#9A3412;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9A3412</span></td><td style="color:var(--text-secondary);">badge.variant1 text (Tan)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--orange-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FFF3EE</td><td><span class="cs-swatch-dot" style="background:#FFF3EE;border:1px solid #9A3412;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FFF3EE</span></td><td style="color:var(--text-secondary);">badge.variant1 background (Tan)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--cyan-800</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0C5E73</td><td><span class="cs-swatch-dot" style="background:#0C5E73;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0C5E73</span></td><td style="color:var(--text-secondary);">badge.variant2 text (Teal)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--cyan-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#E8F6FA</td><td><span class="cs-swatch-dot" style="background:#E8F6FA;border:1px solid #0C5E73;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#E8F6FA</span></td><td style="color:var(--text-secondary);">badge.variant2 background (Teal)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--purple-800</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#A21CAF</td><td><span class="cs-swatch-dot" style="background:#A21CAF;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#A21CAF</span></td><td style="color:var(--text-secondary);">badge.variant3 text (Purple)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--purple-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FCF0FD</td><td><span class="cs-swatch-dot" style="background:#FCF0FD;border:1px solid #A21CAF;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FCF0FD</span></td><td style="color:var(--text-secondary);">badge.variant3 background (Purple)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--lime-800</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#4A6B00</td><td><span class="cs-swatch-dot" style="background:#4A6B00;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#4A6B00</span></td><td style="color:var(--text-secondary);">badge.variant4 text (Lime)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--lime-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F2F9E8</td><td><span class="cs-swatch-dot" style="background:#F2F9E8;border:1px solid #4A6B00;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F2F9E8</span></td><td style="color:var(--text-secondary);">badge.variant4 background (Lime)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--slate-900</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#1E293B</td><td><span class="cs-swatch-dot" style="background:#1E293B;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#1E293B</span></td><td style="color:var(--text-secondary);">badge.variant5 text (Slate)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--slate-100</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</td><td><span class="cs-swatch-dot" style="background:#F1F5F9;border:1px solid #1E293B;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</span></td><td style="color:var(--text-secondary);">badge.variant5 background (Slate)</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Danger</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--red-50</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fef2f2</td><td><span class="cs-swatch-dot" style="background:#fef2f2;border:1px solid #fecaca;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fef2f2</span></td><td style="color:var(--text-secondary);">Error background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--red-500</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ef4444</td><td><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ef4444</span></td><td style="color:var(--text-secondary);">Danger / error</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--red-600</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#dc2626</td><td><span class="cs-swatch-dot" style="background:#dc2626;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#dc2626</span></td><td style="color:var(--text-secondary);">Danger hover</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Semantic Tokens</div>
+          <p class="cs-doc-body">Map primitive values to UI roles. These are the only variables components should reference. Defined in <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">global.css</code> Layer 2.</p>
+
+          <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+            <table class="cs-prim-table">
+              <thead>
+                <tr>
+                  <th style="padding-left:16px;min-width:230px;">Variable</th>
+                  <th style="min-width:230px;">Value (global.css)</th>
+                  <th style="min-width:160px;">Resolved</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Spacing</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-1</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-1)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">8px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-2</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-2)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">16px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-3</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-3)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">24px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-4</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-4)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">32px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-5</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-5)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">40px</td><td style="color:var(--text-secondary);">Button/input height</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-6</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-6)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">48px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-7</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-7)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">56px</td><td style="color:var(--text-secondary);"></td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--spacing-8</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-8)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">64px</td><td style="color:var(--text-secondary);">Header height</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Layout</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--header-height</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--space-8)</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">64px</td><td style="color:var(--text-secondary);">App header height</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--sidebar-width</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">240px</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">240px</td><td style="color:var(--text-secondary);">App sidebar width</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--bg-page</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">linear-gradient(…), white</td><td style="font-family:monospace;font-size:11px;color:var(--text-muted);">gradient</td><td style="color:var(--text-secondary);">App page canvas</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--bg-header</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--surface-base)</td><td><span class="cs-swatch-dot" style="background:#F9F9FB;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F9F9FB</span></td><td style="color:var(--text-secondary);">Header/topbar</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--bg-surface</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--white)</td><td><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ffffff</span></td><td style="color:var(--text-secondary);">Cards, modals, panels</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--bg-input</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--white)</td><td><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ffffff</span></td><td style="color:var(--text-secondary);">Form control fill</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--bg-calendar</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--white)</td><td><span class="cs-swatch-dot" style="background:#ffffff;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ffffff</span></td><td style="color:var(--text-secondary);">Calendar grid surface</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--text-primary</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-900)</td><td><span class="cs-swatch-dot" style="background:#121219;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#121219</span></td><td style="color:var(--text-secondary);">Body copy, headings, labels</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--text-secondary</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-600)</td><td><span class="cs-swatch-dot" style="background:#666689;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#666689</span></td><td style="color:var(--text-secondary);">Descriptions, captions</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--text-muted</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-400)</td><td><span class="cs-swatch-dot" style="background:#9ca3af;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9ca3af</span></td><td style="color:var(--text-secondary);">Placeholders, metadata</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Border</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--border-subtle</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-100)</td><td><span class="cs-swatch-dot" style="background:#f3f4f6;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f3f4f6</span></td><td style="color:var(--text-secondary);">Dividers, card borders</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--border-input</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-200)</td><td><span class="cs-swatch-dot" style="background:#F0F0F7;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F0F0F7</span></td><td style="color:var(--text-secondary);">Form control borders</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Brand</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--brand-blue</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-500)</td><td><span class="cs-swatch-dot" style="background:#5064E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</span></td><td style="color:var(--text-secondary);">Nav active, focus rings, links</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--brand-blue-dark</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-600)</td><td><span class="cs-swatch-dot" style="background:#2C3F85;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#2C3F85</span></td><td style="color:var(--text-secondary);">Hover dark for interactive</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--brand-path</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--teal-600)</td><td><span class="cs-swatch-dot" style="background:#0d9488;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0d9488</span></td><td style="color:var(--text-secondary);">Logo accent, user avatar</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--cta-gradient</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">linear-gradient(blue-500 → indigo-500)</td><td><span class="cs-swatch-dot" style="background:linear-gradient(90deg,#5064E5,#5F50E5);"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">gradient</span></td><td style="color:var(--text-secondary);">Primary CTA buttons, logo icon</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--focus-ring</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">rgba(80,100,229,0.15)</td><td style="font-family:monospace;font-size:11px;color:var(--text-muted);">translucent</td><td style="color:var(--text-secondary);">Focus box-shadow on inputs</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Navigation</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--sidebar-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">transparent</td><td style="font-family:monospace;font-size:11px;color:var(--text-muted);">transparent</td><td style="color:var(--text-secondary);">Sidebar background</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--nav-bg-active</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-100)</td><td><span class="cs-swatch-dot" style="background:#EEEEFF;border:1px solid #dce4ff;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#EEEEFF</span></td><td style="color:var(--text-secondary);">Active nav item fill</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--nav-text-active</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-500)</td><td><span class="cs-swatch-dot" style="background:#5064E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</span></td><td style="color:var(--text-secondary);">Active nav item text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--nav-border-active</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-500)</td><td><span class="cs-swatch-dot" style="background:#5064E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</span></td><td style="color:var(--text-secondary);">Active nav left border</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--nav-item-color</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-700)</td><td><span class="cs-swatch-dot" style="background:#374151;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#374151</span></td><td style="color:var(--text-secondary);">Default nav item text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--nav-item-bg-hover</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-75)</td><td><span class="cs-swatch-dot" style="background:#f9fafb;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#f9fafb</span></td><td style="color:var(--text-secondary);">Nav item + ghost button hover</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Calendar</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--today-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-50)</td><td><span class="cs-swatch-dot" style="background:#F5F5FF;border:1px solid #dce4ff;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F5F5FF</span></td><td style="color:var(--text-secondary);">Today column highlight</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--today-color</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--blue-500)</td><td><span class="cs-swatch-dot" style="background:#5064E5;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#5064E5</span></td><td style="color:var(--text-secondary);">Today header text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--weekend-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-50)</td><td><span class="cs-swatch-dot" style="background:#fafafa;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fafafa</span></td><td style="color:var(--text-secondary);">Weekend column tint</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Scrollbar</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--scrollbar-track</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-300)</td><td><span class="cs-swatch-dot" style="background:#F1F5F9;border:1px solid #e5e7eb;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</span></td><td style="color:var(--text-secondary);">Scrollbar track</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--scrollbar-thumb</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--neutral-500)</td><td><span class="cs-swatch-dot" style="background:#cbd5e1;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#cbd5e1</span></td><td style="color:var(--text-secondary);">Scrollbar thumb</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Danger</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--color-danger</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--red-500)</td><td><span class="cs-swatch-dot" style="background:#ef4444;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#ef4444</span></td><td style="color:var(--text-secondary);">Destructive actions, error text</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--color-danger-hover</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--red-600)</td><td><span class="cs-swatch-dot" style="background:#dc2626;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#dc2626</span></td><td style="color:var(--text-secondary);">Danger hover state</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--color-danger-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--red-50)</td><td><span class="cs-swatch-dot" style="background:#fef2f2;border:1px solid #fecaca;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#fef2f2</span></td><td style="color:var(--text-secondary);">Error/danger background</td></tr>
+
+                <tr class="cs-group-sep"><td colspan="4" style="padding-left:16px;">Appointment Types</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-1-text</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--orange-900)</td><td><span class="cs-swatch-dot" style="background:#9A3412;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#9A3412</span></td><td style="color:var(--text-secondary);">badge.variant1 text (Tan)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-1-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--orange-50)</td><td><span class="cs-swatch-dot" style="background:#FFF3EE;border:1px solid #9A3412;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FFF3EE</span></td><td style="color:var(--text-secondary);">badge.variant1 background (Tan)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-2-text</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--cyan-800)</td><td><span class="cs-swatch-dot" style="background:#0C5E73;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#0C5E73</span></td><td style="color:var(--text-secondary);">badge.variant2 text (Teal)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-2-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--cyan-50)</td><td><span class="cs-swatch-dot" style="background:#E8F6FA;border:1px solid #0C5E73;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#E8F6FA</span></td><td style="color:var(--text-secondary);">badge.variant2 background (Teal)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-3-text</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--purple-800)</td><td><span class="cs-swatch-dot" style="background:#A21CAF;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#A21CAF</span></td><td style="color:var(--text-secondary);">badge.variant3 text (Purple)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-3-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--purple-50)</td><td><span class="cs-swatch-dot" style="background:#FCF0FD;border:1px solid #A21CAF;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#FCF0FD</span></td><td style="color:var(--text-secondary);">badge.variant3 background (Purple)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-4-text</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--lime-800)</td><td><span class="cs-swatch-dot" style="background:#4A6B00;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#4A6B00</span></td><td style="color:var(--text-secondary);">badge.variant4 text (Lime)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-4-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--lime-50)</td><td><span class="cs-swatch-dot" style="background:#F2F9E8;border:1px solid #4A6B00;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F2F9E8</span></td><td style="color:var(--text-secondary);">badge.variant4 background (Lime)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-5-text</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--slate-900)</td><td><span class="cs-swatch-dot" style="background:#1E293B;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#1E293B</span></td><td style="color:var(--text-secondary);">badge.variant5 text (Slate)</td></tr>
+                <tr><td style="padding-left:16px;font-family:monospace;font-size:11px;color:var(--brand-blue);">--badge-variant-5-bg</td><td style="font-family:monospace;font-size:11px;color:var(--text-secondary);">var(--slate-100)</td><td><span class="cs-swatch-dot" style="background:#F1F5F9;border:1px solid #1E293B;"></span> <span style="font-family:monospace;font-size:11px;color:var(--text-secondary);">#F1F5F9</span></td><td style="color:var(--text-secondary);">badge.variant5 background (Slate)</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div><!-- /.tab-panel#tab-code -->
+
+      </div><!-- /.section -->
+
+        </div><!-- /.doc-content -->
+      </div><!-- /.doc-layout -->
+
+    </main>
+  </div><!-- /#appBody -->
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById('tab-' + name).classList.add('active');
+      document.getElementById('tab-btn-' + name).classList.add('active');
+    }
+
+    function filterComponents(query) {
+      var q = query.toLowerCase().trim();
+      var sections = document.querySelectorAll('.doc-section');
+      var visibleCount = 0;
+      sections.forEach(function(sec) {
+        if (!q) { sec.style.display = ''; visibleCount++; return; }
+        var text = sec.textContent.toLowerCase();
+        if (text.includes(q)) { sec.style.display = ''; visibleCount++; }
+        else { sec.style.display = 'none'; }
+      });
+      var noResults = document.getElementById('noResults');
+      noResults.style.display = (q && visibleCount === 0) ? 'block' : 'none';
+    }
+  </script>
+
+
+
+ <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Manrope',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

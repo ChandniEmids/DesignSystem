@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chip — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search design system…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item active">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Chip</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Interactive compact elements for filtering, selecting values, and representing typed input as removable tokens.</div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+          </div>
+
+          <!-- ══════════ TAB: OVERVIEW ══════════ -->
+          <div class="tab-panel active" id="tab-overview">
+
+            <!-- Section A: Purpose -->
+            <div class="cs-doc-sub first">Purpose</div>
+            <p class="cs-doc-body">
+              Chips are interactive compact elements that act like mini-buttons. Unlike badges — which the system sets and the user cannot change — chips are clickable and always produce a state change: a filter narrows results, a choice selects a value, an input chip removes a selected record from a set. Chips appear in filter bars, multi-select fields, and time-slot pickers.
+            </p>
+
+            <div class="cs-principles">
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-hand-finger" style="font-size:14px;color:var(--brand-blue);"></i> Always interactive</div>
+                <div class="cs-principle-body">Every chip must have a defined hover, focus, and active/selected state. Static chips are badges — not chips.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-border-radius" style="font-size:14px;color:var(--brand-blue);"></i> 8px border-radius</div>
+                <div class="cs-principle-body">Chips match button/input border-radius (8px) — not pill-shaped. Pill shape is reserved for badges only.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-stack" style="font-size:14px;color:var(--brand-blue);"></i> Lives in groups</div>
+                <div class="cs-principle-body">Chips appear in horizontal lists or groups. A solitary chip with no siblings should be re-evaluated as a button.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-writing" style="font-size:14px;color:var(--brand-blue);"></i> Label always visible</div>
+                <div class="cs-principle-body">Icons are optional, but text is always required. No icon-only chips — icons must pair with a text label.</div>
+              </div>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section B: Dos & Don'ts -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
+
+            <div class="dd-grid">
+              <div class="dd-card dd-do">
+                <div class="dd-head"><i class="ti ti-thumb-up" style="font-size:13px;"></i> Do</div>
+                <ul class="dd-list">
+                  <li>Define hover, focus, and selected states on every chip.</li>
+                  <li>Keep chip labels 1–2 words maximum — chips are compact by design.</li>
+                  <li>Use <strong>filter chips</strong> for narrowing lists; use <strong>choice chips</strong> for picking exactly one option.</li>
+                  <li>Use <strong>input chips</strong> with a dismiss (×) button only when the value is removable.</li>
+                  <li>Group chips in a flex row with consistent gap (6–8px).</li>
+                </ul>
+              </div>
+              <div class="dd-card dd-dont">
+                <div class="dd-head"><i class="ti ti-thumb-down" style="font-size:13px;"></i> Don't</div>
+                <ul class="dd-list">
+                  <li>Don't use pill shape (border-radius: 99px) on chips — that shape belongs to badges.</li>
+                  <li>Don't create a chip that produces no state change — it is a badge.</li>
+                  <li>Don't place chips inside form inputs or modal headers — use buttons there instead.</li>
+                  <li>Don't omit the selected state — users must always know what is active.</li>
+                  <li>Don't use the pulse dot on chips — that modifier is reserved for badges only.</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Chip Types -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Types &amp; Inventory</div>
+            <p class="cs-doc-body">Three chip types cover all interactive use cases in ClearPath FDO. Each type maps to a distinct interaction pattern.</p>
+
+            <!-- 1. Filter Chip -->
+            <div class="demo-label" style="margin-bottom:8px;">1 — Filter Chip
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">List views · Multi-criteria filter bars · Role/department filter</span>
+            </div>
+            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Narrows a list. Multiple can be active simultaneously. Uses 8px border-radius to match inputs and buttons — sits in a horizontal filter row alongside search inputs.</p>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
+                <button class="pt-filter-chip">All</button>
+                <button class="pt-filter-chip active">Active</button>
+                <button class="pt-filter-chip">Pending</button>
+                <button class="pt-filter-chip">Category A</button>
+                <button class="pt-filter-chip">Category B</button>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <button class="pt-filter-chip">Role A</button>
+                <button class="pt-filter-chip active">Role B</button>
+                <button class="pt-filter-chip">Role C</button>
+                <button class="pt-filter-chip">Dept A</button>
+                <button class="pt-filter-chip">Dept B</button>
+              </div>
+              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">Active state shown in blue · Default is grey border</div>
+            </div>
+
+            <!-- 2. Choice Chip -->
+            <div class="demo-label" style="margin-bottom:8px;">2 — Choice Chip
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Single-select from a fixed set · Slot/time pickers · Exclusive option groups</span>
+            </div>
+            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Selects exactly one value from a set. Selecting a new chip deselects the previous. Used for exclusive-choice groups such as time or slot pickers. Border-radius: 8px — matches input fields.</p>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;flex-wrap:wrap;gap:8px;">
+                <span class="time-slot taken">8:00 AM</span>
+                <span class="time-slot">8:30 AM</span>
+                <span class="time-slot">9:00 AM</span>
+                <span class="time-slot selected">9:30 AM</span>
+                <span class="time-slot">10:00 AM</span>
+                <span class="time-slot taken">10:30 AM</span>
+                <span class="time-slot">11:00 AM</span>
+                <span class="time-slot">11:30 AM</span>
+              </div>
+              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">
+                <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px;"><span class="time-slot" style="font-size:10px;padding:2px 6px;pointer-events:none;">Available</span> Default</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px;"><span class="time-slot selected" style="font-size:10px;padding:2px 6px;pointer-events:none;">Selected</span> Active</span>
+                <span style="display:inline-flex;align-items:center;gap:4px;"><span class="time-slot taken" style="font-size:10px;padding:2px 6px;">Taken</span> Unavailable</span>
+              </div>
+            </div>
+
+            <!-- 3. Input Chip -->
+            <div class="demo-label" style="margin-bottom:8px;">3 — Input Chip (Removable)
+              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Multi-select fields · Typed/selected values as removable tokens</span>
+            </div>
+            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Represents a typed or selected value as a compact removable token. Always includes a dismiss (×) button. Two colour variants distinguish the default record type (teal) from the secondary variant (orange).</p>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+                <span class="patient-pill">Alex M. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+                <span class="patient-pill">Jordan K. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+                <span class="patient-pill">Sam T. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span class="patient-pill lead">Riley D. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+                <span class="patient-pill lead">Casey P. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
+              </div>
+              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">Teal = Default variant &nbsp;·&nbsp; Orange = Secondary variant</div>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section C: Anatomy & Specs -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
+            <p class="cs-doc-body">Chips share a common anatomy: optional leading icon, required label, optional trailing dismiss button. The container shape and colour distinguish chip type.</p>
+
+            <!-- Anatomy diagram -->
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
+
+                <!-- Visual redline -->
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:200px;">
+                  <div class="demo-label" style="margin-bottom:0;">Selected Node — Choice Chip</div>
+                  <div style="position:relative;display:inline-flex;align-items:center;background:var(--bg-surface);border:1.5px solid var(--border-input);border-radius:8px;padding:5px 11px;gap:6px;font-size:12px;font-weight:600;color:var(--text-secondary);white-space:nowrap;">
+                    <div style="position:absolute;left:0;top:1px;bottom:1px;width:11px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:8px 0 0 8px;"></div>
+                    <div style="position:absolute;right:0;top:1px;bottom:1px;width:11px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:0 8px 8px 0;"></div>
+                    <span style="position:relative;z-index:1;">9:30 AM</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Padding: 5px 11px</span>
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Gap: 6px</span>
+                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Border-radius: 8px</span>
+                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Border: 1.5px solid</span>
+                  </div>
+                </div>
+
+                <!-- Node spec panels -->
+                <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:10px;">
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Container — Root Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Direction</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Horizontal / Flex</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border-radius</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">8px (matches inputs &amp; buttons)</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1.5px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">border.input</code></td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Selected border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">2px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">color.brand</code></td></tr>
+                    </table>
+                  </div>
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Label — Text Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Font</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Manrope · 600 · 12px</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Color (default)</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text.secondary</code></td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Color (selected)</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">white (choice chip) · <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">color.brand</code> (filter chip)</td></tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Token spec table -->
+            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+              <table class="spec-table">
+                <thead>
+                  <tr>
+                    <th style="min-width:160px;">Type</th>
+                    <th style="min-width:120px;">State</th>
+                    <th style="min-width:100px;">Property</th>
+                    <th style="min-width:280px;">Token</th>
+                    <th style="min-width:120px;">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="cs-group-sep"><td colspan="5">Filter Chip — .pt-filter-chip</td></tr>
+                  <tr><td>Filter</td><td>Default</td><td>Background</td><td><code class="token-pill">bg.surface</code></td><td class="token-val">var(--bg-surface)</td></tr>
+                  <tr><td>Filter</td><td>Default</td><td>Border</td><td><code class="token-pill">border.subtle</code></td><td class="token-val">1.5px solid</td></tr>
+                  <tr><td>Filter</td><td>Active</td><td>Background</td><td><code class="token-pill">color.brand.bg</code></td><td class="token-val">var(--color-brand-bg)</td></tr>
+                  <tr><td>Filter</td><td>Active</td><td>Border + Text</td><td><code class="token-pill">color.brand</code></td><td class="token-val">var(--nav-active-text)</td></tr>
+
+                  <tr class="cs-group-sep"><td colspan="5">Choice Chip — .time-slot</td></tr>
+                  <tr><td>Choice</td><td>Default</td><td>Border-radius</td><td><code class="token-pill">radius.md</code></td><td class="token-val">8px</td></tr>
+                  <tr><td>Choice</td><td>Selected</td><td>Background</td><td><code class="token-pill">brand.teal</code></td><td class="token-val">#0d9488</td></tr>
+                  <tr><td>Choice</td><td>Taken</td><td>Opacity + strike</td><td><code class="token-pill">—</code></td><td class="token-val">0.6 · line-through</td></tr>
+
+                  <tr class="cs-group-sep"><td colspan="5">Input Chip — .patient-pill</td></tr>
+                  <tr><td>Input — Default</td><td>Default</td><td>Background / Text</td><td><code class="token-pill">badge.success.bg</code> / <code class="token-pill">badge.success.text</code></td><td class="token-val">Teal palette</td></tr>
+                  <tr><td>Input — Secondary</td><td>Default</td><td>Background / Text</td><td><code class="token-pill">badge.variant1.bg</code> / <code class="token-pill">badge.variant1.text</code></td><td class="token-val">Orange palette</td></tr>
+
+
+                </tbody>
+              </table>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section F: Accessibility -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Accessibility</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border-subtle);">
+                    <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Requirement</th>
+                    <th style="text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Rule</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Element</td><td style="padding:8px 12px;color:var(--text-secondary);">Use <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;button&gt;</code> for filter and choice chips — not <code>&lt;span&gt;</code>. Input chips may use <code>&lt;span&gt;</code> with an inner <code>&lt;button&gt;</code> for the dismiss.</td></tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Focus ring</td><td style="padding:8px 12px;color:var(--text-secondary);">All chips must be keyboard-focusable with a visible 3px focus ring using <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">var(--focus-ring)</code>.</td></tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Selected state</td><td style="padding:8px 12px;color:var(--text-secondary);">Use <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-pressed="true"</code> on active filter chips. Use <code>aria-selected="true"</code> inside a <code>role="listbox"</code> for choice chips.</td></tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Dismiss button</td><td style="padding:8px 12px;color:var(--text-secondary);">Input chip dismiss must have <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-label="Remove [patient name]"</code> — the × character alone is not accessible.</td></tr>
+                  <tr><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Contrast</td><td style="padding:8px 12px;color:var(--text-secondary);">All chip labels must meet WCAG AA (4.5:1) against their background. Taken/disabled chips are exempt.</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <!-- ══════════ TAB: CODE ══════════ -->
+          <div class="tab-panel" id="tab-code">
+            <div class="cs-doc-sub first">Developer Usage</div>
+
+            <!-- Filter chip -->
+            <div class="demo-label" style="margin-bottom:8px;">Filter Chip</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default --&gt;
+&lt;button class="pt-filter-chip"&gt;Pending&lt;/button&gt;
+
+&lt;!-- Active --&gt;
+&lt;button class="pt-filter-chip active" aria-pressed="true"&gt;Active&lt;/button&gt;</code></pre>
+            </div>
+
+            <!-- Choice chip -->
+            <div class="demo-label" style="margin-bottom:8px;">Choice Chip — Time Slot</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Available --&gt;
+&lt;button class="time-slot"&gt;9:00 AM&lt;/button&gt;
+
+&lt;!-- Selected --&gt;
+&lt;button class="time-slot selected" aria-selected="true"&gt;9:30 AM&lt;/button&gt;
+
+&lt;!-- Taken / unavailable --&gt;
+&lt;button class="time-slot taken" disabled aria-disabled="true"&gt;10:30 AM&lt;/button&gt;</code></pre>
+            </div>
+
+            <!-- Input chip -->
+            <div class="demo-label" style="margin-bottom:8px;">Input Chip — Removable Token</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default variant --&gt;
+&lt;span class="patient-pill"&gt;
+  Alex M.
+  &lt;button aria-label="Remove Alex M."&gt;×&lt;/button&gt;
+&lt;/span&gt;
+
+&lt;!-- Secondary variant --&gt;
+&lt;span class="patient-pill lead"&gt;
+  Riley D.
+  &lt;button aria-label="Remove Riley D."&gt;×&lt;/button&gt;
+&lt;/span&gt;</code></pre>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+  </script>
+
+</body>
+</html>

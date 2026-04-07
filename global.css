@@ -1,0 +1,558 @@
+/* =============================================================================
+   ClearPath FDO — Global CSS
+   Three-layer token architecture: Primitives → Semantics → Components
+   All pages link this file. Do NOT duplicate these rules in page <style> blocks.
+============================================================================= */
+
+/* ── Reset ── */
+* { font-family: 'Manrope', sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
+
+
+/* ============================================================================
+   LAYER 1 — PRIMITIVES
+   Raw named values. The palette. Never reference these directly in components.
+============================================================================ */
+:root {
+  /* Typography Primitives */
+  --font-family-primary: 'Manrope', sans-serif;
+  --font-family-mono:    'Courier New', monospace;
+
+  --font-size-xs:  12px;
+  --font-size-sm:  14px;
+  --font-size-md:  16px;
+  --font-size-lg:  18px;
+  --font-size-xl:  20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 32px;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:   1.2;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.6;
+
+  /* Spacing (8px grid) */
+  --space-1:  8px;
+  --space-2:  16px;
+  --space-3:  24px;
+  --space-4:  32px;
+  --space-5:  40px;
+  --space-6:  48px;
+  --space-7:  56px;
+  --space-8:  64px;
+
+  /* Border Radius Primitives */
+  --radius-0:    0px;
+  --radius-1:    4px;
+  --radius-2:    6px;
+  --radius-3:    8px;
+  --radius-4:    12px;
+  --radius-5:    16px;
+  --radius-full: 9999px;
+
+  /* Brand scale */
+  --brand-100: #E9F7F7;
+  --brand-200: #D4F0F0;
+  --brand-300: #A9E0E0;
+  --brand-400: #68C9C9;
+  --brand-500: #27B2B2;
+  --brand-600: #1B7D7D;
+  --brand-700: #104747;
+  --brand-800: #082424;
+  --brand-900: #041212;
+  --brand-gradient-end: #268EAD;
+
+  /* Brand Dark scale */
+  --brand-dark-100: #E6EEEF;
+  --brand-dark-200: #CCDDDF;
+  --brand-dark-300: #99BBC0;
+  --brand-dark-400: #4D8790;
+  --brand-dark-500: #005461;
+  --brand-dark-600: #003B44;
+  --brand-dark-700: #002227;
+  --brand-dark-800: #001113;
+  --brand-dark-900: #00080A;
+
+  /* Blue / Indigo (kept for backward compat) */
+  --blue-50:    #F5F5FF;
+  --blue-100:   #EEEEFF;
+  --blue-500:   #5064E5;
+  --blue-600:   #2C3F85;
+  --indigo-500: #5F50E5;
+
+  /* Teal */
+  --teal-50:  #f0fdfa;
+  --teal-100: #ccfbf1;
+  --teal-200: #99f6e4;
+  --teal-400: #2dd4bf;
+  --teal-500: #14b8a6;
+  --teal-600: #0d9488;
+  --teal-700: #0f766e;
+  --teal-800: #115e59;
+
+  /* Neutral */
+  --neutral-50:   #fafafa;
+  --neutral-75:   #f9fafb;
+  --neutral-100:  #f3f4f6;
+  --neutral-200:  #F0F0F7;
+  --neutral-300:  #F1F5F9;
+  --neutral-400:  #9ca3af;
+  --neutral-500:  #cbd5e1;
+  --neutral-600:  #666689;
+  --neutral-700:  #374151;
+  --neutral-900:  #121219;
+  --white:         #ffffff;
+  --surface-base:  #F9F9FB;
+
+  /* Appointment type palette — generic color scales (kept for backward compat) */
+  --orange-900: #9A3412;
+  --orange-50:  #FFF3EE;
+  --cyan-800:   #0C5E73;
+  --cyan-50:    #E8F6FA;
+  --purple-800: #A21CAF;
+  --purple-50:  #FCF0FD;
+  --lime-800:   #4A6B00;
+  --lime-50:    #F2F9E8;
+  --slate-900:  #1E293B;
+  --slate-100:  #F1F5F9;
+
+  /* Appointment type primitives — named by appointment type */
+  --appt-tour-text:              #9A3412;
+  --appt-tour-bg:                #FFF3EE;
+  --appt-counselling-text:       #0C5E73;
+  --appt-counselling-bg:         #E8F6FA;
+  --appt-grouptherapy-text:      #A21CAF;
+  --appt-grouptherapy-bg:        #FCF0FD;
+  --appt-psychevaluation-text:   #4A6B00;
+  --appt-psychevaluation-bg:     #F2F9E8;
+  --appt-medicaltest-text:       #1E293B;
+  --appt-medicaltest-bg:         #F1F5F9;
+
+  /* Red / Danger */
+  --red-50:  #fef2f2;
+  --red-200: #fecaca;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+
+  /* Green / Success */
+  --green-50:  #f0fdf4;
+  --green-200: #bbf7d0;
+  --green-700: #15803d;
+
+  /* Amber / Warning */
+  --amber-50:  #fffbeb;
+  --amber-300: #fcd34d;
+  --amber-900: #92400e;
+
+  /* Sky / Info */
+  --sky-50:  #eff6ff;
+  --sky-200: #bfdbfe;
+  --sky-700: #1d4ed8;
+
+  /* Primary scale (brand blue) */
+  --primary-50:  #F5F7FF;
+  --primary-200: #A5B8FC;
+
+  /* Indigo extended */
+  --indigo-400: #818CF8;
+
+  /* Semi-transparent overlays */
+  --page-overlay-start: rgba(235, 235, 237, 0.60);
+  --page-overlay-end:   rgba(220, 220, 236, 0.60);
+  --blue-500-15:        rgba(80, 100, 229, 0.15);
+  --blue-500-18:        rgba(80, 100, 229, 0.18);
+  --brand-600-15:       rgba(27, 125, 125, 0.15);
+  --brand-600-18:       rgba(27, 125, 125, 0.18);
+  --white-60:           rgba(255, 255, 255, 0.60);
+  --white-5:            rgba(255, 255, 255, 0.05);
+  --white-2:            rgba(255, 255, 255, 0.02);
+  --black-10:           rgba(0, 0, 0, 0.10);
+
+  /* Dark mode surface scale */
+  --dark-950: #16162A;
+  --dark-900: #0D0D1C;
+  --dark-850: #14142A;
+  --dark-800: #12121F;
+  --dark-700: #1A1A2E;
+  --dark-600: #1C1C30;
+  --dark-500: #38385C;
+  --dark-300: #2A2A46;
+  --dark-200: #232340;
+
+  /* Dark mode text scale */
+  --dark-text-100: #E8E8F4;
+  --dark-text-400: #7878A0;
+  --dark-text-500: #8080B0;
+  --dark-text-600: #44446A;
+}
+
+
+/* ============================================================================
+   LAYER 2 — SEMANTICS
+   Map primitives to intent. Components only ever reference tokens from this layer.
+============================================================================ */
+:root {
+  /* Border Radius Semantics */
+  --radius-none: var(--radius-0);
+  --radius-xs:   var(--radius-1);
+  --radius-sm:   var(--radius-2);
+  --radius-md:   var(--radius-3);
+  --radius-lg:   var(--radius-4);
+  --radius-xl:   var(--radius-5);
+  --radius-pill: var(--radius-full);
+
+  /* Spacing Semantic Roles */
+  --space-page-x:   var(--space-4);   /* 32px — horizontal page padding */
+  --space-page-top: var(--space-5);   /* 40px — top content padding */
+  --space-section:  var(--space-8);   /* 64px — vertical section gap */
+  --space-card:     var(--space-3);   /* 24px — card internal padding */
+  --space-form-gap: var(--space-2);   /* 16px — gap between form fields */
+  --space-inline:   var(--space-1);   /* 8px  — inline gap (icon + text) */
+
+  /* Typography Semantics — map primitive tokens to roles */
+  --heading-h1-size:        var(--font-size-3xl);
+  --heading-h1-weight:      var(--font-weight-bold);
+  --heading-h1-line-height: var(--line-height-tight);
+
+  --heading-h2-size:        var(--font-size-2xl);
+  --heading-h2-weight:      var(--font-weight-bold);
+  --heading-h2-line-height: var(--line-height-tight);
+
+  --heading-h3-size:        var(--font-size-xl);
+  --heading-h3-weight:      var(--font-weight-semibold);
+  --heading-h3-line-height: var(--line-height-tight);
+
+  --text-body-size:             var(--font-size-md);
+  --text-body-weight:           var(--font-weight-regular);
+  --text-body-line-height:      var(--line-height-normal);
+
+  --text-body-large-size:       var(--font-size-lg);
+  --text-body-large-weight:     var(--font-weight-regular);
+  --text-body-large-line-height: var(--line-height-normal);
+
+  --text-caption-size:          var(--font-size-sm);
+  --text-caption-weight:        var(--font-weight-regular);
+  --text-caption-line-height:   var(--line-height-normal);
+
+  --label-form-size:        var(--font-size-sm);
+  --label-form-weight:      var(--font-weight-medium);
+  --label-form-line-height: var(--line-height-normal);
+
+  --label-nav-size:         var(--font-size-md);
+  --label-nav-weight:       var(--font-weight-medium);
+  --label-nav-line-height:  var(--line-height-normal);
+
+  /* Spacing aliases (used in component rules) */
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-7: var(--space-7);
+  --spacing-8: var(--space-8);
+
+  /* Layout */
+  --header-height: var(--space-8);
+  --sidebar-width: 240px;
+
+  /* Backgrounds & Surfaces */
+  --bg-page:     linear-gradient(180deg, var(--page-overlay-start) 0%, var(--page-overlay-end) 100%), var(--white);
+  --bg-header:   var(--surface-base);
+  --bg-surface:  var(--white);
+  --bg-input:    var(--white);
+  --bg-calendar: var(--white);
+  --bg-main:     var(--white-60);
+
+  /* Text */
+  --text-primary:   var(--neutral-900);
+  --text-secondary: var(--neutral-600);
+  --text-muted:     var(--neutral-400);
+
+  /* Borders */
+  --border-subtle: var(--neutral-100);
+  --border-input:  var(--neutral-200);
+
+  /* Brand & Actions */
+  --brand-blue:      var(--brand-600);
+  --brand-blue-dark: var(--brand-700);
+  --brand-path:      var(--teal-600);
+  --cta-gradient:    linear-gradient(90deg, var(--brand-500) 0%, var(--brand-gradient-end) 100%);
+  --focus-ring:      var(--brand-600-15);
+
+  /* Navigation */
+  --sidebar-bg:        transparent;
+  --nav-active-bg:     var(--brand-100);
+  --nav-active-text:   var(--brand-600);
+  --nav-active-border: var(--brand-600);
+  --nav-item-color:    var(--neutral-700);
+  --nav-item-hover-bg: var(--neutral-75);
+
+  /* Calendar */
+  --today-bg:    var(--brand-100);
+  --today-color: var(--brand-600);
+  --weekend-bg:  var(--neutral-50);
+
+  /* Scrollbar */
+  --scrollbar-track: var(--neutral-300);
+  --scrollbar-thumb: var(--neutral-500);
+
+  /* Danger (standalone — used by destructive actions, not chips) */
+  --color-danger:        var(--red-500);
+  --color-danger-hover:  var(--red-600);
+
+  /* ── Layer 2: Semantic chip color tokens ──
+     Formula: --color-[intent]-[property]
+     Intents: danger · success · warning · info · brand · neutral
+     danger  = red    (Ongoing / Busy / errors)
+     success = green  (Completed / Available)
+     warning = amber  (Pending / caution)
+     info    = sky    (Upcoming / informational)
+     brand   = brand  (Future / brand-adjacent)
+     neutral = grey   (Cancelled / muted)                        */
+  --color-danger-bg:     var(--red-50);
+  --color-danger-text:   var(--red-700);
+  --color-danger-border: var(--red-200);
+
+  --color-success-bg:     var(--green-50);
+  --color-success-text:   var(--green-700);
+  --color-success-border: var(--green-200);
+
+  --color-warning-bg:     var(--amber-50);
+  --color-warning-text:   var(--amber-900);
+  --color-warning-border: var(--amber-300);
+
+  --color-info-bg:     var(--sky-50);
+  --color-info-text:   var(--sky-700);
+  --color-info-border: var(--sky-200);
+
+  --color-brand-bg:     var(--brand-200);
+  --color-brand-border: var(--brand-300);
+
+  --color-neutral-bg:     var(--neutral-100);
+  --color-neutral-text:   var(--neutral-600);
+  --color-neutral-border: var(--neutral-200);
+
+  /* Badge variant tokens — data-blind (Clinical Fallback Rule)
+     Map backend appointment types to neutral variant names.
+     variant-1: Tan    → Facility Tour
+     variant-2: Teal   → Counselling Session
+     variant-3: Purple → Group Therapy
+     variant-4: Lime   → Psychological Evaluation
+     variant-5: Slate  → Medical Test */
+  --badge-variant-1-bg:   var(--appt-tour-bg);
+  --badge-variant-1-text: var(--appt-tour-text);
+  --badge-variant-2-bg:   var(--appt-counselling-bg);
+  --badge-variant-2-text: var(--appt-counselling-text);
+  --badge-variant-3-bg:   var(--appt-grouptherapy-bg);
+  --badge-variant-3-text: var(--appt-grouptherapy-text);
+  --badge-variant-4-bg:   var(--appt-psychevaluation-bg);
+  --badge-variant-4-text: var(--appt-psychevaluation-text);
+  --badge-variant-5-bg:   var(--appt-medicaltest-bg);
+  --badge-variant-5-text: var(--appt-medicaltest-text);
+}
+
+/* ── Dark mode — semantic overrides only ── */
+[data-theme="dark"] {
+  --bg-page:           var(--dark-900);
+  --bg-header:         var(--dark-800);
+  --bg-surface:        var(--dark-700);
+  --bg-input:          var(--dark-600);
+  --bg-calendar:       var(--dark-850);
+  --text-primary:      var(--dark-text-100);
+  --text-secondary:    var(--dark-text-400);
+  --text-muted:        var(--dark-text-600);
+  --border-subtle:     var(--dark-200);
+  --border-input:      var(--dark-300);
+  --nav-active-bg:     var(--brand-600-18);
+  --nav-item-color:    var(--dark-text-500);
+  --nav-item-hover-bg: var(--white-5);
+  --today-bg:          var(--brand-600-18);
+  --today-color:       var(--brand-dark-400);
+  --weekend-bg:        var(--white-2);
+  --scrollbar-track:   var(--dark-950);
+  --scrollbar-thumb:   var(--dark-500);
+}
+
+
+/* ============================================================================
+   LAYER 3 — COMPONENTS
+   App shell. Only semantic tokens used here — no raw hex values.
+============================================================================ */
+
+/* ── Badge component tokens — Rule of Three: [component]-[intent]-[property]
+   Formula: --badge-[intent]-[property]
+   Each entry maps one semantic layer down: badge → color → primitive.       ── */
+:root {
+  --badge-danger-bg:     var(--color-danger-bg);
+  --badge-danger-text:   var(--color-danger-text);
+  --badge-danger-border: var(--color-danger-border);
+
+  --badge-success-bg:     var(--color-success-bg);
+  --badge-success-text:   var(--color-success-text);
+  --badge-success-border: var(--color-success-border);
+
+  --badge-warning-bg:     var(--color-warning-bg);
+  --badge-warning-text:   var(--color-warning-text);
+  --badge-warning-border: var(--color-warning-border);
+
+  --badge-info-bg:     var(--color-info-bg);
+  --badge-info-text:   var(--color-info-text);
+  --badge-info-border: var(--color-info-border);
+
+  --badge-brand-bg:     var(--color-brand-bg);
+  --badge-brand-border: var(--color-brand-border);
+
+  --badge-neutral-bg:     var(--color-neutral-bg);
+  --badge-neutral-text:   var(--color-neutral-text);
+  --badge-neutral-border: var(--color-neutral-border);
+}
+
+/* ── Base ── */
+body { background: var(--bg-page); margin: 0; padding: 0; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 3px; }
+
+/* ── Animations ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(1.3); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+.skeleton {
+  background: linear-gradient(90deg, var(--neutral-300) 25%, var(--neutral-50) 50%, var(--neutral-300) 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ── App Header ── */
+#appHeader {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: var(--header-height);
+  background: var(--bg-header);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 50; display: flex; align-items: center;
+  padding: 0 var(--spacing-3); gap: var(--spacing-2);
+}
+#appHeader .header-logo { display: flex; align-items: center; gap: var(--spacing-1); text-decoration: none; flex-shrink: 0; }
+#appHeader .header-logo-icon {
+  width: 32px; height: 32px;
+  background: var(--cta-gradient);
+  border-radius: 6px; display: flex; align-items: center; justify-content: center;
+}
+#appHeader .header-logo-icon svg { width: 18px; height: 18px; fill: var(--white); }
+#appHeader .header-logo-text { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; line-height: 1; }
+#appHeader .header-logo-text .clear { color: var(--text-primary); }
+#appHeader .header-logo-text .path  { color: var(--brand-blue); }
+#appHeader .header-logo-text .fdo   { color: var(--text-secondary); font-weight: 500; margin-left: 2px; }
+#appHeader .header-search-wrap { flex: 1; display: flex; justify-content: center; }
+#appHeader .header-search { position: relative; width: 100%; min-width: 320px; max-width: 480px; }
+#appHeader .header-search svg,
+#appHeader .header-search i {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; color: var(--text-muted); pointer-events: none;
+}
+#appHeader .header-search input {
+  width: 100%; height: 40px; padding: 0 12px 0 40px;
+  border: 1px solid var(--border-input); border-radius: 8px;
+  font-size: 14px; font-family: inherit;
+  color: var(--text-primary); background: var(--bg-input);
+  outline: none; transition: border-color .15s, box-shadow .15s;
+}
+#appHeader .header-search input:focus {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+#appHeader .header-search input::placeholder { color: var(--text-muted); }
+#appHeader .header-right { display: flex; align-items: center; gap: var(--spacing-1); flex-shrink: 0; }
+#appHeader .user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--brand-path); color: var(--white);
+  font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; position: relative; user-select: none;
+}
+#appHeader .user-avatar-wrap { display: flex; align-items: center; gap: 4px; cursor: pointer; padding: 4px; border-radius: 8px; transition: background .15s; }
+#appHeader .user-avatar-wrap:hover { background: var(--nav-item-hover-bg); }
+#appHeader .user-caret { width: 14px; height: 14px; color: var(--text-secondary); }
+#appHeader .theme-toggle,
+.theme-toggle {
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; cursor: pointer; border: none; background: transparent; transition: background 0.15s;
+}
+#appHeader .theme-toggle:hover,
+.theme-toggle:hover { background: var(--nav-item-hover-bg); }
+
+/* ── User Dropdown ── */
+.user-dropdown-wrap { position: relative; }
+.user-dropdown {
+  display: none; position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: 8px; box-shadow: 0 8px 24px var(--black-10);
+  min-width: 200px; z-index: 200; overflow: hidden;
+}
+.user-dropdown.open { display: block; }
+.user-dropdown-info { padding: 14px 16px 12px; border-bottom: 1px solid var(--border-subtle); }
+.user-dropdown-name  { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.user-dropdown-email { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.user-dropdown-item {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  font-size: 13px; color: var(--text-secondary); cursor: pointer;
+  transition: background .12s; text-decoration: none;
+  width: 100%; border: none; background: none; font-family: inherit;
+}
+.user-dropdown-item:hover        { background: var(--nav-item-hover-bg); color: var(--text-primary); }
+.user-dropdown-item.logout       { color: var(--color-danger); }
+.user-dropdown-item.logout:hover { background: var(--color-danger-bg); color: var(--color-danger-hover); }
+
+/* ── Sidebar ── */
+#appSidebar {
+  position: fixed; top: var(--header-height); left: 0;
+  width: var(--sidebar-width); height: calc(100vh - var(--header-height));
+  background: var(--sidebar-bg); display: flex; flex-direction: column;
+  z-index: 40; overflow-y: auto;
+}
+#appSidebar .nav-section-label, .nav-section-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: var(--spacing-3) var(--spacing-2) var(--spacing-1);
+}
+#appSidebar .nav-section-label.admin-label, .nav-section-label.admin-label { margin-top: 32px; }
+#appSidebar .nav-item, .nav-item {
+  display: flex; align-items: center; gap: var(--spacing-1);
+  height: 40px; padding: 0 var(--spacing-2);
+  font-size: 14px; font-weight: 500; color: var(--nav-item-color);
+  text-decoration: none; border-radius: 8px; margin: 0 8px;
+  cursor: pointer; transition: background .15s, color .15s;
+  border-left: 3px solid transparent;
+}
+#appSidebar .nav-item:hover:not(.active), .nav-item:hover:not(.active) { background: var(--nav-item-hover-bg); }
+#appSidebar .nav-item.active, .nav-item.active {
+  background: var(--nav-active-bg); color: var(--nav-active-text);
+  border-left-color: var(--nav-active-border); font-weight: 600;
+}
+#appSidebar .nav-item svg, .nav-item svg {
+  width: 16px; height: 16px; flex-shrink: 0;
+  stroke: currentColor; fill: none; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+#appSidebar .nav-item i, .nav-item i { flex-shrink: 0; line-height: 1; }
+#appSidebar .nav-spacer, .nav-spacer { flex: 1; }
+#appSidebar .nav-bottom, .nav-bottom { border-top: 1px solid var(--border-subtle); padding: var(--spacing-1) 0; }
+#appSidebar .nav-bottom .nav-item, .nav-bottom .nav-item { color: var(--text-secondary); }
+
+/* ── App layout ── */
+#appBody { display: flex; padding-top: var(--header-height); }
+#appMain  { background: var(--bg-main); flex: 1; margin-left: var(--sidebar-width); min-height: calc(100vh - var(--header-height)); overflow-x: auto; }

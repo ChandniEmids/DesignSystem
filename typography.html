@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typography — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" id="compSearch" placeholder="Search components…" oninput="filterComponents(this.value)" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item active">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+
+      <div class="doc-layout">
+        <div class="doc-content" id="docContent">
+
+          <div class="doc-no-results" id="noResults" style="display:none;">No components match your search.</div>
+
+          <!-- ─────────────────── TYPOGRAPHY FOUNDATION ─────────────────── -->
+          <div class="section doc-section" id="sec-typography">
+
+            <div class="doc-subheader-left" style="margin-bottom:24px;">
+              <div class="doc-subheader-title">Typography Foundation</div>
+              <div class="doc-subheader-sub">Type scale, weight system, line-height primitives, and semantic usage tokens</div>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="tab-bar">
+              <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+              <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+            </div>
+
+            <!-- ── Tab: Overview ── -->
+            <div class="tab-panel active" id="tab-overview">
+
+              <!-- Section A: Purpose -->
+              <p class="cs-doc-body">
+                ClearPath FDO uses a two-layer typography model: <strong style="color:var(--text-primary);">primitive tokens</strong> define the raw scale values, and
+                <strong style="color:var(--text-primary);">semantic tokens</strong> assign those primitives to roles in the UI.
+                Components always reference semantic tokens — never raw pixel values — keeping the type system scalable and refactor-safe.
+              </p>
+              <div class="cs-principles">
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-ruler" style="font-size:14px;color:var(--brand-blue);"></i> Scale Discipline</div>
+                  <div class="cs-principle-body">Seven sizes from xs (12px) to 3xl (32px). No one-off sizes like 13px or 15px.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-layers-intersect" style="font-size:14px;color:var(--brand-blue);"></i> Primitive → Semantic</div>
+                  <div class="cs-principle-body">Every semantic token maps only to primitives. No raw values in roles.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-eye" style="font-size:14px;color:var(--brand-blue);"></i> Readability First</div>
+                  <div class="cs-principle-body">Line heights are chosen for their use context: tight for headings, normal for body, relaxed for long-form content.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-hospital" style="font-size:14px;color:var(--brand-blue);"></i> Clinical Clarity</div>
+                  <div class="cs-principle-body">Healthcare UIs demand legible, neutral type. No decorative or display fonts.</div>
+                </div>
+              </div>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section B: Primitive Tokens -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Primitive Tokens</div>
+              <p class="cs-doc-body">Raw values that make up the type palette. These are never used directly in components — only in semantic token definitions.</p>
+
+              <!-- Font Family -->
+              <div class="section-heading">Font Family</div>
+              <table class="type-prim-table" style="margin-bottom:32px;">
+                <thead>
+                  <tr>
+                    <th style="width:260px;">Token</th>
+                    <th style="width:260px;">Value</th>
+                    <th>Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>--font-family-primary</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">'Manrope', sans-serif</td>
+                    <td style="font-family:var(--font-family-primary);font-size:14px;color:var(--text-primary);">The quick brown fox</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-family-mono</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">'Courier New', monospace</td>
+                    <td style="font-family:var(--font-family-mono);font-size:13px;color:var(--text-primary);">const x = token.value</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Font Size -->
+              <div class="section-heading">Font Size Scale</div>
+              <table class="type-prim-table" style="margin-bottom:32px;">
+                <thead>
+                  <tr>
+                    <th style="width:200px;">Token</th>
+                    <th style="width:100px;">Value</th>
+                    <th>Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>--font-size-xs</code></td>
+                    <td>12px</td>
+                    <td style="font-size:var(--font-size-xs);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-sm</code></td>
+                    <td>14px</td>
+                    <td style="font-size:var(--font-size-sm);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-md</code></td>
+                    <td>16px</td>
+                    <td style="font-size:var(--font-size-md);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-lg</code></td>
+                    <td>18px</td>
+                    <td style="font-size:var(--font-size-lg);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-xl</code></td>
+                    <td>20px</td>
+                    <td style="font-size:var(--font-size-xl);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-2xl</code></td>
+                    <td>24px</td>
+                    <td style="font-size:var(--font-size-2xl);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                  <tr>
+                    <td><code>--font-size-3xl</code></td>
+                    <td>32px</td>
+                    <td style="font-size:var(--font-size-3xl);color:var(--text-primary);">Typography specimen</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <!-- Font Weight + Line Height side by side -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-bottom:32px;">
+                <div>
+                  <div class="section-heading">Font Weight</div>
+                  <table class="type-prim-table">
+                    <thead>
+                      <tr>
+                        <th>Token</th>
+                        <th>Value</th>
+                        <th>Preview</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>--font-weight-regular</code></td>
+                        <td>400</td>
+                        <td style="font-weight:400;font-size:14px;color:var(--text-primary);">Regular</td>
+                      </tr>
+                      <tr>
+                        <td><code>--font-weight-medium</code></td>
+                        <td>500</td>
+                        <td style="font-weight:500;font-size:14px;color:var(--text-primary);">Medium</td>
+                      </tr>
+                      <tr>
+                        <td><code>--font-weight-semibold</code></td>
+                        <td>600</td>
+                        <td style="font-weight:600;font-size:14px;color:var(--text-primary);">Semibold</td>
+                      </tr>
+                      <tr>
+                        <td><code>--font-weight-bold</code></td>
+                        <td>700</td>
+                        <td style="font-weight:700;font-size:14px;color:var(--text-primary);">Bold</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <div class="section-heading">Line Height</div>
+                  <table class="type-prim-table">
+                    <thead>
+                      <tr>
+                        <th>Token</th>
+                        <th>Value</th>
+                        <th>Usage</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>--line-height-tight</code></td>
+                        <td>1.2 (120%)</td>
+                        <td style="font-size:12px;color:var(--text-secondary);">Headings</td>
+                      </tr>
+                      <tr>
+                        <td><code>--line-height-normal</code></td>
+                        <td>1.5 (150%)</td>
+                        <td style="font-size:12px;color:var(--text-secondary);">Body text</td>
+                      </tr>
+                      <tr>
+                        <td><code>--line-height-relaxed</code></td>
+                        <td>1.6 (160%)</td>
+                        <td style="font-size:12px;color:var(--text-secondary);">Long-form content</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section C: Semantic Tokens -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Semantic Tokens</div>
+              <p class="cs-doc-body">Usage-based roles that map primitive tokens to UI contexts. These are the only tokens components should reference.</p>
+
+              <table class="type-specimen-table" style="margin-bottom:40px;">
+                <thead>
+                  <tr>
+                    <th style="width:240px;">Token</th>
+                    <th style="width:260px;">Primitives</th>
+                    <th>Live Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Headings group -->
+                  <tr class="ts-group-sep">
+                    <td colspan="3">Headings</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">heading.h1</span>
+                      <span class="ts-val">--heading-h1-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.3xl</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.bold</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.tight</code>
+                    </td>
+                    <td><span class="ts-preview-h1">Page Title</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">heading.h2</span>
+                      <span class="ts-val">--heading-h2-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.2xl</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.bold</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.tight</code>
+                    </td>
+                    <td><span class="ts-preview-h2">Section Heading</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">heading.h3</span>
+                      <span class="ts-val">--heading-h3-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.xl</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.semibold</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.tight</code>
+                    </td>
+                    <td><span class="ts-preview-h3">Card Heading</span></td>
+                  </tr>
+
+                  <!-- Text group -->
+                  <tr class="ts-group-sep">
+                    <td colspan="3">Text</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">text.body</span>
+                      <span class="ts-val">--text-body-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.md</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.regular</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.normal</code>
+                    </td>
+                    <td><span class="ts-preview-body">Default reading text for UI content</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">text.body.large</span>
+                      <span class="ts-val">--text-body-large-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.lg</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.regular</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.normal</code>
+                    </td>
+                    <td><span class="ts-preview-body-large">Larger body for introductory text</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">text.caption</span>
+                      <span class="ts-val">--text-caption-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.sm</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.regular</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.normal</code>
+                    </td>
+                    <td><span class="ts-preview-caption">Metadata · helper text · timestamps</span></td>
+                  </tr>
+
+                  <!-- Labels group -->
+                  <tr class="ts-group-sep">
+                    <td colspan="3">Labels</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">label.form</span>
+                      <span class="ts-val">--label-form-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.sm</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.medium</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.normal</code>
+                    </td>
+                    <td><span class="ts-preview-label-form">Patient Name</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <span class="ts-token">label.nav</span>
+                      <span class="ts-val">--label-nav-*</span>
+                    </td>
+                    <td style="font-size:12px;color:var(--text-secondary);line-height:1.8;">
+                      size → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.size.md</code><br>
+                      weight → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">font.weight.medium</code><br>
+                      line-height → <code style="font-family:'Courier New',monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">line.height.normal</code>
+                    </td>
+                    <td><span class="ts-preview-label-nav">Appointments</span></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section D: Usage Rules -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Usage Rules</div>
+              <div class="type-rule-grid" style="margin-bottom:32px;">
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-heading" style="font-size:14px;"></i> Headings</div>
+                  <div class="type-rule-title">Use for hierarchy only</div>
+                  <p class="type-rule-body">h1 is reserved for page-level titles. h2 for section headings. h3 for card or panel headings. Never skip levels for visual size alone.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-align-left" style="font-size:14px;"></i> Body</div>
+                  <div class="type-rule-title">Default reading context</div>
+                  <p class="type-rule-body">Use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text.body</code> for all standard UI text. <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text.body.large</code> for introductory or descriptive copy above fold.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-info-circle" style="font-size:14px;"></i> Caption</div>
+                  <div class="type-rule-title">Metadata and helper text</div>
+                  <p class="type-rule-body">Use for timestamps, secondary descriptors, empty state help text, and form helper copy. Never use for interactive labels or primary content.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-forms" style="font-size:14px;"></i> Labels</div>
+                  <div class="type-rule-title">Form and navigation UI</div>
+                  <p class="type-rule-body"><code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">label.form</code> for input field labels and section dividers. <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">label.nav</code> for sidebar navigation items.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-ban" style="font-size:14px;color:var(--color-danger);"></i> No Raw Values</div>
+                  <div class="type-rule-title">Never use px or weights directly</div>
+                  <p class="type-rule-body">Never write <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">font-size: 14px</code> in a component. Always reference a semantic token. Raw values break refactoring and theming.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-ban" style="font-size:14px;color:var(--color-danger);"></i> No Color in Typography</div>
+                  <div class="type-rule-title">Text color is a color token concern</div>
+                  <p class="type-rule-body">Typography tokens define size, weight, and line-height only. Text color is set by color semantic tokens: <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--text-primary</code>, <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--text-secondary</code>.</p>
+                </div>
+              </div>
+
+              <!-- Dos & Don'ts -->
+              <div class="section-heading">Dos &amp; Don'ts</div>
+              <div class="dd-grid">
+                <div class="dd-card dd-do">
+                  <div class="dd-head"><i class="ti ti-thumb-up" style="font-size:14px;"></i> Do</div>
+                  <ul class="dd-list">
+                    <li>Use semantic class names like <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">.ts-preview-body</code> in components</li>
+                    <li>Map new type roles to existing primitives first</li>
+                    <li>Keep line-height paired to the role: tight for headings, normal for body</li>
+                    <li>Always use Sentence case for UI text (not Title Case)</li>
+                    <li>Pair <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">label.form</code> with a visible input field — never floating alone</li>
+                  </ul>
+                </div>
+                <div class="dd-card dd-dont">
+                  <div class="dd-head"><i class="ti ti-thumb-down" style="font-size:14px;"></i> Don't</div>
+                  <ul class="dd-list">
+                    <li>Don't write raw pixel sizes like <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">font-size: 13px</code> in components</li>
+                    <li>Don't mix heading levels for visual weight only — use font-weight</li>
+                    <li>Don't use <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">heading.h1</code> inside cards or modals</li>
+                    <li>Don't add color values inside typography token definitions</li>
+                    <li>Don't introduce sizes outside the defined scale (13px, 15px, 17px)</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div><!-- /tab-overview -->
+
+            <!-- ── Tab: Code ── -->
+            <div class="tab-panel" id="tab-code">
+
+              <div class="section-heading" style="margin-bottom:24px;">CSS Custom Properties</div>
+
+              <p style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;line-height:1.6;">
+                All typography tokens are defined in <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:2px 6px;border-radius:3px;">global.css</code> under Layer 1 (primitives) and Layer 2 (semantics).
+                Components use the semantic tokens only — never the primitives directly.
+              </p>
+
+              <!-- Primitive CSS block -->
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Layer 1 — Primitive Tokens</div>
+              <div class="code-block" style="margin-bottom:32px;">
+<pre><span class="cm-comment">/* global.css — Layer 1: Typography Primitives */</span>
+<span class="cm-tag">:root</span> {
+  <span class="cm-comment">/* Font family */</span>
+  <span class="cm-attr">--font-family-primary</span>: <span class="cm-val">'Manrope', sans-serif</span>;
+  <span class="cm-attr">--font-family-mono</span>:    <span class="cm-val">'Courier New', monospace</span>;
+
+  <span class="cm-comment">/* Font size scale (xs → 3xl) */</span>
+  <span class="cm-attr">--font-size-xs</span>:  <span class="cm-val">12px</span>;
+  <span class="cm-attr">--font-size-sm</span>:  <span class="cm-val">14px</span>;
+  <span class="cm-attr">--font-size-md</span>:  <span class="cm-val">16px</span>;
+  <span class="cm-attr">--font-size-lg</span>:  <span class="cm-val">18px</span>;
+  <span class="cm-attr">--font-size-xl</span>:  <span class="cm-val">20px</span>;
+  <span class="cm-attr">--font-size-2xl</span>: <span class="cm-val">24px</span>;
+  <span class="cm-attr">--font-size-3xl</span>: <span class="cm-val">32px</span>;
+
+  <span class="cm-comment">/* Font weight */</span>
+  <span class="cm-attr">--font-weight-regular</span>:  <span class="cm-val">400</span>;
+  <span class="cm-attr">--font-weight-medium</span>:   <span class="cm-val">500</span>;
+  <span class="cm-attr">--font-weight-semibold</span>: <span class="cm-val">600</span>;
+  <span class="cm-attr">--font-weight-bold</span>:     <span class="cm-val">700</span>;
+
+  <span class="cm-comment">/* Line height */</span>
+  <span class="cm-attr">--line-height-tight</span>:   <span class="cm-val">1.2</span>;  <span class="cm-comment">/* 120% — headings */</span>
+  <span class="cm-attr">--line-height-normal</span>:  <span class="cm-val">1.5</span>;  <span class="cm-comment">/* 150% — body */</span>
+  <span class="cm-attr">--line-height-relaxed</span>: <span class="cm-val">1.6</span>;  <span class="cm-comment">/* 160% — long content */</span>
+}</pre>
+              </div>
+
+              <!-- Semantic CSS block -->
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Layer 2 — Semantic Tokens</div>
+              <div class="code-block" style="margin-bottom:32px;">
+<pre><span class="cm-comment">/* global.css — Layer 2: Typography Semantics */</span>
+<span class="cm-tag">:root</span> {
+  <span class="cm-comment">/* Headings */</span>
+  <span class="cm-attr">--heading-h1-size</span>:        <span class="cm-val">var(--font-size-3xl)</span>;
+  <span class="cm-attr">--heading-h1-weight</span>:      <span class="cm-val">var(--font-weight-bold)</span>;
+  <span class="cm-attr">--heading-h1-line-height</span>: <span class="cm-val">var(--line-height-tight)</span>;
+
+  <span class="cm-attr">--heading-h2-size</span>:        <span class="cm-val">var(--font-size-2xl)</span>;
+  <span class="cm-attr">--heading-h2-weight</span>:      <span class="cm-val">var(--font-weight-bold)</span>;
+  <span class="cm-attr">--heading-h2-line-height</span>: <span class="cm-val">var(--line-height-tight)</span>;
+
+  <span class="cm-attr">--heading-h3-size</span>:        <span class="cm-val">var(--font-size-xl)</span>;
+  <span class="cm-attr">--heading-h3-weight</span>:      <span class="cm-val">var(--font-weight-semibold)</span>;
+  <span class="cm-attr">--heading-h3-line-height</span>: <span class="cm-val">var(--line-height-tight)</span>;
+
+  <span class="cm-comment">/* Text */</span>
+  <span class="cm-attr">--text-body-size</span>:             <span class="cm-val">var(--font-size-md)</span>;
+  <span class="cm-attr">--text-body-weight</span>:           <span class="cm-val">var(--font-weight-regular)</span>;
+  <span class="cm-attr">--text-body-line-height</span>:      <span class="cm-val">var(--line-height-normal)</span>;
+
+  <span class="cm-attr">--text-body-large-size</span>:       <span class="cm-val">var(--font-size-lg)</span>;
+  <span class="cm-attr">--text-body-large-weight</span>:     <span class="cm-val">var(--font-weight-regular)</span>;
+  <span class="cm-attr">--text-body-large-line-height</span>: <span class="cm-val">var(--line-height-normal)</span>;
+
+  <span class="cm-attr">--text-caption-size</span>:          <span class="cm-val">var(--font-size-sm)</span>;
+  <span class="cm-attr">--text-caption-weight</span>:        <span class="cm-val">var(--font-weight-regular)</span>;
+  <span class="cm-attr">--text-caption-line-height</span>:   <span class="cm-val">var(--line-height-normal)</span>;
+
+  <span class="cm-comment">/* Labels */</span>
+  <span class="cm-attr">--label-form-size</span>:        <span class="cm-val">var(--font-size-sm)</span>;
+  <span class="cm-attr">--label-form-weight</span>:      <span class="cm-val">var(--font-weight-medium)</span>;
+  <span class="cm-attr">--label-form-line-height</span>: <span class="cm-val">var(--line-height-normal)</span>;
+
+  <span class="cm-attr">--label-nav-size</span>:         <span class="cm-val">var(--font-size-md)</span>;
+  <span class="cm-attr">--label-nav-weight</span>:       <span class="cm-val">var(--font-weight-medium)</span>;
+  <span class="cm-attr">--label-nav-line-height</span>:  <span class="cm-val">var(--line-height-normal)</span>;
+}</pre>
+              </div>
+
+              <!-- Specimen classes block -->
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">ds.css — Specimen Utility Classes</div>
+              <div class="code-block" style="margin-bottom:32px;">
+<pre><span class="cm-comment">/* ds.css — Type specimen classes (use in components) */</span>
+<span class="cm-tag">.ts-preview-h1</span>  {
+  <span class="cm-attr">font-size</span>: <span class="cm-val">var(--heading-h1-size)</span>;
+  <span class="cm-attr">font-weight</span>: <span class="cm-val">var(--heading-h1-weight)</span>;
+  <span class="cm-attr">line-height</span>: <span class="cm-val">var(--heading-h1-line-height)</span>;
+  <span class="cm-attr">color</span>: <span class="cm-val">var(--text-primary)</span>;
+}
+<span class="cm-tag">.ts-preview-body</span> {
+  <span class="cm-attr">font-size</span>: <span class="cm-val">var(--text-body-size)</span>;
+  <span class="cm-attr">font-weight</span>: <span class="cm-val">var(--text-body-weight)</span>;
+  <span class="cm-attr">line-height</span>: <span class="cm-val">var(--text-body-line-height)</span>;
+  <span class="cm-attr">color</span>: <span class="cm-val">var(--text-primary)</span>;
+}
+<span class="cm-tag">.ts-preview-caption</span> {
+  <span class="cm-attr">font-size</span>: <span class="cm-val">var(--text-caption-size)</span>;
+  <span class="cm-attr">font-weight</span>: <span class="cm-val">var(--text-caption-weight)</span>;
+  <span class="cm-attr">line-height</span>: <span class="cm-val">var(--text-caption-line-height)</span>;
+  <span class="cm-attr">color</span>: <span class="cm-val">var(--text-secondary)</span>;
+}</pre>
+              </div>
+
+            </div><!-- /tab-code -->
+
+          </div><!-- /sec-typography -->
+
+        </div><!-- /doc-content -->
+      </div><!-- /doc-layout -->
+
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+    function filterComponents(q) {
+      const noRes = document.getElementById('noResults');
+      noRes.style.display = q.trim() ? 'block' : 'none';
+    }
+  </script>
+
+
+<script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Manrope',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

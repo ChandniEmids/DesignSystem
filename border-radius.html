@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Border Radius — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search components…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item active">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content" id="docContent">
+
+          <div class="section doc-section" id="sec-border-radius">
+
+            <div class="doc-subheader-left" style="margin-bottom:24px;">
+              <div class="doc-subheader-title">Border Radius</div>
+              <div class="doc-subheader-sub">Corner radius primitives, semantic size tokens, and component usage rules</div>
+            </div>
+
+            <!-- Tab bar -->
+            <div class="tab-bar">
+              <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+              <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+            </div>
+
+            <!-- ── Tab: Overview ── -->
+            <div class="tab-panel active" id="tab-overview">
+
+              <!-- Section A: Purpose -->
+              <p class="cs-doc-body">
+                Border radius in ClearPath FDO uses a deliberate <strong style="color:var(--text-primary);">7-step scale</strong> from sharp (0px) to pill (9999px).
+                Every corner treatment maps to a named semantic token — ensuring corners feel intentional and consistent across the entire UI.
+              </p>
+              <div class="cs-principles">
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-circles-relation" style="font-size:14px;color:var(--brand-blue);"></i> Consistent Softness</div>
+                  <div class="cs-principle-body">All UI elements of the same type share the same radius. Inputs, buttons, and cards never vary from their designated token.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-layers-intersect" style="font-size:14px;color:var(--brand-blue);"></i> Primitive → Role</div>
+                  <div class="cs-principle-body">Raw pixel values (4, 6, 8, 12, 16) are primitives. Components reference semantic roles: sm, md, lg, pill.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-hospital" style="font-size:14px;color:var(--brand-blue);"></i> Clinical Restraint</div>
+                  <div class="cs-principle-body">Healthcare UI requires trust. Radius is used sparingly — enough to soften hard edges without appearing playful.</div>
+                </div>
+                <div class="cs-principle-card">
+                  <div class="cs-principle-title"><i class="ti ti-arrow-up" style="font-size:14px;color:var(--brand-blue);"></i> Size Signals Hierarchy</div>
+                  <div class="cs-principle-body">Larger radius for larger surfaces: sm for inline elements, md for controls, lg for containers, pill for status indicators.</div>
+                </div>
+              </div>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Visual radius demo -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Scale Visualisation</div>
+              <p class="cs-doc-body">All boxes are 64×56px. Corner treatment only changes.</p>
+
+              <div class="radius-grid-demo" style="margin-bottom:40px;">
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-none);"></div>
+                  <span class="radius-grid-label">none</span>
+                  <span class="radius-grid-token">0px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-xs);"></div>
+                  <span class="radius-grid-label">xs</span>
+                  <span class="radius-grid-token">4px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-sm);"></div>
+                  <span class="radius-grid-label">sm</span>
+                  <span class="radius-grid-token">6px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-md);"></div>
+                  <span class="radius-grid-label">md</span>
+                  <span class="radius-grid-token">8px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-lg);"></div>
+                  <span class="radius-grid-label">lg</span>
+                  <span class="radius-grid-token">12px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-xl);"></div>
+                  <span class="radius-grid-label">xl</span>
+                  <span class="radius-grid-token">16px</span>
+                </div>
+                <div class="radius-grid-item">
+                  <div class="radius-grid-box" style="border-radius:var(--radius-pill);width:96px;"></div>
+                  <span class="radius-grid-label">pill</span>
+                  <span class="radius-grid-token">9999px</span>
+                </div>
+              </div>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section B: Primitive Tokens -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Primitive Tokens</div>
+              <p class="cs-doc-body">Raw corner values. The base palette for all radius decisions.</p>
+
+              <table class="radius-token-table" style="margin-bottom:40px;">
+                <thead>
+                  <tr>
+                    <th style="width:180px;">Token</th>
+                    <th style="width:100px;">Value</th>
+                    <th>Preview</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>--radius-0</code></td>
+                    <td>0px</td>
+                    <td><div class="radius-swatch" style="border-radius:0;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-1</code></td>
+                    <td>4px</td>
+                    <td><div class="radius-swatch" style="border-radius:4px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-2</code></td>
+                    <td>6px</td>
+                    <td><div class="radius-swatch" style="border-radius:6px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-3</code></td>
+                    <td>8px</td>
+                    <td><div class="radius-swatch" style="border-radius:8px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-4</code></td>
+                    <td>12px</td>
+                    <td><div class="radius-swatch" style="border-radius:12px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-5</code></td>
+                    <td>16px</td>
+                    <td><div class="radius-swatch" style="border-radius:16px;"></div></td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-full</code></td>
+                    <td>9999px</td>
+                    <td><div class="radius-swatch-pill"></div></td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section C: Semantic Tokens -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Semantic Tokens</div>
+              <p class="cs-doc-body">Named roles that components reference. Each maps to a single primitive.</p>
+
+              <table class="radius-token-table" style="margin-bottom:40px;">
+                <thead>
+                  <tr>
+                    <th style="width:180px;">Token</th>
+                    <th style="width:140px;">Maps to</th>
+                    <th style="width:80px;">Value</th>
+                    <th>Used in</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>--radius-none</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-0)</td>
+                    <td>0px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Dividers, table cell insets, sharp decorative borders</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-xs</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-1)</td>
+                    <td>4px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Checkboxes, radio buttons, small tag tokens, code snippets</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-sm</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-2)</td>
+                    <td>6px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Badges, chips, tooltips, compact UI indicators</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-md</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-3)</td>
+                    <td>8px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);"><strong>Default.</strong> Inputs, selects, buttons, dropdowns, nav items</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-lg</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-4)</td>
+                    <td>12px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Cards, panels, date pickers, popovers</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-xl</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-5)</td>
+                    <td>16px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Modals, drawers, featured/hero-sized containers</td>
+                  </tr>
+                  <tr>
+                    <td><code>--radius-pill</code></td>
+                    <td style="font-family:'Courier New',monospace;font-size:11px;color:var(--text-secondary);">var(--radius-full)</td>
+                    <td>9999px</td>
+                    <td style="font-size:12px;color:var(--text-secondary);">Status badges, avatar circles, pill-shaped action buttons</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <hr class="cs-section-divider" />
+
+              <!-- Section D: Usage Rules -->
+              <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Usage Rules</div>
+              <div class="type-rule-grid" style="margin-bottom:32px;">
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-check" style="font-size:14px;"></i> Default is md</div>
+                  <div class="type-rule-title">Use radius-md as the baseline</div>
+                  <p class="type-rule-body">Inputs, buttons, cards, selects, and nav items all use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-md</code> (8px) by default unless explicitly overridden by a larger surface role.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-check" style="font-size:14px;"></i> Size Signals Hierarchy</div>
+                  <div class="type-rule-title">Larger radius = larger container</div>
+                  <p class="type-rule-body">Inline elements (badges, chips) use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">sm</code>. Controls use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">md</code>. Cards use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">lg</code>. Modals use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">xl</code>.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-ban" style="font-size:14px;color:var(--color-danger);"></i> No Raw Values</div>
+                  <div class="type-rule-title">Never hardcode corner values</div>
+                  <p class="type-rule-body">Never write <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">border-radius: 8px</code>. Always use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">var(--radius-md)</code> so global corner changes propagate automatically.</p>
+                </div>
+                <div class="type-rule-card">
+                  <div class="type-rule-label"><i class="ti ti-ban" style="font-size:14px;color:var(--color-danger);"></i> No 50% for Circles</div>
+                  <div class="type-rule-title">Use radius-pill, not 50%</div>
+                  <p class="type-rule-body">For circular avatars and pill badges, use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-pill</code> (9999px). Using 50% can distort non-square elements unpredictably.</p>
+                </div>
+              </div>
+
+              <!-- Dos & Don'ts -->
+              <div class="section-heading">Dos &amp; Don'ts</div>
+              <div class="dd-grid">
+                <div class="dd-card dd-do">
+                  <div class="dd-head"><i class="ti ti-thumb-up" style="font-size:14px;"></i> Do</div>
+                  <ul class="dd-list">
+                    <li>Use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-md</code> for all input fields and buttons</li>
+                    <li>Use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-sm</code> for badges and compact chips</li>
+                    <li>Use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-lg</code> for appointment cards and panels</li>
+                    <li>Use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-pill</code> for user avatars and status dots</li>
+                  </ul>
+                </div>
+                <div class="dd-card dd-dont">
+                  <div class="dd-head"><i class="ti ti-thumb-down" style="font-size:14px;"></i> Don't</div>
+                  <ul class="dd-list">
+                    <li>Don't write raw values like <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">border-radius: 10px</code> — it's off-scale</li>
+                    <li>Don't mix radius tokens within a single component (e.g., md on container, sm on inner element)</li>
+                    <li>Don't use <code style="font-size:11px;font-family:monospace;background:#fef2f2;padding:1px 4px;border-radius:3px;color:#b91c1c;">border-radius: 50%</code> for pill shapes — use <code style="font-size:11px;font-family:monospace;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">--radius-pill</code></li>
+                    <li>Don't apply large radii (lg, xl) to small inline components — use sm or md</li>
+                  </ul>
+                </div>
+              </div>
+
+            </div><!-- /tab-overview -->
+
+            <!-- ── Tab: Code ── -->
+            <div class="tab-panel" id="tab-code">
+
+              <div class="section-heading" style="margin-bottom:24px;">CSS Custom Properties</div>
+              <p style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;line-height:1.6;">
+                All radius tokens live in <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:2px 6px;border-radius:3px;">global.css</code> — Layer 1 for raw values, Layer 2 for semantic names.
+              </p>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Layer 1 — Primitive Values</div>
+              <div class="code-block" style="margin-bottom:32px;">
+<pre><span class="cm-comment">/* global.css — Layer 1: Border Radius Primitives */</span>
+<span class="cm-tag">:root</span> {
+  <span class="cm-attr">--radius-0</span>:    <span class="cm-val">0px</span>;
+  <span class="cm-attr">--radius-1</span>:    <span class="cm-val">4px</span>;
+  <span class="cm-attr">--radius-2</span>:    <span class="cm-val">6px</span>;
+  <span class="cm-attr">--radius-3</span>:    <span class="cm-val">8px</span>;
+  <span class="cm-attr">--radius-4</span>:    <span class="cm-val">12px</span>;
+  <span class="cm-attr">--radius-5</span>:    <span class="cm-val">16px</span>;
+  <span class="cm-attr">--radius-full</span>: <span class="cm-val">9999px</span>;
+}</pre>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Layer 2 — Semantic Tokens</div>
+              <div class="code-block" style="margin-bottom:32px;">
+<pre><span class="cm-comment">/* global.css — Layer 2: Border Radius Semantics */</span>
+<span class="cm-tag">:root</span> {
+  <span class="cm-attr">--radius-none</span>: <span class="cm-val">var(--radius-0)</span>;    <span class="cm-comment">/* sharp edges */</span>
+  <span class="cm-attr">--radius-xs</span>:   <span class="cm-val">var(--radius-1)</span>;    <span class="cm-comment">/* checkboxes, code tags */</span>
+  <span class="cm-attr">--radius-sm</span>:   <span class="cm-val">var(--radius-2)</span>;    <span class="cm-comment">/* badges, chips */</span>
+  <span class="cm-attr">--radius-md</span>:   <span class="cm-val">var(--radius-3)</span>;    <span class="cm-comment">/* default — inputs, buttons */</span>
+  <span class="cm-attr">--radius-lg</span>:   <span class="cm-val">var(--radius-4)</span>;    <span class="cm-comment">/* cards, panels */</span>
+  <span class="cm-attr">--radius-xl</span>:   <span class="cm-val">var(--radius-5)</span>;    <span class="cm-comment">/* modals, drawers */</span>
+  <span class="cm-attr">--radius-pill</span>: <span class="cm-val">var(--radius-full)</span>; <span class="cm-comment">/* avatars, status badges */</span>
+}</pre>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Example Usage</div>
+              <div class="code-block">
+<pre><span class="cm-comment">/* Input field */</span>
+<span class="cm-tag">.field input</span> {
+  <span class="cm-attr">border-radius</span>: <span class="cm-val">var(--radius-md)</span>;
+}
+
+<span class="cm-comment">/* Status badge */</span>
+<span class="cm-tag">.badge</span> {
+  <span class="cm-attr">border-radius</span>: <span class="cm-val">var(--radius-sm)</span>;
+}
+
+<span class="cm-comment">/* Appointment card */</span>
+<span class="cm-tag">.appointment-card</span> {
+  <span class="cm-attr">border-radius</span>: <span class="cm-val">var(--radius-lg)</span>;
+}
+
+<span class="cm-comment">/* Modal dialog */</span>
+<span class="cm-tag">.modal-panel</span> {
+  <span class="cm-attr">border-radius</span>: <span class="cm-val">var(--radius-xl)</span>;
+}
+
+<span class="cm-comment">/* User avatar */</span>
+<span class="cm-tag">.user-avatar</span> {
+  <span class="cm-attr">border-radius</span>: <span class="cm-val">var(--radius-pill)</span>;
+}</pre>
+              </div>
+
+            </div><!-- /tab-code -->
+
+          </div><!-- /sec-border-radius -->
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+  </script>
+
+
+
+
+<script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

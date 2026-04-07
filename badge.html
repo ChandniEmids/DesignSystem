@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Badge — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search design system…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item active">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Badge</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Inline status indicators, type labels, availability signals, and metadata tags.</div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+          </div>
+
+          <!-- ══════════ TAB: OVERVIEW ══════════ -->
+          <div class="tab-panel active" id="tab-overview">
+
+            <!-- Section A: Purpose -->
+            <div class="cs-doc-sub first">Purpose</div>
+            <p class="cs-doc-body">
+              Badges are non-interactive inline visual cues that communicate discrete, scannable information at a glance — status, availability, category, record type, or system counts. They serve a critical trust function in high-density UIs: users must instantly distinguish between states such as <em>Ongoing</em> and <em>Completed</em> without reading full sentences.
+            </p>
+
+            <div class="cs-principles">
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-eye" style="font-size:14px;color:var(--brand-blue);"></i> Scannable</div>
+                <div class="cs-principle-body">Colour + label together — never colour alone. Supports users with colour blindness.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-forbid" style="font-size:14px;color:var(--brand-blue);"></i> Non-interactive</div>
+                <div class="cs-principle-body">Chips communicate state. Never clickable unless wrapped in a button or filter control.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-stack" style="font-size:14px;color:var(--brand-blue);"></i> Context-bound</div>
+                <div class="cs-principle-body">Status, appointment type, and availability are separate token systems — do not mix them.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-heartbeat" style="font-size:14px;color:var(--brand-blue);"></i> Clinical Trust</div>
+                <div class="cs-principle-body">Labels use approved vocabulary only. No invented statuses or repurposed colours.</div>
+              </div>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section B: Dos & Don'ts -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
+
+            <div class="dd-grid">
+              <div class="dd-card dd-do">
+                <div class="dd-head">
+                  <i class="ti ti-thumb-up" style="font-size:13px;"></i> Do
+                </div>
+                <ul class="dd-list">
+                  <li>Always pair a colour fill with a visible text label — never rely on colour alone.</li>
+                  <li>Use <strong>status chips</strong> exclusively for appointment lifecycle states.</li>
+                  <li>Use <strong>type tags</strong> only on cards, detail panels, and booking flows.</li>
+                  <li>Keep labels short (1–2 words). Use approved vocabulary: Ongoing · Completed · Cancelled · Future · Pending · Upcoming.</li>
+                  <li>Use the pulse dot <em>only</em> on the Ongoing chip — it signals a live, time-sensitive state.</li>
+                </ul>
+              </div>
+              <div class="dd-card dd-dont">
+                <div class="dd-head">
+                  <i class="ti ti-thumb-down" style="font-size:13px;"></i> Don't
+                </div>
+                <ul class="dd-list">
+                  <li>Don't use appointment type colours for status — they are separate systems with different semantics.</li>
+                  <li>Don't stack multiple chips of the same category on a single element.</li>
+                  <li>Don't invent new status colours ad-hoc — flag as a New Token Candidate first.</li>
+                  <li>Don't use red or green outside their defined semantic meaning (error vs. success).</li>
+                  <li>Don't apply the pulse animation outside Ongoing or Live contexts — it implies urgency.</li>
+                </ul>
+              </div>
+            </div>
+
+            <hr class="cs-section-divider" />
+
+            <!-- Variants -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Variants</div>
+
+            <p class="cs-doc-body">Chip variants are defined by three independent axes — never by specific UI labels like "Ongoing" or "Medical Test". This keeps the design system decoupled from application data (Atlassian/Carbon pattern). Combine one intent + one appearance style + any structural modifiers to build any chip.</p>
+
+            <!-- A. Semantic Intent -->
+            <div class="demo-label" style="margin-bottom:12px;">A — Semantic Intent <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">The "what" — functional meaning, independent of UI label</span></div>
+            <div class="demo-block" style="margin-bottom:24px;padding:0;overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border-subtle);">
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Intent</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">CSS Class</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Preview</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">When to use</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Danger</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-danger</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-danger"><span class="pulse-dot"></span> Ongoing</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Errors, high-priority states, live activity, busy status.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Success</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-success</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> Completed</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Positive outcomes, available, confirmed, completed states.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Warning</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-warning</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-warning"><i class="ti ti-clock" style="font-size:12px;"></i> Pending</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Caution, delayed, attention required, awaiting action.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Info</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-info</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-info">Upcoming</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Informational, upcoming, general metadata categories.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Brand</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-brand</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-brand">Future</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Brand-adjacent, anticipated, inactive, future states. Dashed outline style.</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Neutral</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.chip-neutral</code></td>
+                    <td style="padding:10px 16px;"><span class="chip chip-neutral">Cancelled</span></td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Low-emphasis, inactive, dismissed, muted utility states.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- B. Appearance Style -->
+            <div class="demo-label" style="margin-bottom:12px;">B — Appearance Style <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">The "how it looks" — container treatment, independent of intent</span></div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div class="demo-row" style="align-items:center;">
+                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Subtle (default)</span>
+                  <span class="chip chip-danger">Danger</span>
+                  <span style="font-size:11px;color:var(--text-secondary);">Tinted background, high-contrast text, solid border. Any intent can use this style.</span>
+                </div>
+                <div style="width:1px;height:64px;background:var(--border-subtle);flex-shrink:0;"></div>
+                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Outline</span>
+                  <span class="chip chip-brand">Future</span>
+                  <span style="font-size:11px;color:var(--text-secondary);">Tinted background, brand text, dashed border. Use for inactive or anticipated states.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- C. Structural Modifiers -->
+            <div class="demo-label" style="margin-bottom:12px;">C — Structural Modifiers <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">Boolean props — combinable with any intent</span></div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div class="demo-row" style="gap:32px;flex-wrap:wrap;align-items:flex-start;">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">hasDot</span>
+                  <span class="chip chip-danger"><span class="pulse-dot"></span> Live state</span>
+                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">6px pulse dot. Reserved for real-time / live activity only.</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">hasIcon</span>
+                  <span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> With icon</span>
+                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">Leading Tabler icon for categorization. Avoid purely decorative use.</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">size: medium (default)</span>
+                  <span class="chip chip-info">Upcoming</span>
+                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">24px+ height. General UI — cards, detail panels, headers.</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">size: small</span>
+                  <span class="chip chip-info" style="padding:2px 8px;">Upcoming</span>
+                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">Compact height. Use in dense tables and compact list rows — reduce padding only, never font size.</span>
+                </div>
+              </div>
+            </div>
+
+        
+
+        
+
+      
+          
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section C: Anatomy & Specs -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
+
+            <p class="cs-doc-body">Each chip consists of up to three parts: an optional leading dot or icon, a required label, and a container with background + border encoding the category.</p>
+
+            <!-- Anatomy diagram — Redline format -->
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
+
+                <!-- LEFT: Visual redline chip -->
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:200px;">
+                  <div class="demo-label" style="margin-bottom:0;">Selected Node</div>
+
+                  <!-- Chip with green spacer bars -->
+                  <div style="position:relative;display:inline-flex;align-items:center;background:var(--badge-danger-bg);border:1px solid var(--badge-danger-border);border-radius:99px;padding:4px 12px;gap:6px;font-size:12px;font-weight:700;color:var(--badge-danger-text);white-space:nowrap;">
+                    <!-- Padding left spacer -->
+                    <div style="position:absolute;left:0;top:1px;bottom:1px;width:12px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:99px 0 0 99px;"></div>
+                    <!-- Padding right spacer -->
+                    <div style="position:absolute;right:0;top:1px;bottom:1px;width:12px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:0 99px 99px 0;"></div>
+                    <span class="pulse-dot" style="position:relative;z-index:1;flex-shrink:0;"></span>
+                    <span style="position:relative;z-index:1;">Ongoing</span>
+                  </div>
+
+                  <!-- Node callout lines -->
+                  <div style="display:flex;gap:20px;align-items:flex-start;">
+                    <div style="text-align:center;">
+                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
+                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">① Dot</span>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
+                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">② Label</span>
+                    </div>
+                  </div>
+                  <div>
+                    <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">③ Container</span>
+                  </div>
+
+                  <!-- Measurements -->
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Padding: 4px 12px</span>
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Gap: 6px</span>
+                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Height: 24px (fixed)</span>
+                  </div>
+                </div>
+
+                <!-- RIGHT: Node spec panels -->
+                <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:10px;">
+
+                  <!-- ③ Root Container -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">③ Container — Root Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Direction</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Horizontal / Flex</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Alignment</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Middle Left (align-items: center)</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Resizing</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">H: Hug · V: Fixed 24px</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Padding</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">4px top/bottom · 12px left/right</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Background</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--badge-danger-bg);border:1px solid var(--badge-danger-border);vertical-align:middle;margin-right:5px;"></span><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.bg</code> → #fef2f2</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.border</code> · radius: 99px</td></tr>
+                    </table>
+                  </div>
+
+                  <!-- ① Dot / Icon -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">① Dot / Icon — Leading Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Width / Height</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">6 × 6px</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border Radius</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">50%</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Color</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">currentColor (inherits ② Label token)</td></tr>
+                    </table>
+                  </div>
+
+                  <!-- ② Label -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">② Label — Text Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Token</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.text</code> → #b91c1c</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Font</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Manrope · 700 · 12px</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Letter Spacing</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">−0.15px</td></tr>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Token spec table -->
+            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+              <table class="spec-table">
+                <thead>
+                  <tr>
+                    <th style="min-width:160px;">Variant</th>
+                    <th style="min-width:140px;">Element</th>
+                    <th style="min-width:100px;">Property</th>
+                    <th style="min-width:300px;">Token</th>
+                    <th style="min-width:140px;">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- ── Base ── -->
+                  <tr class="cs-group-sep"><td colspan="5">Base — shared across all chip variants</td></tr>
+                  <tr>
+                    <td>All chips</td><td>Container</td><td>Radius</td>
+                    <td><code class="token-new">radius.pill</code> <span style="font-size:10px;color:#92400e;font-weight:600;">⚠ new</span></td>
+                    <td class="token-val">99px</td>
+                  </tr>
+                  <tr>
+                    <td>All chips</td><td>Label</td><td>Font size / weight</td>
+                    <td><span style="font-size:11px;color:var(--text-muted);">—</span></td>
+                    <td class="token-val">12px / 700</td>
+                  </tr>
+
+                  <!-- ── Danger ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-danger — errors, live activity, high-priority, busy</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-danger"><span class="pulse-dot"></span> Danger</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.danger.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-50);"></span><code>color.red.50</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.danger.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-700);"></span><code>color.red.700</code></td></tr>
+                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.danger.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-200);"></span><code>color.red.200</code></td></tr>
+
+                  <!-- ── Success ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-success — positive outcomes, available, confirmed, completed</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> Success</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.success.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-50);"></span><code>color.green.50</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.success.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-700);"></span><code>color.green.700</code></td></tr>
+                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.success.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-200);"></span><code>color.green.200</code></td></tr>
+
+                  <!-- ── Warning ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-warning — caution, delayed, pending, awaiting action</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-warning"><i class="ti ti-clock" style="font-size:12px;"></i> Warning</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.warning.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-50);"></span><code>color.amber.50</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.warning.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-900);"></span><code>color.amber.900</code></td></tr>
+                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.warning.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-300);"></span><code>color.amber.300</code></td></tr>
+
+                  <!-- ── Info ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-info — upcoming, informational, general metadata</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-info">Info</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.info.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-50);"></span><code>color.sky.50</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.info.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-700);"></span><code>color.sky.700</code></td></tr>
+                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.info.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-200);"></span><code>color.sky.200</code></td></tr>
+
+                  <!-- ── Brand ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-brand — brand-adjacent, dashed border (anticipated, inactive, future states)</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-brand">Brand</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.brand.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--primary-50);"></span><code>color.primary.50</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">brand.blue</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--blue-500);"></span><code>color.blue.500</code></td></tr>
+                  <tr><td>Container</td><td>Border (dashed)</td><td><code class="token-pill">badge.brand.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--primary-200);"></span><code>color.primary.200</code></td></tr>
+
+                  <!-- ── Neutral ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.chip-neutral — low-emphasis (inactive, dismissed, muted)</td></tr>
+                  <tr>
+                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-neutral">Neutral</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">badge.neutral.bg</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-100);"></span><code>color.neutral.100</code></td>
+                  </tr>
+                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.neutral.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-600);"></span><code>color.neutral.600</code></td></tr>
+                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.neutral.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-200);"></span><code>color.neutral.200</code></td></tr>
+
+                  <!-- ── Categorical Variants ── -->
+                  <tr class="cs-group-sep"><td colspan="5">.type-tag — Categorical Variants (data-blind; Clinical Fallback Rule)</td></tr>
+                  <tr>
+                    <td><span class="type-tag" data-type="tour">Variant 1</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">badge.variant1.bg</code> / <code class="token-pill">badge.variant1.text</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--orange-50);"></span><span class="cs-swatch-dot" style="background:var(--orange-900);"></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="type-tag" data-type="counsel">Variant 2</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">badge.variant2.bg</code> / <code class="token-pill">badge.variant2.text</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--cyan-50);"></span><span class="cs-swatch-dot" style="background:var(--cyan-800);"></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="type-tag" data-type="group">Variant 3</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">badge.variant3.bg</code> / <code class="token-pill">badge.variant3.text</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--purple-50);"></span><span class="cs-swatch-dot" style="background:var(--purple-800);"></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="type-tag" data-type="psych">Variant 4</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">badge.variant4.bg</code> / <code class="token-pill">badge.variant4.text</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--lime-50);"></span><span class="cs-swatch-dot" style="background:var(--lime-800);"></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="type-tag" data-type="medical">Variant 5</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">badge.variant5.bg</code> / <code class="token-pill">badge.variant5.text</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--slate-100);"></span><span class="cs-swatch-dot" style="background:var(--slate-900);"></span></td>
+                  </tr>
+
+                  <!-- ── Utility ── -->
+                  <tr class="cs-group-sep"><td colspan="5">Utility — non-chip components using shared token system</td></tr>
+                  <tr>
+                    <td><span class="live-badge"><span class="live-dot"></span> Live</span></td>
+                    <td>Live dot</td><td>Background</td>
+                    <td><code class="token-pill">brand.path</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--teal-600);"></span><code>color.teal.600</code></td>
+                  </tr>
+                  <tr>
+                    <td><span class="feature-chip">Label</span></td>
+                    <td colspan="2">Background / Text</td>
+                    <td><code class="token-pill">border.subtle</code> / <code class="token-pill">text.muted</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-100);"></span><span class="cs-swatch-dot" style="background:var(--neutral-400);"></span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="count-badge">4</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><code class="token-pill">brand.blue</code></td>
+                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--blue-500);"></span><code>color.blue.500</code></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div><!-- /demo-block table -->
+
+          </div><!-- /tab-overview -->
+
+          <!-- ══════════ TAB: CODE ══════════ -->
+          <div class="tab-panel" id="tab-code">
+
+            <div class="cs-doc-sub first">Status Chips</div>
+            <p class="cs-doc-body">Use the <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">.chip</code> base class with a variant modifier. Never use colour alone — always include a visible label.</p>
+            <div class="code-block">
+<pre><span class="cm-comment">&lt;!-- Ongoing → chip-danger: pulse dot required --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-danger"</span><span class="cm-tag">&gt;&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"pulse-dot"</span><span class="cm-tag">&gt;&lt;/span&gt;</span> Ongoing<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Completed → chip-success: check icon (ti-check) --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-success"</span><span class="cm-tag">&gt;</span>
+  <span class="cm-tag">&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-check"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Completed
+<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Cancelled → chip-neutral: no icon --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-neutral"</span><span class="cm-tag">&gt;</span>Cancelled<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Future → chip-brand: dashed border applied via CSS --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-brand"</span><span class="cm-tag">&gt;</span>Future<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Pending → chip-warning: clock icon (ti-clock) --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-warning"</span><span class="cm-tag">&gt;</span>
+  <span class="cm-tag">&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-clock"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Pending
+<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Upcoming → chip-info --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"chip chip-info"</span><span class="cm-tag">&gt;</span>Upcoming<span class="cm-tag">&lt;/span&gt;</span></pre>
+            </div>
+
+            <div class="cs-doc-sub">Appointment Type Tags</div>
+            <p class="cs-doc-body">Labels are uppercased via CSS — write them in sentence case in HTML.</p>
+            <div class="code-block">
+<pre><span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"type-tag tag-tour"</span><span class="cm-tag">&gt;&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-building"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Facility Tour<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"type-tag tag-counsel"</span><span class="cm-tag">&gt;&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-message-dots"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Counselling Session<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"type-tag tag-group"</span><span class="cm-tag">&gt;&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-users"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Group Therapy<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"type-tag tag-psych"</span><span class="cm-tag">&gt;&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-brain"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Psychological Evaluation<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"type-tag tag-medical"</span><span class="cm-tag">&gt;&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-stethoscope"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span> Medical Test<span class="cm-tag">&lt;/span&gt;</span></pre>
+            </div>
+
+            <div class="cs-doc-sub">Availability &amp; Utility</div>
+            <div class="code-block">
+<pre><span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"avail-badge avail"</span><span class="cm-tag">&gt;&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"avail-dot green"</span><span class="cm-tag">&gt;&lt;/span&gt;</span> Available<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"avail-badge busy"</span><span class="cm-tag">&gt;&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"avail-dot red"</span><span class="cm-tag">&gt;&lt;/span&gt;</span> Busy<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"live-badge"</span><span class="cm-tag">&gt;&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"live-dot"</span><span class="cm-tag">&gt;&lt;/span&gt;</span> Live<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"feature-chip"</span><span class="cm-tag">&gt;</span>Projector<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"count-badge"</span><span class="cm-tag">&gt;</span>4<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"count-badge danger"</span><span class="cm-tag">&gt;</span>2<span class="cm-tag">&lt;/span&gt;</span></pre>
+            </div>
+
+            <div class="cs-doc-sub">Display Logic</div>
+            <p class="cs-doc-body">Derive the display status at render time — never pass backend status directly to the chip class.</p>
+            <div class="code-block">
+<pre><span class="cm-comment">// Derive chip intent from appointment data</span>
+<span class="cm-comment">// Returns the CSS class intent: danger · success · warning · info · brand · neutral</span>
+function getChipIntent(appointment) {
+  const now  = new Date();
+  const date = new Date(appointment.date);
+  const isToday = date.toDateString() === now.toDateString();
+  const isPast  = date &lt; now;
+
+  if (isPast &amp;&amp; ['due','pending'].includes(appointment.status)) return 'neutral';  <span class="cm-comment">// Cancelled</span>
+  if (isToday &amp;&amp; isWithin1Hour(appointment))                    return 'danger';   <span class="cm-comment">// Ongoing</span>
+  if (appointment.status === 'completed')                        return 'success';  <span class="cm-comment">// Completed</span>
+  if (appointment.status === 'pending')                          return 'warning';  <span class="cm-comment">// Pending</span>
+  if (appointment.status === 'upcoming')                         return 'info';     <span class="cm-comment">// Upcoming</span>
+  if (!isPast)                                                   return 'brand';    <span class="cm-comment">// Future</span>
+  return 'neutral';
+}
+
+<span class="cm-comment">// Usage: &lt;span class="chip chip-${getChipIntent(appt)}"&gt;...&lt;/span&gt;</span></pre>
+            </div>
+
+          </div><!-- /tab-code -->
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + name).classList.add('active');
+      document.getElementById('tab-btn-' + name).classList.add('active');
+    }
+  </script>
+</body>
+</html>
