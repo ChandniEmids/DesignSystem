@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tokens — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../vendor/tabler-icons/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    /* ── Token page styles ── */
+    .tok-section-title {
+      font-size: 20px; font-weight: 700; color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .tok-section-sub {
+      font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.6;
+    }
+    .tok-divider { border: none; border-top: 1px solid var(--border-subtle); margin: 40px 0; }
+
+    /* ── Layer flow diagram ── */
+    .layer-flow {
+      display: flex; align-items: stretch; gap: 0;
+      border: 1px solid var(--border-subtle); border-radius: 12px;
+      overflow: hidden; margin-bottom: 32px;
+    }
+    .layer-card {
+      flex: 1; padding: 24px; position: relative;
+    }
+    .layer-card + .layer-card { border-left: 1px solid var(--border-subtle); }
+    .layer-card.l1 { background: #F5F7FF; }
+    .layer-card.l2 { background: #F0FDFA; }
+    .layer-card.l3 { background: #FFF9F0; }
+    .layer-arrow {
+      display: flex; align-items: center; justify-content: center;
+      width: 40px; flex-shrink: 0; background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
+      border-right: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+    .layer-num {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+      padding: 3px 8px; border-radius: 20px; display: inline-block; margin-bottom: 10px;
+    }
+    .layer-card.l1 .layer-num { background: var(--brand-blue); color: #fff; }
+    .layer-card.l2 .layer-num { background: var(--brand-path); color: #fff; }
+    .layer-card.l3 .layer-num { background: #D97706; color: #fff; }
+    .layer-name { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+    .layer-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .layer-example {
+      font-family: monospace; font-size: 12px; background: rgba(255,255,255,0.7);
+      border: 1px solid rgba(0,0,0,0.07); border-radius: 6px;
+      padding: 10px 12px; line-height: 1.9; color: var(--text-primary);
+    }
+    .layer-example .tok-key { color: var(--brand-blue); }
+    .layer-example .tok-val { color: #0C5E73; }
+    .layer-example .tok-ref { color: var(--brand-path); }
+    .layer-example .tok-comment { color: var(--text-muted); }
+
+    /* ── Rule cards ── */
+    .rule-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px;
+    }
+    .rule-card {
+      border: 1px solid var(--border-subtle); border-radius: 10px;
+      padding: 20px; background: var(--bg-surface);
+    }
+    .rule-card-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .rule-card-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .rule-card-icon.blue  { background: #EEF2FF; color: var(--brand-blue); }
+    .rule-card-icon.teal  { background: #F0FDFA; color: var(--brand-path); }
+    .rule-card-icon.amber { background: #FFFBEB; color: #D97706; }
+    .rule-card-icon.red   { background: #FEF2F2; color: #DC2626; }
+    .rule-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .rule-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+    /* ── Naming pattern ── */
+    .naming-pattern {
+      background: var(--bg-surface); border: 1px solid var(--border-subtle);
+      border-radius: 10px; padding: 24px; margin-bottom: 24px;
+    }
+    .naming-pattern-title {
+      font-size: 13px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px;
+    }
+    .naming-anatomy {
+      display: flex; align-items: center; gap: 0; flex-wrap: wrap;
+      font-family: monospace; font-size: 15px; font-weight: 600;
+      margin-bottom: 20px; line-height: 1;
+    }
+    .naming-seg {
+      padding: 8px 12px; border-radius: 6px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .naming-seg-label {
+      font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;
+      font-family: 'Manrope', sans-serif; margin-top: 6px;
+    }
+    .naming-sep { color: var(--text-muted); padding: 0 2px; font-weight: 400; align-self: flex-start; padding-top: 8px; }
+    .seg-prefix  { background: #EEF2FF; color: var(--brand-blue); }
+    .seg-prefix  .naming-seg-label { color: var(--brand-blue); }
+    .seg-category{ background: #F0FDFA; color: #0C5E73; }
+    .seg-category .naming-seg-label { color: #0C5E73; }
+    .seg-variant { background: #FFF7ED; color: #C2410C; }
+    .seg-variant .naming-seg-label { color: #C2410C; }
+    .seg-modifier{ background: #F5F3FF; color: #6D28D9; }
+    .seg-modifier .naming-seg-label { color: #6D28D9; }
+
+    /* ── Token table ── */
+    .tok-table-wrap {
+      border: 1px solid var(--border-subtle); border-radius: 10px; overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .tok-table { width: 100%; border-collapse: collapse; }
+    .tok-table thead tr { background: var(--neutral-100); }
+    .tok-table th {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 10px 16px; text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .tok-table td {
+      padding: 11px 16px; font-size: 13px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .tok-table tr:last-child td { border-bottom: none; }
+    .tok-table tr:hover td { background: var(--neutral-50); }
+    .tok-name {
+      font-family: monospace; font-size: 12px; font-weight: 600;
+      color: var(--brand-blue); background: #EEF2FF;
+      padding: 2px 7px; border-radius: 4px; white-space: nowrap;
+    }
+    .tok-value {
+      font-family: monospace; font-size: 12px; color: var(--text-secondary);
+    }
+    .tok-swatch {
+      width: 20px; height: 20px; border-radius: 4px; display: inline-block;
+      border: 1px solid rgba(0,0,0,0.08); vertical-align: middle; margin-right: 8px;
+      flex-shrink: 0;
+    }
+    .tok-desc { font-size: 13px; color: var(--text-secondary); }
+    .tok-layer-badge {
+      font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap;
+    }
+    .badge-l1 { background: #EEF2FF; color: var(--brand-blue); }
+    .badge-l2 { background: #F0FDFA; color: var(--brand-path); }
+    .badge-l3 { background: #FFF9F0; color: #D97706; }
+
+    /* ── Do / Don't ── */
+    .do-dont-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px;
+    }
+    .do-card, .dont-card {
+      border-radius: 10px; overflow: hidden;
+    }
+    .do-card-header, .dont-card-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; font-size: 13px; font-weight: 600;
+    }
+    .do-card-header   { background: #F0FDF4; color: #16A34A; border-bottom: 1px solid #BBF7D0; }
+    .dont-card-header { background: #FEF2F2; color: #DC2626; border-bottom: 1px solid #FECACA; }
+    .do-card-body, .dont-card-body {
+      padding: 16px;
+      border: 1px solid var(--border-subtle); border-top: none;
+      border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;
+      background: var(--bg-surface);
+      font-family: monospace; font-size: 12px; line-height: 2;
+      color: var(--text-primary);
+    }
+    .code-good { color: #16A34A; }
+    .code-bad  { color: #DC2626; text-decoration: line-through; }
+    .code-neutral { color: var(--text-secondary); }
+
+    /* ── Spacing tokens ── */
+    .spacing-grid {
+      display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px;
+    }
+    .spacing-row {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .spacing-bar-wrap { flex: 1; }
+    .spacing-bar {
+      height: 24px; background: var(--cta-gradient);
+      border-radius: 4px; opacity: 0.8;
+    }
+    .spacing-info { width: 240px; display: flex; gap: 12px; align-items: center; }
+    .spacing-token { font-family: monospace; font-size: 12px; color: var(--brand-blue); font-weight: 600; min-width: 100px; }
+    .spacing-px { font-size: 13px; color: var(--text-secondary); min-width: 40px; }
+
+    /* Subsection header */
+    .subsec-header {
+      font-size: 16px; font-weight: 700; color: var(--text-primary);
+      margin: 32px 0 12px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search tokens…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="tokens.html" class="nav-item active">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <a href="Components-inventory.html#sec-patterns" class="nav-item">
+      <i class="ti ti-puzzle" style="font-size:16px;"></i> Patterns
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout" style="max-width:720px;">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div class="doc-subheader-left" style="margin-bottom:40px;">
+            <div class="doc-subheader-title">Token Structure</div>
+            <div class="doc-subheader-sub">The naming convention used across all design tokens in ClearPath FDO.</div>
+          </div>
+
+          <!-- Format -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border-subtle);">Format</div>
+
+            <!-- Anatomy card -->
+            <div style="background:#FAFAFA;border:1px solid var(--border-subtle);border-radius:12px;padding:32px 32px 28px;">
+
+              <!-- Token string preview -->
+              <div style="display:flex;align-items:center;justify-content:center;gap:2px;font-family:monospace;font-size:13px;font-weight:500;color:var(--text-muted);margin-bottom:28px;letter-spacing:0.01em;">
+                <span style="color:var(--brand-blue);font-weight:700;">Category</span>
+                <span>.</span>
+                <span style="color:#0C5E73;font-weight:700;">Group</span>
+                <span>.</span>
+                <span style="color:#C2410C;font-weight:700;">Property</span>
+                <span>.</span>
+                <span style="color:#6D28D9;font-weight:700;">State</span>
+              </div>
+
+              <!-- Segments row -->
+              <div style="display:flex;align-items:flex-start;justify-content:center;gap:0;font-family:monospace;font-size:15px;font-weight:600;flex-wrap:wrap;">
+
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <span style="background:#EEF2FF;color:var(--brand-blue);padding:10px 18px;border-radius:8px;border:1px solid #C7D2FE;">Category</span>
+                  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--brand-blue);font-family:'Manrope',sans-serif;">what type</span>
+                </div>
+
+                <span style="color:var(--text-muted);padding:10px 8px;font-weight:400;line-height:1;">.</span>
+
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <span style="background:#F0FDFA;color:#0C5E73;padding:10px 18px;border-radius:8px;border:1px solid #99F6E4;">Group</span>
+                  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#0C5E73;font-family:'Manrope',sans-serif;">where used</span>
+                </div>
+
+                <span style="color:var(--text-muted);padding:10px 8px;font-weight:400;line-height:1;">.</span>
+
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <span style="background:#FFF7ED;color:#C2410C;padding:10px 18px;border-radius:8px;border:1px solid #FED7AA;">Property</span>
+                  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#C2410C;font-family:'Manrope',sans-serif;">what aspect</span>
+                </div>
+
+                <span style="color:var(--text-muted);padding:10px 8px;font-weight:400;line-height:1;">.</span>
+
+                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+                  <span style="background:#F5F3FF;color:#6D28D9;padding:10px 18px;border-radius:8px;border:1px solid #DDD6FE;opacity:0.7;">State</span>
+                  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#6D28D9;font-family:'Manrope',sans-serif;opacity:0.7;">optional</span>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Rules -->
+          <div style="margin-bottom:40px;">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border-subtle);">Rules</div>
+          <div style="background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:10px;padding:20px 24px;">
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+              <li style="display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--text-secondary);">
+                <span style="color:var(--brand-blue);font-weight:700;flex-shrink:0;">·</span>
+                Separate all words with <code style="font-family:monospace;font-size:12px;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">.</code> — never use <code style="font-family:monospace;font-size:12px;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">-</code> as a word separator
+              </li>
+              <li style="display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--text-secondary);">
+                <span style="color:var(--brand-blue);font-weight:700;flex-shrink:0;">·</span>
+                State always comes last — <code style="font-family:monospace;font-size:12px;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">color.nav.bg.active</code> not <code style="font-family:monospace;font-size:12px;background:var(--border-subtle);padding:1px 5px;border-radius:3px;text-decoration:line-through;opacity:0.6;">color.nav.active.bg</code>
+              </li>
+              <li style="display:flex;align-items:baseline;gap:10px;font-size:13px;color:var(--text-secondary);">
+                <span style="color:var(--brand-blue);font-weight:700;flex-shrink:0;">·</span>
+                State is optional — omit it when there is only one state (e.g. <code style="font-family:monospace;font-size:12px;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">color.text.primary</code>)
+              </li>
+            </ul>
+          </div>
+          </div><!-- /rules -->
+
+          <!-- Examples -->
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--border-subtle);">Examples</div>
+
+          <!-- Example 1 -->
+          <div style="border:1px solid var(--border-subtle);border-radius:10px;overflow:hidden;margin-bottom:16px;">
+            <div style="padding:14px 20px;background:var(--neutral-100);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:10px;">
+              <code style="font-family:monospace;font-size:14px;font-weight:700;color:var(--brand-blue);">color.nav.bg.active</code>
+              <span style="font-size:12px;color:var(--text-muted);">— nav item background when active</span>
+            </div>
+            <div style="padding:16px 20px;background:var(--bg-surface);">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);width:90px;">Category</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#EEF2FF;color:var(--brand-blue);padding:2px 7px;border-radius:4px;">color</code> <span style="color:var(--text-secondary);margin-left:8px;">It's a color token</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">Group</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#F0FDFA;color:#0C5E73;padding:2px 7px;border-radius:4px;">nav</code> <span style="color:var(--text-secondary);margin-left:8px;">Used in the sidebar navigation</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">Property</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#FFF7ED;color:#C2410C;padding:2px 7px;border-radius:4px;">bg</code> <span style="color:var(--text-secondary);margin-left:8px;">Background fill</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">State</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#F5F3FF;color:#6D28D9;padding:2px 7px;border-radius:4px;">active</code> <span style="color:var(--text-secondary);margin-left:8px;">When the nav item is selected</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <!-- Example 2 -->
+          <div style="border:1px solid var(--border-subtle);border-radius:10px;overflow:hidden;margin-bottom:40px;">
+            <div style="padding:14px 20px;background:var(--neutral-100);border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:10px;">
+              <code style="font-family:monospace;font-size:14px;font-weight:700;color:var(--brand-blue);">color.text.primary</code>
+              <span style="font-size:12px;color:var(--text-muted);">— no state, only one value exists</span>
+            </div>
+            <div style="padding:16px 20px;background:var(--bg-surface);">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);width:90px;">Category</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#EEF2FF;color:var(--brand-blue);padding:2px 7px;border-radius:4px;">color</code> <span style="color:var(--text-secondary);margin-left:8px;">It's a color token</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">Group</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#F0FDFA;color:#0C5E73;padding:2px 7px;border-radius:4px;">text</code> <span style="color:var(--text-secondary);margin-left:8px;">Used for text / typography</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">Property</td>
+                  <td><code style="font-family:monospace;font-size:12px;background:#FFF7ED;color:#C2410C;padding:2px 7px;border-radius:4px;">primary</code> <span style="color:var(--text-secondary);margin-left:8px;">The primary (strongest) text color</span></td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:var(--text-muted);">State</td>
+                  <td><span style="color:var(--text-muted);font-size:13px;">— omitted, only one state exists</span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+        </div><!-- /doc-content -->
+      </div><!-- /doc-layout -->
+    </main>
+  </div><!-- /appBody -->
+
+
+
+
+  
+<script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Manrope',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>
