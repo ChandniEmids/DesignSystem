@@ -9,6 +9,102 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="global.css?v=3" />
   <link rel="stylesheet" href="ds.css?v=3" />
+
+  <style>
+    /* ── Chip component tokens ── */
+    :root {
+      --chip-radius-xs: 4px;
+      --chip-radius-md: 8px;
+
+      /* Default state */
+      --chip-default-bg:     #ffffff;
+      --chip-default-border: #f0f0f7;
+      --chip-default-text:   #121219;
+
+      /* Hover state */
+      --chip-hover-bg:     #f5f5f5;
+      --chip-hover-border: #d7dde0;
+      --chip-hover-text:   #121219;
+
+      /* Selected state */
+      --chip-selected-bg:     #27b2b2;
+      --chip-selected-border: #a9e0e0;
+      --chip-selected-text:   #ffffff;
+    }
+
+    /* ── Base chip styles ── */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid;
+      white-space: nowrap;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .chip-xs {
+      gap: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      line-height: 1.32;
+      border-radius: var(--chip-radius-xs);
+    }
+    .chip-md {
+      gap: 6px;
+      padding: 8px 16px;
+      font-size: 14px;
+      line-height: 1.2;
+      border-radius: var(--chip-radius-md);
+    }
+
+    /* States */
+    .chip-default  { background: var(--chip-default-bg);  border-color: var(--chip-default-border);  color: var(--chip-default-text); }
+    .chip-hover    { background: var(--chip-hover-bg);    border-color: var(--chip-hover-border);    color: var(--chip-hover-text); }
+    .chip-selected { background: var(--chip-selected-bg); border-color: var(--chip-selected-border); color: var(--chip-selected-text); }
+    .chip-disabled { background: var(--chip-default-bg);  border-color: var(--chip-default-border);  color: var(--chip-default-text); opacity: .5; text-decoration: line-through; pointer-events: none; }
+
+    /* ── Variant matrix table ── */
+    .variant-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .variant-matrix th {
+      padding: 8px 16px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border-subtle);
+      text-align: left;
+      white-space: nowrap;
+    }
+    .variant-matrix th:first-child { min-width: 148px; }
+    .variant-matrix td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .variant-matrix tr.size-header td {
+      background: var(--border-subtle);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-muted);
+      padding: 5px 16px;
+      border-bottom: none;
+    }
+    .row-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .row-label strong { color: var(--text-secondary); font-weight: 700; }
+  </style>
 </head>
 <body>
 
@@ -114,7 +210,7 @@
           <!-- ══════════ TAB: OVERVIEW ══════════ -->
           <div class="tab-panel active" id="tab-overview">
 
-            <!-- Section A: Purpose -->
+            <!-- Section: Purpose -->
             <div class="cs-doc-sub first">Purpose</div>
             <p class="cs-doc-body">
               Chips are interactive compact elements that act like mini-buttons. Unlike badges — which the system sets and the user cannot change — chips are clickable and always produce a state change: a filter narrows results, a choice selects a value, an input chip removes a selected record from a set. Chips appear in filter bars, multi-select fields, and time-slot pickers.
@@ -126,8 +222,8 @@
                 <div class="cs-principle-body">Every chip must have a defined hover, focus, and active/selected state. Static chips are badges — not chips.</div>
               </div>
               <div class="cs-principle-card">
-                <div class="cs-principle-title"><i class="ti ti-border-radius" style="font-size:14px;color:var(--brand-blue);"></i> 8px border-radius</div>
-                <div class="cs-principle-body">Chips match button/input border-radius (8px) — not pill-shaped. Pill shape is reserved for badges only.</div>
+                <div class="cs-principle-title"><i class="ti ti-border-radius" style="font-size:14px;color:var(--brand-blue);"></i> Two sizes</div>
+                <div class="cs-principle-body">Xs (6px radius, 12px) for dense UIs. Md (8px radius, 14px) for standard form-level interactions.</div>
               </div>
               <div class="cs-principle-card">
                 <div class="cs-principle-title"><i class="ti ti-stack" style="font-size:14px;color:var(--brand-blue);"></i> Lives in groups</div>
@@ -139,11 +235,162 @@
               </div>
             </div>
 
+           
+
             <hr class="cs-section-divider" />
 
-            <!-- Section B: Dos & Don'ts -->
-            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
+            <!-- ══ CHIP COMPONENT ══ -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Chip</div>
+            <p class="cs-doc-body">The Chip component has four independent properties: <strong>State</strong>, <strong>Size</strong>, <strong>Leading Icon</strong>, and <strong>Trailing Icon</strong>. The matrix below shows every combination in order.</p>
 
+            <!-- Property tags -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">State: Default · Selected · Hover · Disabled</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Size: Xs · Md</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Leading Icon: True · False</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Trailing Icon: True · False</span>
+            </div>
+
+            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+              <table class="variant-matrix">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Default</th>
+                    <th>Hover</th>
+                    <th>Selected</th>
+                    <th>Disabled</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <!-- ── Xs ── -->
+                  <tr class="size-header">
+                    <td colspan="5">Size = Xs &nbsp;·&nbsp; 12px · padding 4px 8px · radius 6px</td>
+                  </tr>
+
+                  <!-- Xs no icon -->
+                  <tr>
+                    <td class="row-label">No icon</td>
+                    <td><button class="chip chip-xs chip-default">Label</button></td>
+                    <td><button class="chip chip-xs chip-hover">Label</button></td>
+                    <td><button class="chip chip-xs chip-selected">Label</button></td>
+                    <td><button class="chip chip-xs chip-disabled" disabled>Label</button></td>
+                  </tr>
+
+                  <!-- Xs leading icon -->
+                  <tr>
+                    <td class="row-label">Leading icon</td>
+                    <td><button class="chip chip-xs chip-default"><i class="ti ti-tag" style="font-size:12px;"></i>Label</button></td>
+                    <td><button class="chip chip-xs chip-hover"><i class="ti ti-tag" style="font-size:12px;"></i>Label</button></td>
+                    <td><button class="chip chip-xs chip-selected"><i class="ti ti-tag" style="font-size:12px;"></i>Label</button></td>
+                    <td><button class="chip chip-xs chip-disabled" disabled><i class="ti ti-tag" style="font-size:12px;"></i>Label</button></td>
+                  </tr>
+
+                  <!-- Xs trailing icon -->
+                  <tr>
+                    <td class="row-label">Trailing icon</td>
+                    <td><button class="chip chip-xs chip-default">Label<i class="ti ti-x" style="font-size:12px;"></i></button></td>
+                    <td><button class="chip chip-xs chip-hover">Label<i class="ti ti-x" style="font-size:12px;"></i></button></td>
+                    <td><button class="chip chip-xs chip-selected">Label<i class="ti ti-x" style="font-size:12px;"></i></button></td>
+                    <td><button class="chip chip-xs chip-disabled" disabled>Label<i class="ti ti-x" style="font-size:12px;"></i></button></td>
+                  </tr>
+
+                  <!-- ── Md ── -->
+                  <tr class="size-header">
+                    <td colspan="5">Size = Md &nbsp;·&nbsp; 14px · padding 8px 16px · radius 8px</td>
+                  </tr>
+
+                  <!-- Md no icon -->
+                  <tr>
+                    <td class="row-label">No icon</td>
+                    <td><button class="chip chip-md chip-default">Label</button></td>
+                    <td><button class="chip chip-md chip-hover">Label</button></td>
+                    <td><button class="chip chip-md chip-selected">Label</button></td>
+                    <td><button class="chip chip-md chip-disabled" disabled>Label</button></td>
+                  </tr>
+
+                  <!-- Md leading icon -->
+                  <tr>
+                    <td class="row-label">Leading icon</td>
+                    <td><button class="chip chip-md chip-default"><i class="ti ti-tag" style="font-size:14px;"></i>Label</button></td>
+                    <td><button class="chip chip-md chip-hover"><i class="ti ti-tag" style="font-size:14px;"></i>Label</button></td>
+                    <td><button class="chip chip-md chip-selected"><i class="ti ti-tag" style="font-size:14px;"></i>Label</button></td>
+                    <td><button class="chip chip-md chip-disabled" disabled><i class="ti ti-tag" style="font-size:14px;"></i>Label</button></td>
+                  </tr>
+
+                  <!-- Md trailing icon -->
+                  <tr>
+                    <td class="row-label">Trailing icon</td>
+                    <td><button class="chip chip-md chip-default">Label<i class="ti ti-x" style="font-size:14px;"></i></button></td>
+                    <td><button class="chip chip-md chip-hover">Label<i class="ti ti-x" style="font-size:14px;"></i></button></td>
+                    <td><button class="chip chip-md chip-selected">Label<i class="ti ti-x" style="font-size:14px;"></i></button></td>
+                    <td><button class="chip chip-md chip-disabled" disabled>Label<i class="ti ti-x" style="font-size:14px;"></i></button></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <!-- State colour reference -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:24px;">
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px;">Default</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Surface/Primary</code> #fff</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Input</code> #f0f0f7</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/Primary</code> #121219</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px;">Hover</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Base/Base-01</code> #f5f5f5</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Subtle</code> #d7dde0</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/Primary</code> #121219</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px;">Selected</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Brand/500</code> #27b2b2</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Brand</code> #a9e0e0</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/White</code> #ffffff</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:6px;">Disabled</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Same as Default, opacity 50%</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Label has strikethrough</div>
+                <div style="font-size:11px;color:var(--text-secondary);">pointer-events: none</div>
+              </div>
+            </div>
+
+  
+
+      
+            <hr class="cs-section-divider" />
+
+            <!-- ══ ANATOMY & SPECS ══ -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
+            <p class="cs-doc-body">Chips share a common anatomy: optional leading icon, required label, optional trailing icon. Size determines padding, font size, and border radius.</p>
+
+            <!-- Size comparison -->
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Xs</span>
+                  <button class="chip chip-xs chip-default"><i class="ti ti-tag" style="font-size:12px;"></i>Label<i class="ti ti-x" style="font-size:12px;"></i></button>
+                  <div style="font-size:10px;color:var(--text-muted);">12px SemiBold · 4px/8px · r-4</div>
+                </div>
+                <div style="display:flex;flex-direction:column;align-items:flex-start;gap:8px;">
+                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Md</span>
+                  <button class="chip chip-md chip-default"><i class="ti ti-tag" style="font-size:14px;"></i>Label<i class="ti ti-x" style="font-size:14px;"></i></button>
+                  <div style="font-size:10px;color:var(--text-muted);">14px SemiBold · 8px/16px · r-8</div>
+                </div>
+              </div>
+            </div>
+
+
+
+             <hr class="cs-section-divider" />
+
+            <!-- Section: Dos & Don'ts -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
             <div class="dd-grid">
               <div class="dd-card dd-do">
                 <div class="dd-head"><i class="ti ti-thumb-up" style="font-size:13px;"></i> Do</div>
@@ -152,7 +399,7 @@
                   <li>Keep chip labels 1–2 words maximum — chips are compact by design.</li>
                   <li>Use <strong>filter chips</strong> for narrowing lists; use <strong>choice chips</strong> for picking exactly one option.</li>
                   <li>Use <strong>input chips</strong> with a dismiss (×) button only when the value is removable.</li>
-                  <li>Group chips in a flex row with consistent gap (6–8px).</li>
+                  <li>Group chips in a flex row with consistent gap (4–8px).</li>
                 </ul>
               </div>
               <div class="dd-card dd-dont">
@@ -167,161 +414,13 @@
               </div>
             </div>
 
-            <hr class="cs-section-divider" />
 
-            <!-- Chip Types -->
-            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Types &amp; Inventory</div>
-            <p class="cs-doc-body">Three chip types cover all interactive use cases in ClearPath FDO. Each type maps to a distinct interaction pattern.</p>
-
-            <!-- 1. Filter Chip -->
-            <div class="demo-label" style="margin-bottom:8px;">1 — Filter Chip
-              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">List views · Multi-criteria filter bars · Role/department filter</span>
-            </div>
-            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Narrows a list. Multiple can be active simultaneously. Uses 8px border-radius to match inputs and buttons — sits in a horizontal filter row alongside search inputs.</p>
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-                <button class="pt-filter-chip">All</button>
-                <button class="pt-filter-chip active">Active</button>
-                <button class="pt-filter-chip">Pending</button>
-                <button class="pt-filter-chip">Category A</button>
-                <button class="pt-filter-chip">Category B</button>
-              </div>
-              <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                <button class="pt-filter-chip">Role A</button>
-                <button class="pt-filter-chip active">Role B</button>
-                <button class="pt-filter-chip">Role C</button>
-                <button class="pt-filter-chip">Dept A</button>
-                <button class="pt-filter-chip">Dept B</button>
-              </div>
-              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">Active state shown in blue · Default is grey border</div>
-            </div>
-
-            <!-- 2. Choice Chip -->
-            <div class="demo-label" style="margin-bottom:8px;">2 — Choice Chip
-              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Single-select from a fixed set · Slot/time pickers · Exclusive option groups</span>
-            </div>
-            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Selects exactly one value from a set. Selecting a new chip deselects the previous. Used for exclusive-choice groups such as time or slot pickers. Border-radius: 8px — matches input fields.</p>
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div style="display:flex;flex-wrap:wrap;gap:8px;">
-                <span class="time-slot taken">8:00 AM</span>
-                <span class="time-slot">8:30 AM</span>
-                <span class="time-slot">9:00 AM</span>
-                <span class="time-slot selected">9:30 AM</span>
-                <span class="time-slot">10:00 AM</span>
-                <span class="time-slot taken">10:30 AM</span>
-                <span class="time-slot">11:00 AM</span>
-                <span class="time-slot">11:30 AM</span>
-              </div>
-              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">
-                <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px;"><span class="time-slot" style="font-size:10px;padding:2px 6px;pointer-events:none;">Available</span> Default</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;margin-right:12px;"><span class="time-slot selected" style="font-size:10px;padding:2px 6px;pointer-events:none;">Selected</span> Active</span>
-                <span style="display:inline-flex;align-items:center;gap:4px;"><span class="time-slot taken" style="font-size:10px;padding:2px 6px;">Taken</span> Unavailable</span>
-              </div>
-            </div>
-
-            <!-- 3. Input Chip -->
-            <div class="demo-label" style="margin-bottom:8px;">3 — Input Chip (Removable)
-              <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;margin-left:6px;">Multi-select fields · Typed/selected values as removable tokens</span>
-            </div>
-            <p class="cs-doc-body" style="margin-top:0;margin-bottom:12px;">Represents a typed or selected value as a compact removable token. Always includes a dismiss (×) button. Two colour variants distinguish the default record type (teal) from the secondary variant (orange).</p>
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                <span class="patient-pill">Alex M. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
-                <span class="patient-pill">Jordan K. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
-                <span class="patient-pill">Sam T. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
-              </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <span class="patient-pill lead">Riley D. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
-                <span class="patient-pill lead">Casey P. <button style="background:none;border:none;cursor:pointer;padding:0;margin-left:4px;color:inherit;opacity:0.6;font-size:10px;line-height:1;">×</button></span>
-              </div>
-              <div style="margin-top:10px;font-size:10px;color:var(--text-muted);">Teal = Default variant &nbsp;·&nbsp; Orange = Secondary variant</div>
-            </div>
+           
 
             <hr class="cs-section-divider" />
+            
 
-            <!-- Section C: Anatomy & Specs -->
-            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
-            <p class="cs-doc-body">Chips share a common anatomy: optional leading icon, required label, optional trailing dismiss button. The container shape and colour distinguish chip type.</p>
-
-            <!-- Anatomy diagram -->
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
-
-                <!-- Visual redline -->
-                <div style="display:flex;flex-direction:column;gap:20px;min-width:200px;">
-                  <div class="demo-label" style="margin-bottom:0;">Selected Node — Choice Chip</div>
-                  <div style="position:relative;display:inline-flex;align-items:center;background:var(--bg-surface);border:1.5px solid var(--border-input);border-radius:8px;padding:5px 11px;gap:6px;font-size:12px;font-weight:600;color:var(--text-secondary);white-space:nowrap;">
-                    <div style="position:absolute;left:0;top:1px;bottom:1px;width:11px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:8px 0 0 8px;"></div>
-                    <div style="position:absolute;right:0;top:1px;bottom:1px;width:11px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:0 8px 8px 0;"></div>
-                    <span style="position:relative;z-index:1;">9:30 AM</span>
-                  </div>
-                  <div style="display:flex;flex-direction:column;gap:3px;">
-                    <span style="font-size:10px;font-weight:600;color:#10b981;">Padding: 5px 11px</span>
-                    <span style="font-size:10px;font-weight:600;color:#10b981;">Gap: 6px</span>
-                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Border-radius: 8px</span>
-                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Border: 1.5px solid</span>
-                  </div>
-                </div>
-
-                <!-- Node spec panels -->
-                <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:10px;">
-                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
-                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Container — Root Node</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Direction</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Horizontal / Flex</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border-radius</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">8px (matches inputs &amp; buttons)</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1.5px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">border.input</code></td></tr>
-                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Selected border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">2px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">color.brand</code></td></tr>
-                    </table>
-                  </div>
-                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
-                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Label — Text Node</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Font</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Manrope · 600 · 12px</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Color (default)</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text.secondary</code></td></tr>
-                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Color (selected)</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">white (choice chip) · <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">color.brand</code> (filter chip)</td></tr>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Token spec table -->
-            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
-              <table class="spec-table">
-                <thead>
-                  <tr>
-                    <th style="min-width:160px;">Type</th>
-                    <th style="min-width:120px;">State</th>
-                    <th style="min-width:100px;">Property</th>
-                    <th style="min-width:280px;">Token</th>
-                    <th style="min-width:120px;">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="cs-group-sep"><td colspan="5">Filter Chip — .pt-filter-chip</td></tr>
-                  <tr><td>Filter</td><td>Default</td><td>Background</td><td><code class="token-pill">bg.surface</code></td><td class="token-val">var(--bg-surface)</td></tr>
-                  <tr><td>Filter</td><td>Default</td><td>Border</td><td><code class="token-pill">border.subtle</code></td><td class="token-val">1.5px solid</td></tr>
-                  <tr><td>Filter</td><td>Active</td><td>Background</td><td><code class="token-pill">color.brand.bg</code></td><td class="token-val">var(--color-brand-bg)</td></tr>
-                  <tr><td>Filter</td><td>Active</td><td>Border + Text</td><td><code class="token-pill">color.brand</code></td><td class="token-val">var(--nav-active-text)</td></tr>
-
-                  <tr class="cs-group-sep"><td colspan="5">Choice Chip — .time-slot</td></tr>
-                  <tr><td>Choice</td><td>Default</td><td>Border-radius</td><td><code class="token-pill">radius.md</code></td><td class="token-val">8px</td></tr>
-                  <tr><td>Choice</td><td>Selected</td><td>Background</td><td><code class="token-pill">brand.teal</code></td><td class="token-val">#0d9488</td></tr>
-                  <tr><td>Choice</td><td>Taken</td><td>Opacity + strike</td><td><code class="token-pill">—</code></td><td class="token-val">0.6 · line-through</td></tr>
-
-                  <tr class="cs-group-sep"><td colspan="5">Input Chip — .patient-pill</td></tr>
-                  <tr><td>Input — Default</td><td>Default</td><td>Background / Text</td><td><code class="token-pill">badge.success.bg</code> / <code class="token-pill">badge.success.text</code></td><td class="token-val">Teal palette</td></tr>
-                  <tr><td>Input — Secondary</td><td>Default</td><td>Background / Text</td><td><code class="token-pill">badge.variant1.bg</code> / <code class="token-pill">badge.variant1.text</code></td><td class="token-val">Orange palette</td></tr>
-
-
-                </tbody>
-              </table>
-            </div>
-
-            <hr class="cs-section-divider" />
-
-            <!-- Section F: Accessibility -->
+            <!-- Section: Accessibility -->
             <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Accessibility</div>
             <div class="demo-block" style="margin-bottom:24px;">
               <table style="width:100%;border-collapse:collapse;font-size:12px;">
@@ -332,11 +431,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Element</td><td style="padding:8px 12px;color:var(--text-secondary);">Use <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;button&gt;</code> for filter and choice chips — not <code>&lt;span&gt;</code>. Input chips may use <code>&lt;span&gt;</code> with an inner <code>&lt;button&gt;</code> for the dismiss.</td></tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Element</td><td style="padding:8px 12px;color:var(--text-secondary);">Use <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;button&gt;</code> for filter and choice chips — not <code>&lt;span&gt;</code>. Input chips may use <code>&lt;span&gt;</code> with an inner <code>&lt;button&gt;</code> for the dismiss. Status Chips use <code>&lt;span&gt;</code> as they are non-interactive.</td></tr>
                   <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Focus ring</td><td style="padding:8px 12px;color:var(--text-secondary);">All chips must be keyboard-focusable with a visible 3px focus ring using <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">var(--focus-ring)</code>.</td></tr>
                   <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Selected state</td><td style="padding:8px 12px;color:var(--text-secondary);">Use <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-pressed="true"</code> on active filter chips. Use <code>aria-selected="true"</code> inside a <code>role="listbox"</code> for choice chips.</td></tr>
                   <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Dismiss button</td><td style="padding:8px 12px;color:var(--text-secondary);">Input chip dismiss must have <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-label="Remove [patient name]"</code> — the × character alone is not accessible.</td></tr>
-                  <tr><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Contrast</td><td style="padding:8px 12px;color:var(--text-secondary);">All chip labels must meet WCAG AA (4.5:1) against their background. Taken/disabled chips are exempt.</td></tr>
+                  <tr><td style="padding:8px 12px;font-weight:600;color:var(--text-primary);">Contrast</td><td style="padding:8px 12px;color:var(--text-secondary);">All chip labels must meet WCAG AA (4.5:1) against their background. Disabled chips are exempt.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -347,8 +446,60 @@
           <div class="tab-panel" id="tab-code">
             <div class="cs-doc-sub first">Developer Usage</div>
 
+            <!-- Chip Xs -->
+            <div class="demo-label" style="margin-bottom:8px;">Chip — Xs</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default --&gt;
+&lt;button class="chip chip-xs chip-default"&gt;Label&lt;/button&gt;
+
+&lt;!-- Default + leading icon --&gt;
+&lt;button class="chip chip-xs chip-default"&gt;
+  &lt;i class="ti ti-tag"&gt;&lt;/i&gt;Label
+&lt;/button&gt;
+
+&lt;!-- Default + trailing icon --&gt;
+&lt;button class="chip chip-xs chip-default"&gt;
+  Label&lt;i class="ti ti-x"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+&lt;!-- Hover --&gt;
+&lt;button class="chip chip-xs chip-hover"&gt;Label&lt;/button&gt;
+
+&lt;!-- Selected --&gt;
+&lt;button class="chip chip-xs chip-selected" aria-pressed="true"&gt;Label&lt;/button&gt;
+
+&lt;!-- Disabled --&gt;
+&lt;button class="chip chip-xs chip-disabled" disabled aria-disabled="true"&gt;Label&lt;/button&gt;</code></pre>
+            </div>
+
+            <!-- Chip Md -->
+            <div class="demo-label" style="margin-bottom:8px;">Chip — Md</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default --&gt;
+&lt;button class="chip chip-md chip-default"&gt;Label&lt;/button&gt;
+
+&lt;!-- Default + leading icon --&gt;
+&lt;button class="chip chip-md chip-default"&gt;
+  &lt;i class="ti ti-tag"&gt;&lt;/i&gt;Label
+&lt;/button&gt;
+
+&lt;!-- Default + trailing icon --&gt;
+&lt;button class="chip chip-md chip-default"&gt;
+  Label&lt;i class="ti ti-x"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+&lt;!-- Hover --&gt;
+&lt;button class="chip chip-md chip-hover"&gt;Label&lt;/button&gt;
+
+&lt;!-- Selected --&gt;
+&lt;button class="chip chip-md chip-selected" aria-pressed="true"&gt;Label&lt;/button&gt;
+
+&lt;!-- Disabled --&gt;
+&lt;button class="chip chip-md chip-disabled" disabled aria-disabled="true"&gt;Label&lt;/button&gt;</code></pre>
+            </div>
+
             <!-- Filter chip -->
-            <div class="demo-label" style="margin-bottom:8px;">Filter Chip</div>
+            <div class="demo-label" style="margin-bottom:8px;">Filter Chip (App usage)</div>
             <div class="demo-block" style="margin-bottom:24px;">
               <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default --&gt;
 &lt;button class="pt-filter-chip"&gt;Pending&lt;/button&gt;
@@ -358,7 +509,7 @@
             </div>
 
             <!-- Choice chip -->
-            <div class="demo-label" style="margin-bottom:8px;">Choice Chip — Time Slot</div>
+            <div class="demo-label" style="margin-bottom:8px;">Choice Chip — Time Slot (App usage)</div>
             <div class="demo-block" style="margin-bottom:24px;">
               <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Available --&gt;
 &lt;button class="time-slot"&gt;9:00 AM&lt;/button&gt;
@@ -371,7 +522,7 @@
             </div>
 
             <!-- Input chip -->
-            <div class="demo-label" style="margin-bottom:8px;">Input Chip — Removable Token</div>
+            <div class="demo-label" style="margin-bottom:8px;">Input Chip — Removable Token (App usage)</div>
             <div class="demo-block" style="margin-bottom:24px;">
               <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Default variant --&gt;
 &lt;span class="patient-pill"&gt;

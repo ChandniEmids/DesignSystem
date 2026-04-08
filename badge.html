@@ -9,6 +9,64 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="global.css?v=3" />
   <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    /* ── Badge component tokens ── */
+    :root {
+      /* Outline */
+      --badge-outline-error-bg:      #fef2f2;
+      --badge-outline-error-border:  #fecaca;
+      --badge-outline-error-text:    #dc2626;
+      --badge-outline-info-bg:       #f5f5ff;
+      --badge-outline-info-border:   #bfdbfe;
+      --badge-outline-info-text:     #1d4ed8;
+      --badge-outline-success-bg:    #f0fdf4;
+      --badge-outline-success-border:#bbf7d0;
+      --badge-outline-success-text:  #15803d;
+      --badge-outline-brand-bg:      #e9f7f7;
+      --badge-outline-brand-border:  #27b2b2;
+      --badge-outline-brand-text:    #27b2b2;
+      /* Solid */
+      --badge-solid-error-bg:        #dc2626;
+      --badge-solid-info-bg:         #1d4ed8;
+      --badge-solid-success-bg:      #15803d;
+      --badge-solid-brand-bg:        #27b2b2;
+    }
+
+    .bdg {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.32;
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 4px;
+      gap: 0;
+    }
+    .bdg-icon { gap: 4px; }
+
+    /* Outline */
+    .bdg-outline-error   { background: var(--badge-outline-error-bg);   border: 1px solid var(--badge-outline-error-border);   color: var(--badge-outline-error-text); }
+    .bdg-outline-info    { background: var(--badge-outline-info-bg);    border: 1px solid var(--badge-outline-info-border);    color: var(--badge-outline-info-text); }
+    .bdg-outline-success { background: var(--badge-outline-success-bg); border: 1px solid var(--badge-outline-success-border); color: var(--badge-outline-success-text); }
+    .bdg-outline-brand   { background: var(--badge-outline-brand-bg);   border: 1px dashed var(--badge-outline-brand-border);  color: var(--badge-outline-brand-text); }
+
+    /* Solid */
+    .bdg-solid-error     { background: var(--badge-solid-error-bg);   border: none; color: #ffffff; }
+    .bdg-solid-info      { background: var(--badge-solid-info-bg);    border: none; color: #ffffff; }
+    .bdg-solid-success   { background: var(--badge-solid-success-bg); border: none; color: #ffffff; }
+    .bdg-solid-brand     { background: var(--badge-solid-brand-bg);   border: none; color: #ffffff; }
+
+    /* Variant matrix table (shared with chips) */
+    .variant-matrix { width:100%; border-collapse:collapse; font-size:12px; }
+    .variant-matrix th { padding:8px 16px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); border-bottom:2px solid var(--border-subtle); text-align:left; white-space:nowrap; }
+    .variant-matrix th:first-child { min-width:148px; }
+    .variant-matrix td { padding:10px 16px; border-bottom:1px solid var(--border-subtle); vertical-align:middle; }
+    .variant-matrix tr.size-header td { background:var(--border-subtle); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); padding:5px 16px; border-bottom:none; }
+    .row-label { font-size:11px; color:var(--text-muted); font-weight:500; white-space:nowrap; }
+  </style>
 </head>
 <body>
 
@@ -139,9 +197,267 @@
               </div>
             </div>
 
+     
+
+         
+
+           
+        
+
+      
+          
+
             <hr class="cs-section-divider" />
 
-            <!-- Section B: Dos & Don'ts -->
+            <!-- ══ BADGE COMPONENT ══ -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Badge Component</div>
+            <p class="cs-doc-body">The Badge component has three independent properties: <strong>Style</strong>, <strong>Type</strong>, and <strong>Leading Icon</strong>. Each combination is listed below with its CSS class and preview.</p>
+
+            <!-- Property tags -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Style: Outline · Solid</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Type: Error · Info · Success · Brand</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Leading Icon: True · False</span>
+            </div>
+
+            <!-- Semantic Intent-style Badge Component table -->
+            <div class="demo-label" style="margin-bottom:12px;margin-top:8px;">All Variants <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">Type × Style × Icon — each combination with CSS class and preview</span></div>
+            <div class="demo-block" style="margin-bottom:24px;padding:0;overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border-subtle);">
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Type · Style</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">CSS Class</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Preview</th>
+                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">When to use</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Error · Outline</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-outline-error</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-outline-error">Error</span>
+                        <span class="bdg bdg-outline-error bdg-icon"><i class="ti ti-alert-circle" style="font-size:12px;"></i>Error</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Low-emphasis error state. Inline validation, form field errors, failed checks.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Error · Solid</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-solid-error</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-solid-error">Error</span>
+                        <span class="bdg bdg-solid-error bdg-icon"><i class="ti ti-alert-circle" style="font-size:12px;"></i>Error</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">High-emphasis critical state. System errors, destructive alerts, access denied.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Info · Outline</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-outline-info</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-outline-info">Info</span>
+                        <span class="bdg bdg-outline-info bdg-icon"><i class="ti ti-info-circle" style="font-size:12px;"></i>Info</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Neutral informational context. Helper text, upcoming events, general metadata.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Info · Solid</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-solid-info</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-solid-info">Info</span>
+                        <span class="bdg bdg-solid-info bdg-icon"><i class="ti ti-info-circle" style="font-size:12px;"></i>Info</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Strong informational signal. Active status indicators, in-progress system states.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Success · Outline</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-outline-success</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-outline-success">Success</span>
+                        <span class="bdg bdg-outline-success bdg-icon"><i class="ti ti-circle-check" style="font-size:12px;"></i>Success</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Positive outcome. Completed, confirmed, available, passed states.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Success · Solid</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-solid-success</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-solid-success">Success</span>
+                        <span class="bdg bdg-solid-success bdg-icon"><i class="ti ti-circle-check" style="font-size:12px;"></i>Success</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">High-emphasis success. Payment confirmed, appointment booked, task done.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Brand · Outline</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-outline-brand</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-outline-brand">Future</span>
+                        <span class="bdg bdg-outline-brand bdg-icon"><i class="ti ti-clock" style="font-size:12px;"></i>Future</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Anticipated or inactive state. Dashed border signals "not yet active". Label: Future.</td>
+                  </tr>
+
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Brand · Solid</td>
+                    <td style="padding:10px 16px;"><code class="token-pill">.bdg-solid-brand</code></td>
+                    <td style="padding:10px 16px;">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <span class="bdg bdg-solid-brand">Brand</span>
+                        <span class="bdg bdg-solid-brand bdg-icon"><i class="ti ti-tag" style="font-size:12px;"></i>Brand</span>
+                      </div>
+                    </td>
+                    <td style="padding:10px 16px;color:var(--text-secondary);">Brand-primary emphasis. Use sparingly for brand-forward indicators and highlights.</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Type colour reference cards -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:24px;">
+              <div style="border:1px solid #fecaca;border-radius:6px;padding:10px 12px;background:#fef2f2;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#dc2626;margin-bottom:6px;">Error</div>
+                <div style="font-size:11px;color:#7f1d1d;">Outline: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">base/base-danger</code></div>
+                <div style="font-size:11px;color:#7f1d1d;">Solid: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">red/600</code> #dc2626</div>
+                <div style="font-size:11px;color:#7f1d1d;">Text: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">text/text-danger</code></div>
+              </div>
+              <div style="border:1px solid #bfdbfe;border-radius:6px;padding:10px 12px;background:#f5f5ff;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#1d4ed8;margin-bottom:6px;">Info</div>
+                <div style="font-size:11px;color:#1e3a8a;">Outline: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">base/base-info</code></div>
+                <div style="font-size:11px;color:#1e3a8a;">Solid: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">blue/700</code> #1d4ed8</div>
+                <div style="font-size:11px;color:#1e3a8a;">Text: #1d4ed8</div>
+              </div>
+              <div style="border:1px solid #bbf7d0;border-radius:6px;padding:10px 12px;background:#f0fdf4;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#15803d;margin-bottom:6px;">Success</div>
+                <div style="font-size:11px;color:#14532d;">Outline: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">base/base-success</code></div>
+                <div style="font-size:11px;color:#14532d;">Solid: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">green/700</code> #15803d</div>
+                <div style="font-size:11px;color:#14532d;">Text: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">text/text-success</code></div>
+              </div>
+              <div style="border:1px solid #a9e0e0;border-radius:6px;padding:10px 12px;background:#e9f7f7;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#27b2b2;margin-bottom:6px;">Brand</div>
+                <div style="font-size:11px;color:#104747;">Outline: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">brand/100</code> · dashed border</div>
+                <div style="font-size:11px;color:#104747;">Solid: <code style="font-size:10px;background:rgba(0,0,0,.06);padding:1px 4px;border-radius:3px;">brand/500</code> #27b2b2</div>
+                <div style="font-size:11px;color:#104747;">Outline label: "Future"</div>
+              </div>
+            </div>
+
+           
+
+            <hr class="cs-section-divider" />
+
+            <!-- Section C: Anatomy & Specs -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
+
+            <p class="cs-doc-body">Each badge consists of an optional leading icon and a required label inside a container with background + border encoding the semantic intent.</p>
+
+            <!-- Anatomy diagram — Redline format -->
+            <div class="demo-block" style="margin-bottom:24px;">
+              <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
+
+                <!-- LEFT: Visual redline badge -->
+                <div style="display:flex;flex-direction:column;gap:20px;min-width:200px;">
+                  <div class="demo-label" style="margin-bottom:0;">Selected Node</div>
+
+                  <!-- Badge with green spacer bars -->
+                  <div style="position:relative;display:inline-flex;align-items:center;background:#fef2f2;border:1px solid #fecaca;border-radius:4px;padding:4px 8px;gap:4px;font-size:12px;font-weight:600;color:#dc2626;white-space:nowrap;font-family:'Manrope',sans-serif;line-height:1.32;">
+                    <!-- Padding left spacer -->
+                    <div style="position:absolute;left:0;top:1px;bottom:1px;width:8px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:4px 0 0 4px;"></div>
+                    <!-- Padding right spacer -->
+                    <div style="position:absolute;right:0;top:1px;bottom:1px;width:8px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:0 4px 4px 0;"></div>
+                    <i class="ti ti-alert-circle" style="font-size:12px;position:relative;z-index:1;flex-shrink:0;"></i>
+                    <span style="position:relative;z-index:1;">Error</span>
+                  </div>
+
+                  <!-- Node callout lines -->
+                  <div style="display:flex;gap:20px;align-items:flex-start;">
+                    <div style="text-align:center;">
+                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
+                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">① Icon</span>
+                    </div>
+                    <div style="text-align:center;">
+                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
+                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">② Label</span>
+                    </div>
+                  </div>
+                  <div>
+                    <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">③ Container</span>
+                  </div>
+
+                  <!-- Measurements -->
+                  <div style="display:flex;flex-direction:column;gap:3px;">
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Padding: 4px 8px</span>
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Gap: 4px</span>
+                    <span style="font-size:10px;font-weight:600;color:#10b981;">Border-radius: 4px</span>
+                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Resizing: Hug × Hug</span>
+                  </div>
+                </div>
+
+                <!-- RIGHT: Node spec panels -->
+                <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:10px;">
+
+                  <!-- ③ Root Container -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">③ Container — Root Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Direction</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Horizontal / Flex</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Alignment</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Middle Left (align-items: center)</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Resizing</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">H: Hug · V: Hug</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Padding</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">4px top/bottom · 8px left/right</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Outline bg</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#fef2f2;border:1px solid #fecaca;vertical-align:middle;margin-right:5px;"></span><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">base/base-{type}</code> → #fef2f2</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Solid bg</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#dc2626;vertical-align:middle;margin-right:5px;"></span><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">fill/{type}</code> → #dc2626</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">border/{type}</code> · radius: 4px</td></tr>
+                    </table>
+                  </div>
+
+                  <!-- ① Icon -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">① Icon — Leading Node (optional)</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Library</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Tabler Icons — outline style</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Size</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">12 × 12px (font-size: 12px)</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Gap to label</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">space-4 (4px)</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Color</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">currentColor (inherits ② Label token)</td></tr>
+                    </table>
+                  </div>
+
+                  <!-- ② Label -->
+                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
+                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">② Label — Text Node</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Outline token</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text/text-{type}</code> → #dc2626</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Solid token</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">text/white</code> → #ffffff</td></tr>
+                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Font</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Manrope · 600 (SemiBold) · 12px</td></tr>
+                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Line-height</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1.32</td></tr>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <hr class="cs-section-divider" />
+   <!-- Section B: Dos & Don'ts -->
             <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
 
             <div class="dd-grid">
@@ -170,364 +486,38 @@
                 </ul>
               </div>
             </div>
-
-            <hr class="cs-section-divider" />
-
-            <!-- Variants -->
-            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Variants</div>
-
-            <p class="cs-doc-body">Chip variants are defined by three independent axes — never by specific UI labels like "Ongoing" or "Medical Test". This keeps the design system decoupled from application data (Atlassian/Carbon pattern). Combine one intent + one appearance style + any structural modifiers to build any chip.</p>
-
-            <!-- A. Semantic Intent -->
-            <div class="demo-label" style="margin-bottom:12px;">A — Semantic Intent <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">The "what" — functional meaning, independent of UI label</span></div>
-            <div class="demo-block" style="margin-bottom:24px;padding:0;overflow-x:auto;">
-              <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                <thead>
-                  <tr style="border-bottom:2px solid var(--border-subtle);">
-                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;">Intent</th>
-                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">CSS Class</th>
-                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Preview</th>
-                    <th style="text-align:left;padding:8px 16px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">When to use</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Danger</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-danger</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-danger"><span class="pulse-dot"></span> Ongoing</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Errors, high-priority states, live activity, busy status.</td>
-                  </tr>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Success</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-success</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> Completed</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Positive outcomes, available, confirmed, completed states.</td>
-                  </tr>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Warning</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-warning</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-warning"><i class="ti ti-clock" style="font-size:12px;"></i> Pending</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Caution, delayed, attention required, awaiting action.</td>
-                  </tr>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Info</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-info</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-info">Upcoming</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Informational, upcoming, general metadata categories.</td>
-                  </tr>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Brand</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-brand</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-brand">Future</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Brand-adjacent, anticipated, inactive, future states. Dashed outline style.</td>
-                  </tr>
-                  <tr style="border-bottom:1px solid var(--border-subtle);">
-                    <td style="padding:10px 16px;font-weight:700;color:var(--text-primary);">Neutral</td>
-                    <td style="padding:10px 16px;"><code class="token-pill">.chip-neutral</code></td>
-                    <td style="padding:10px 16px;"><span class="chip chip-neutral">Cancelled</span></td>
-                    <td style="padding:10px 16px;color:var(--text-secondary);">Low-emphasis, inactive, dismissed, muted utility states.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- B. Appearance Style -->
-            <div class="demo-label" style="margin-bottom:12px;">B — Appearance Style <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">The "how it looks" — container treatment, independent of intent</span></div>
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div class="demo-row" style="align-items:center;">
-                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Subtle (default)</span>
-                  <span class="chip chip-danger">Danger</span>
-                  <span style="font-size:11px;color:var(--text-secondary);">Tinted background, high-contrast text, solid border. Any intent can use this style.</span>
-                </div>
-                <div style="width:1px;height:64px;background:var(--border-subtle);flex-shrink:0;"></div>
-                <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-start;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">Outline</span>
-                  <span class="chip chip-brand">Future</span>
-                  <span style="font-size:11px;color:var(--text-secondary);">Tinted background, brand text, dashed border. Use for inactive or anticipated states.</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- C. Structural Modifiers -->
-            <div class="demo-label" style="margin-bottom:12px;">C — Structural Modifiers <span style="font-size:10px;font-weight:400;color:var(--text-muted);text-transform:none;letter-spacing:0;">Boolean props — combinable with any intent</span></div>
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div class="demo-row" style="gap:32px;flex-wrap:wrap;align-items:flex-start;">
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">hasDot</span>
-                  <span class="chip chip-danger"><span class="pulse-dot"></span> Live state</span>
-                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">6px pulse dot. Reserved for real-time / live activity only.</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">hasIcon</span>
-                  <span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> With icon</span>
-                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">Leading Tabler icon for categorization. Avoid purely decorative use.</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">size: medium (default)</span>
-                  <span class="chip chip-info">Upcoming</span>
-                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">24px+ height. General UI — cards, detail panels, headers.</span>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:8px;">
-                  <span style="font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;">size: small</span>
-                  <span class="chip chip-info" style="padding:2px 8px;">Upcoming</span>
-                  <span style="font-size:11px;color:var(--text-secondary);max-width:160px;">Compact height. Use in dense tables and compact list rows — reduce padding only, never font size.</span>
-                </div>
-              </div>
-            </div>
-
-        
-
-        
-
-      
-          
-
-            <hr class="cs-section-divider" />
-
-            <!-- Section C: Anatomy & Specs -->
-            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
-
-            <p class="cs-doc-body">Each chip consists of up to three parts: an optional leading dot or icon, a required label, and a container with background + border encoding the category.</p>
-
-            <!-- Anatomy diagram — Redline format -->
-            <div class="demo-block" style="margin-bottom:24px;">
-              <div style="display:flex;align-items:flex-start;gap:40px;flex-wrap:wrap;">
-
-                <!-- LEFT: Visual redline chip -->
-                <div style="display:flex;flex-direction:column;gap:20px;min-width:200px;">
-                  <div class="demo-label" style="margin-bottom:0;">Selected Node</div>
-
-                  <!-- Chip with green spacer bars -->
-                  <div style="position:relative;display:inline-flex;align-items:center;background:var(--badge-danger-bg);border:1px solid var(--badge-danger-border);border-radius:99px;padding:4px 12px;gap:6px;font-size:12px;font-weight:700;color:var(--badge-danger-text);white-space:nowrap;">
-                    <!-- Padding left spacer -->
-                    <div style="position:absolute;left:0;top:1px;bottom:1px;width:12px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:99px 0 0 99px;"></div>
-                    <!-- Padding right spacer -->
-                    <div style="position:absolute;right:0;top:1px;bottom:1px;width:12px;background:rgba(16,185,129,0.12);border-left:1.5px dashed #10b981;border-right:1.5px dashed #10b981;pointer-events:none;border-radius:0 99px 99px 0;"></div>
-                    <span class="pulse-dot" style="position:relative;z-index:1;flex-shrink:0;"></span>
-                    <span style="position:relative;z-index:1;">Ongoing</span>
-                  </div>
-
-                  <!-- Node callout lines -->
-                  <div style="display:flex;gap:20px;align-items:flex-start;">
-                    <div style="text-align:center;">
-                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
-                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">① Dot</span>
-                    </div>
-                    <div style="text-align:center;">
-                      <div style="width:1px;height:14px;background:var(--brand-blue);margin:0 auto 3px;opacity:.4;"></div>
-                      <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">② Label</span>
-                    </div>
-                  </div>
-                  <div>
-                    <span style="font-size:10px;font-weight:700;color:var(--brand-blue);">③ Container</span>
-                  </div>
-
-                  <!-- Measurements -->
-                  <div style="display:flex;flex-direction:column;gap:3px;">
-                    <span style="font-size:10px;font-weight:600;color:#10b981;">Padding: 4px 12px</span>
-                    <span style="font-size:10px;font-weight:600;color:#10b981;">Gap: 6px</span>
-                    <span style="font-size:10px;font-weight:600;color:var(--text-muted);">Height: 24px (fixed)</span>
-                  </div>
-                </div>
-
-                <!-- RIGHT: Node spec panels -->
-                <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:10px;">
-
-                  <!-- ③ Root Container -->
-                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
-                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">③ Container — Root Node</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Direction</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Horizontal / Flex</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Alignment</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Middle Left (align-items: center)</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Resizing</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">H: Hug · V: Fixed 24px</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Padding</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">4px top/bottom · 12px left/right</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Background</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--badge-danger-bg);border:1px solid var(--badge-danger-border);vertical-align:middle;margin-right:5px;"></span><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.bg</code> → #fef2f2</td></tr>
-                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Border</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">1px solid <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.border</code> · radius: 99px</td></tr>
-                    </table>
-                  </div>
-
-                  <!-- ① Dot / Icon -->
-                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
-                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">① Dot / Icon — Leading Node</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Width / Height</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">6 × 6px</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Border Radius</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">50%</td></tr>
-                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Color</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">currentColor (inherits ② Label token)</td></tr>
-                    </table>
-                  </div>
-
-                  <!-- ② Label -->
-                  <div style="border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;">
-                    <div style="background:var(--border-subtle);padding:5px 10px;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">② Label — Text Node</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:11px;">
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);width:40%;">Token</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);"><code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">badge.danger.text</code> → #b91c1c</td></tr>
-                      <tr style="border-bottom:1px solid var(--border-subtle);"><td style="padding:5px 10px;color:var(--text-muted);">Font</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">Manrope · 700 · 12px</td></tr>
-                      <tr><td style="padding:5px 10px;color:var(--text-muted);">Letter Spacing</td><td style="padding:5px 10px;font-weight:600;color:var(--text-primary);">−0.15px</td></tr>
-                    </table>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-
-            <!-- Token spec table -->
-            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
-              <table class="spec-table">
-                <thead>
-                  <tr>
-                    <th style="min-width:160px;">Variant</th>
-                    <th style="min-width:140px;">Element</th>
-                    <th style="min-width:100px;">Property</th>
-                    <th style="min-width:300px;">Token</th>
-                    <th style="min-width:140px;">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <!-- ── Base ── -->
-                  <tr class="cs-group-sep"><td colspan="5">Base — shared across all chip variants</td></tr>
-                  <tr>
-                    <td>All chips</td><td>Container</td><td>Radius</td>
-                    <td><code class="token-new">radius.pill</code> <span style="font-size:10px;color:#92400e;font-weight:600;">⚠ new</span></td>
-                    <td class="token-val">99px</td>
-                  </tr>
-                  <tr>
-                    <td>All chips</td><td>Label</td><td>Font size / weight</td>
-                    <td><span style="font-size:11px;color:var(--text-muted);">—</span></td>
-                    <td class="token-val">12px / 700</td>
-                  </tr>
-
-                  <!-- ── Danger ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-danger — errors, live activity, high-priority, busy</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-danger"><span class="pulse-dot"></span> Danger</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.danger.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-50);"></span><code>color.red.50</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.danger.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-700);"></span><code>color.red.700</code></td></tr>
-                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.danger.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--red-200);"></span><code>color.red.200</code></td></tr>
-
-                  <!-- ── Success ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-success — positive outcomes, available, confirmed, completed</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-success"><i class="ti ti-check" style="font-size:12px;"></i> Success</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.success.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-50);"></span><code>color.green.50</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.success.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-700);"></span><code>color.green.700</code></td></tr>
-                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.success.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--green-200);"></span><code>color.green.200</code></td></tr>
-
-                  <!-- ── Warning ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-warning — caution, delayed, pending, awaiting action</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-warning"><i class="ti ti-clock" style="font-size:12px;"></i> Warning</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.warning.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-50);"></span><code>color.amber.50</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.warning.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-900);"></span><code>color.amber.900</code></td></tr>
-                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.warning.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--amber-300);"></span><code>color.amber.300</code></td></tr>
-
-                  <!-- ── Info ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-info — upcoming, informational, general metadata</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-info">Info</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.info.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-50);"></span><code>color.sky.50</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.info.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-700);"></span><code>color.sky.700</code></td></tr>
-                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.info.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--sky-200);"></span><code>color.sky.200</code></td></tr>
-
-                  <!-- ── Brand ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-brand — brand-adjacent, dashed border (anticipated, inactive, future states)</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-brand">Brand</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.brand.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--primary-50);"></span><code>color.primary.50</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">brand.blue</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--blue-500);"></span><code>color.blue.500</code></td></tr>
-                  <tr><td>Container</td><td>Border (dashed)</td><td><code class="token-pill">badge.brand.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--primary-200);"></span><code>color.primary.200</code></td></tr>
-
-                  <!-- ── Neutral ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.chip-neutral — low-emphasis (inactive, dismissed, muted)</td></tr>
-                  <tr>
-                    <td rowspan="3" style="vertical-align:top;padding-top:12px;"><span class="chip chip-neutral">Neutral</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">badge.neutral.bg</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-100);"></span><code>color.neutral.100</code></td>
-                  </tr>
-                  <tr><td>Label</td><td>Color</td><td><code class="token-pill">badge.neutral.text</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-600);"></span><code>color.neutral.600</code></td></tr>
-                  <tr><td>Container</td><td>Border</td><td><code class="token-pill">badge.neutral.border</code></td><td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-200);"></span><code>color.neutral.200</code></td></tr>
-
-                  <!-- ── Categorical Variants ── -->
-                  <tr class="cs-group-sep"><td colspan="5">.type-tag — Categorical Variants (data-blind; Clinical Fallback Rule)</td></tr>
-                  <tr>
-                    <td><span class="type-tag" data-type="tour">Variant 1</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">badge.variant1.bg</code> / <code class="token-pill">badge.variant1.text</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--orange-50);"></span><span class="cs-swatch-dot" style="background:var(--orange-900);"></span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="type-tag" data-type="counsel">Variant 2</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">badge.variant2.bg</code> / <code class="token-pill">badge.variant2.text</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--cyan-50);"></span><span class="cs-swatch-dot" style="background:var(--cyan-800);"></span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="type-tag" data-type="group">Variant 3</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">badge.variant3.bg</code> / <code class="token-pill">badge.variant3.text</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--purple-50);"></span><span class="cs-swatch-dot" style="background:var(--purple-800);"></span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="type-tag" data-type="psych">Variant 4</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">badge.variant4.bg</code> / <code class="token-pill">badge.variant4.text</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--lime-50);"></span><span class="cs-swatch-dot" style="background:var(--lime-800);"></span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="type-tag" data-type="medical">Variant 5</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">badge.variant5.bg</code> / <code class="token-pill">badge.variant5.text</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--slate-100);"></span><span class="cs-swatch-dot" style="background:var(--slate-900);"></span></td>
-                  </tr>
-
-                  <!-- ── Utility ── -->
-                  <tr class="cs-group-sep"><td colspan="5">Utility — non-chip components using shared token system</td></tr>
-                  <tr>
-                    <td><span class="live-badge"><span class="live-dot"></span> Live</span></td>
-                    <td>Live dot</td><td>Background</td>
-                    <td><code class="token-pill">brand.path</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--teal-600);"></span><code>color.teal.600</code></td>
-                  </tr>
-                  <tr>
-                    <td><span class="feature-chip">Label</span></td>
-                    <td colspan="2">Background / Text</td>
-                    <td><code class="token-pill">border.subtle</code> / <code class="token-pill">text.muted</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--neutral-100);"></span><span class="cs-swatch-dot" style="background:var(--neutral-400);"></span></td>
-                  </tr>
-                  <tr>
-                    <td><span class="count-badge">4</span></td>
-                    <td>Container</td><td>Background</td>
-                    <td><code class="token-pill">brand.blue</code></td>
-                    <td class="token-val"><span class="cs-swatch-dot" style="background:var(--blue-500);"></span><code>color.blue.500</code></td>
-                  </tr>
-
-                </tbody>
-              </table>
-            </div><!-- /demo-block table -->
-
           </div><!-- /tab-overview -->
 
           <!-- ══════════ TAB: CODE ══════════ -->
           <div class="tab-panel" id="tab-code">
 
-            <div class="cs-doc-sub first">Status Chips</div>
+            <div class="cs-doc-sub first">Badge Component</div>
+            <p class="cs-doc-body">Use <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">.bdg</code> with a style modifier (<code>.bdg-outline-*</code> or <code>.bdg-solid-*</code>). Add <code>.bdg-icon</code> when using a leading icon.</p>
+            <div class="code-block">
+<pre><span class="cm-comment">&lt;!-- Outline — no icon --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-outline-error"</span><span class="cm-tag">&gt;</span>Error<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-outline-info"</span><span class="cm-tag">&gt;</span>Info<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-outline-success"</span><span class="cm-tag">&gt;</span>Success<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-outline-brand"</span><span class="cm-tag">&gt;</span>Future<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Outline — with leading icon --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-outline-error bdg-icon"</span><span class="cm-tag">&gt;</span>
+  <span class="cm-tag">&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-alert-circle"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span>Error
+<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Solid — no icon --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-solid-error"</span><span class="cm-tag">&gt;</span>Error<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-solid-info"</span><span class="cm-tag">&gt;</span>Info<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-solid-success"</span><span class="cm-tag">&gt;</span>Success<span class="cm-tag">&lt;/span&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-solid-brand"</span><span class="cm-tag">&gt;</span>Brand<span class="cm-tag">&lt;/span&gt;</span>
+
+<span class="cm-comment">&lt;!-- Solid — with leading icon --&gt;</span>
+<span class="cm-tag">&lt;span</span> <span class="cm-attr">class</span>=<span class="cm-val">"bdg bdg-solid-success bdg-icon"</span><span class="cm-tag">&gt;</span>
+  <span class="cm-tag">&lt;i</span> <span class="cm-attr">class</span>=<span class="cm-val">"ti ti-circle-check"</span> <span class="cm-attr">style</span>=<span class="cm-val">"font-size:12px;"</span><span class="cm-tag">&gt;&lt;/i&gt;</span>Success
+<span class="cm-tag">&lt;/span&gt;</span></pre>
+            </div>
+
+            <div class="cs-doc-sub">Status Chips</div>
             <p class="cs-doc-body">Use the <code style="font-size:12px;font-family:monospace;background:var(--border-subtle);padding:1px 5px;border-radius:3px;">.chip</code> base class with a variant modifier. Never use colour alone — always include a visible label.</p>
             <div class="code-block">
 <pre><span class="cm-comment">&lt;!-- Ongoing → chip-danger: pulse dot required --&gt;</span>
