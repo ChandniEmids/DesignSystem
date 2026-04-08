@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Badge — ClearPath FDO Design System</title>
   <script src="../vendor/tailwind.min.js"></script>
+    <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="global.css?v=3" />
@@ -601,5 +602,75 @@ function getChipIntent(appointment) {
       document.getElementById('tab-btn-' + name).classList.add('active');
     }
   </script>
+
+  <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
 </body>
 </html>
