@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Timepicker — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+
+  <style>
+    /* ── Timepicker component tokens ── */
+    :root {
+      /* Input states — mirror datepicker (same base Input) */
+      --tp-border-default:   var(--neutral-200);
+      --tp-border-hover:     var(--neutral-600);
+      --tp-border-focus:     var(--brand-500);
+      --tp-border-filled:    var(--brand-500);
+      --tp-border-error:     var(--red-500);
+      --tp-border-disabled:  var(--neutral-200);
+
+      --tp-label-default:    var(--neutral-600);
+      --tp-label-focus:      var(--brand-500);
+      --tp-label-error:      var(--red-500);
+      --tp-label-disabled:   var(--neutral-400);
+
+      --tp-text-input:       var(--neutral-900);
+      --tp-text-placeholder: var(--neutral-400);
+      --tp-text-disabled:    var(--neutral-400);
+
+      --tp-bg-default:       var(--white);
+      --tp-bg-disabled:      var(--neutral-100);
+
+      --tp-icon-default:     var(--neutral-400);
+      --tp-icon-active:      var(--brand-500);
+
+      /* Dropdown panel */
+      --tp-panel-bg:         var(--white);
+      --tp-panel-border:     var(--neutral-200);
+      --tp-panel-shadow:     0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+      --tp-panel-radius:     var(--radius-3);
+
+      /* Column items */
+      --tp-item-text:        var(--neutral-900);
+      --tp-item-hover-bg:    var(--brand-100);
+      --tp-item-hover-text:  var(--brand-600);
+      --tp-item-selected-bg: var(--brand-500);
+      --tp-item-selected-text: #ffffff;
+      --tp-col-header:       var(--neutral-400);
+      --tp-col-divider:      var(--neutral-100);
+      --tp-col-bg:           var(--white);
+    }
+
+    /* ── Floating-label input (same as Datepicker) ── */
+    .tp-field {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      width: 300px;
+    }
+
+    .tp-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .tp-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--tp-label-default);
+      background: var(--tp-bg-default);
+      padding: 0 4px;
+      pointer-events: none;
+      transition: top .18s ease, font-size .18s ease, color .18s ease, transform .18s ease;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .tp-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 40px 0 12px;
+      border: 1.5px solid var(--tp-border-default);
+      border-radius: var(--radius-3);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--tp-text-input);
+      background: var(--tp-bg-default);
+      outline: none;
+      cursor: pointer;
+      transition: border-color .15s;
+      letter-spacing: .04em;
+    }
+
+    .tp-input::placeholder { color: transparent; }
+
+    /* Float label */
+    .tp-field.focused .tp-label,
+    .tp-field.filled  .tp-label {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .tp-field.focused   .tp-label { color: var(--tp-label-focus); }
+    .tp-field.error     .tp-label { color: var(--tp-label-error); }
+    .tp-field.disabled  .tp-label { color: var(--tp-label-disabled); }
+
+    /* Border states */
+    .tp-field.hover    .tp-input { border-color: var(--tp-border-hover); }
+    .tp-field.focused  .tp-input { border-color: var(--tp-border-focus); box-shadow: 0 0 0 3px rgba(39,178,178,.14); }
+    .tp-field.filled   .tp-input { border-color: var(--tp-border-filled); }
+    .tp-field.disabled .tp-input { border-color: var(--tp-border-disabled); background: var(--tp-bg-disabled); color: var(--tp-text-disabled); cursor: not-allowed; }
+    .tp-field.error    .tp-input { border-color: var(--tp-border-error); box-shadow: 0 0 0 3px rgba(239,68,68,.10); }
+
+    /* Clock icon */
+    .tp-icon-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--tp-icon-default);
+      border-radius: var(--radius-1);
+      transition: background .12s, color .12s;
+      padding: 0;
+    }
+    .tp-icon-btn:hover { background: var(--neutral-100); color: var(--tp-icon-active); }
+    .tp-field.focused .tp-icon-btn,
+    .tp-field.filled  .tp-icon-btn { color: var(--tp-icon-active); }
+    .tp-field.disabled .tp-icon-btn { cursor: not-allowed; pointer-events: none; color: var(--tp-text-disabled); }
+
+    /* Error message */
+    .tp-error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--red-600);
+      margin-top: 4px;
+      padding-left: 2px;
+    }
+    .tp-field.error .tp-error-msg { display: block; }
+
+    /* ── Time Dropdown Panel ── */
+    .tp-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      background: var(--tp-panel-bg);
+      border: 1px solid var(--tp-panel-border);
+      border-radius: var(--tp-panel-radius);
+      box-shadow: var(--tp-panel-shadow);
+      z-index: 200;
+      overflow: hidden;
+      user-select: none;
+      width: 280px;
+    }
+
+    /* Format toggle (12hr / 24hr) */
+    .tp-format-bar {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--tp-col-divider);
+      background: var(--neutral-50);
+      gap: 8px;
+    }
+    .tp-format-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      flex: 1;
+    }
+    .tp-format-toggle {
+      display: flex;
+      background: var(--neutral-200);
+      border-radius: var(--radius-1);
+      padding: 2px;
+      gap: 2px;
+    }
+    .tp-format-btn {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-muted);
+      transition: background .12s, color .12s;
+      font-family: inherit;
+    }
+    .tp-format-btn.active {
+      background: var(--white);
+      color: var(--text-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,.1);
+    }
+
+    /* Columns container */
+    .tp-columns {
+      display: flex;
+      height: 208px;
+    }
+
+    /* Individual column */
+    .tp-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--tp-col-divider);
+      overflow: hidden;
+    }
+    .tp-col:last-child { border-right: none; }
+
+    .tp-col-header {
+      text-align: center;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--tp-col-header);
+      padding: 8px 0 6px;
+      border-bottom: 1px solid var(--tp-col-divider);
+      flex-shrink: 0;
+      background: var(--neutral-50);
+    }
+
+    /* Scroll list */
+    .tp-col-list {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--neutral-300) transparent;
+      scroll-snap-type: y mandatory;
+    }
+    .tp-col-list::-webkit-scrollbar { width: 4px; }
+    .tp-col-list::-webkit-scrollbar-track { background: transparent; }
+    .tp-col-list::-webkit-scrollbar-thumb { background: var(--neutral-300); border-radius: 2px; }
+
+    .tp-item {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--tp-item-text);
+      cursor: pointer;
+      scroll-snap-align: start;
+      transition: background .1s, color .1s;
+      border-radius: 0;
+    }
+    .tp-item:hover    { background: var(--tp-item-hover-bg); color: var(--tp-item-hover-text); }
+    .tp-item.selected { background: var(--tp-item-selected-bg); color: var(--tp-item-selected-text); font-weight: 700; }
+    .tp-item.disabled { color: var(--neutral-300); cursor: not-allowed; pointer-events: none; }
+
+    /* Increment/decrement controls */
+    .tp-inc-btn {
+      width: 100%;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--neutral-50);
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: background .12s, color .12s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .tp-inc-btn:hover { background: var(--neutral-100); color: var(--text-primary); }
+    .tp-inc-btn.top    { border-bottom: 1px solid var(--tp-col-divider); }
+    .tp-inc-btn.bottom { border-top:    1px solid var(--tp-col-divider); }
+
+    /* AM/PM column */
+    .tp-col.ampm { flex: 0 0 56px; }
+    .tp-ampm-item {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--tp-item-text);
+      cursor: pointer;
+      transition: background .1s, color .1s;
+      letter-spacing: .04em;
+    }
+    .tp-ampm-item:hover    { background: var(--tp-item-hover-bg); color: var(--tp-item-hover-text); }
+    .tp-ampm-item.selected { background: var(--tp-item-selected-bg); color: var(--tp-item-selected-text); }
+
+    /* Action strip */
+    .tp-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-top: 1px solid var(--tp-col-divider);
+      background: var(--neutral-50);
+    }
+    .tp-action-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-500);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius-1);
+      transition: background .12s, color .12s;
+    }
+    .tp-action-btn:hover { background: var(--brand-100); }
+    .tp-action-btn.danger { color: var(--red-600); }
+    .tp-action-btn.danger:hover { background: var(--red-50); }
+    .tp-action-btn.primary {
+      background: var(--brand-500);
+      color: #fff;
+      padding: 4px 16px;
+    }
+    .tp-action-btn.primary:hover { background: var(--brand-600); }
+
+    /* ── Keyboard input variant ── */
+    .tp-keyboard-input {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      gap: 6px;
+      border-top: 1px solid var(--tp-col-divider);
+    }
+    .tp-segment {
+      width: 52px;
+      height: 44px;
+      border: 1.5px solid var(--tp-border-default);
+      border-radius: var(--radius-2);
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      font-family: inherit;
+      color: var(--tp-text-input);
+      outline: none;
+      transition: border-color .15s;
+      background: var(--tp-bg-default);
+    }
+    .tp-segment:focus { border-color: var(--tp-border-focus); box-shadow: 0 0 0 3px rgba(39,178,178,.14); }
+    .tp-segment::placeholder { color: var(--neutral-300); font-weight: 400; font-size: 16px; }
+    .tp-sep { font-size: 20px; font-weight: 700; color: var(--text-secondary); }
+    .tp-ampm-seg {
+      width: 44px;
+      height: 44px;
+      border: 1.5px solid var(--tp-border-default);
+      border-radius: var(--radius-2);
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      background: var(--tp-bg-default);
+      color: var(--tp-text-input);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .15s;
+    }
+
+    /* ── Demo layout ── */
+    .states-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px 32px;
+      padding: 32px;
+      background: var(--neutral-50);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-4);
+    }
+    .state-item { display: flex; flex-direction: column; gap: 8px; }
+    .state-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+    }
+
+    /* Token table */
+    .token-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .token-table th {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+      color: var(--text-muted); text-align: left; padding: 6px 16px 8px; border-bottom: 2px solid var(--border-subtle);
+    }
+    .token-table td { padding: 8px 16px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .token-table tr:last-child td { border-bottom: none; }
+    .tok-name { font-family: 'Courier New', monospace; font-size: 12px; color: var(--brand-600); background: var(--brand-100); padding: 2px 6px; border-radius: 3px; }
+    .tok-val  { font-family: 'Courier New', monospace; font-size: 12px; color: var(--text-secondary); }
+
+    /* cs-doc */
+    .cs-doc-sub { font-size: 13px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: .07em; border-top: 1px solid var(--border-subtle); padding-top: 24px; margin-top: 32px; margin-bottom: 12px; }
+    .cs-doc-sub.first { border-top: none; padding-top: 0; margin-top: 0; }
+    .cs-doc-body { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 16px; }
+    .cs-principles { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .cs-principle-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-3); padding: 16px; }
+    .cs-principle-title { font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .cs-principle-body  { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+
+    .doc-layout  { display: flex; gap: 40px; padding: 40px 32px; max-width: 1200px; }
+    .doc-content { flex: 1; min-width: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search design system…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="datepicker.html" class="nav-item">
+      <i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker
+    </a>
+    <a href="timepicker.html" class="nav-item active">
+      <i class="ti ti-clock" style="font-size:16px;"></i> Timepicker
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Timepicker</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Extends the Input component with a scrollable time panel supporting 12hr and 24hr formats.</div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+          </div>
+
+          <!-- ══════════ TAB: OVERVIEW ══════════ -->
+          <div class="tab-panel active" id="tab-overview">
+
+            <div class="cs-doc-sub first">Purpose</div>
+            <p class="cs-doc-body">
+              The Timepicker extends the outlined floating-label Input with a clock icon trigger and a scrollable dropdown for hour and minute selection. Supports both 12-hour (AM/PM) and 24-hour formats. Both keyboard input and scroll/click selection are supported simultaneously — users choose their preferred interaction mode.
+            </p>
+
+            <div class="cs-principles">
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-layers-intersect" style="font-size:14px;color:var(--brand-blue);"></i> Extends Input</div>
+                <div class="cs-principle-body">Same floating-label outlined input. All six states — default, hover, focused, filled, disabled, error — inherited unchanged.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-clock-2" style="font-size:14px;color:var(--brand-blue);"></i> Dual Format</div>
+                <div class="cs-principle-body">Toggle between 12hr and 24hr at the top of the panel. Format persists per field instance, defaults to 12hr.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-keyboard" style="font-size:14px;color:var(--brand-blue);"></i> Keyboard Input</div>
+                <div class="cs-principle-body">Segment inputs allow direct typing of HH MM. Up/down arrows increment values. Backspace clears segment.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-circle-check" style="font-size:14px;color:var(--brand-blue);"></i> Accessible</div>
+                <div class="cs-principle-body">aria-label on all controls, role="listbox" on columns, aria-selected on items, scroll-snap for predictable selection.</div>
+              </div>
+            </div>
+
+            <!-- ── Input States ── -->
+            <div class="cs-doc-sub">Input States</div>
+            <p class="cs-doc-body">Timepicker input inherits all base Input states — no new styling added to the field itself.</p>
+
+            <div class="states-grid">
+
+              <div class="state-item">
+                <div class="state-label">Default</div>
+                <div class="tp-field">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" placeholder=" " readonly />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker">
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="state-item">
+                <div class="state-label">Hover</div>
+                <div class="tp-field hover">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" placeholder=" " readonly />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker">
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="state-item">
+                <div class="state-label">Focused</div>
+                <div class="tp-field focused">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" placeholder=" " readonly />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker">
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="state-item">
+                <div class="state-label">Filled</div>
+                <div class="tp-field filled">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" value="9:30 AM" placeholder=" " readonly />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker">
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="state-item">
+                <div class="state-label">Disabled</div>
+                <div class="tp-field disabled">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" placeholder=" " readonly disabled />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker" disabled>
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="state-item">
+                <div class="state-label">Error</div>
+                <div class="tp-field error">
+                  <div class="tp-input-wrap">
+                    <input class="tp-input" type="text" value="25:99" placeholder=" " readonly />
+                    <label class="tp-label">Appointment time</label>
+                    <button class="tp-icon-btn" aria-label="Open time picker">
+                      <i class="ti ti-clock" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                  <div class="tp-error-msg">
+                    <i class="ti ti-alert-circle" style="font-size:12px;vertical-align:middle;margin-right:3px;"></i>Please enter a valid time.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── Dropdown Panel — 12hr ── -->
+            <div class="cs-doc-sub">Dropdown Panel — 12-hour format</div>
+            <p class="cs-doc-body">Three scrollable columns: Hours (1–12), Minutes (00–55, step 5), AM/PM. Selected item highlighted in brand color.</p>
+
+            <div style="position:relative;padding-bottom:320px;margin-bottom:40px;">
+              <div class="tp-field focused" style="z-index:210;position:relative;">
+                <div class="tp-input-wrap">
+                  <input class="tp-input" type="text" value="9:30 AM" placeholder=" " readonly />
+                  <label class="tp-label">Appointment time</label>
+                  <button class="tp-icon-btn" aria-label="Open time picker">
+                    <i class="ti ti-clock" style="font-size:16px;"></i>
+                  </button>
+                </div>
+
+                <div class="tp-panel" role="dialog" aria-modal="true" aria-label="Choose time">
+
+                  <!-- Format bar -->
+                  <div class="tp-format-bar">
+                    <span class="tp-format-label">Format</span>
+                    <div class="tp-format-toggle">
+                      <button class="tp-format-btn active" data-fmt="12">12hr</button>
+                      <button class="tp-format-btn" data-fmt="24">24hr</button>
+                    </div>
+                  </div>
+
+                  <!-- Columns -->
+                  <div class="tp-columns">
+
+                    <!-- Hours -->
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top" aria-label="Increment hour"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">HR</div>
+                      <div class="tp-col-list" role="listbox" aria-label="Hour">
+                        <div class="tp-item" role="option" aria-selected="false">1</div>
+                        <div class="tp-item" role="option" aria-selected="false">2</div>
+                        <div class="tp-item" role="option" aria-selected="false">3</div>
+                        <div class="tp-item" role="option" aria-selected="false">4</div>
+                        <div class="tp-item" role="option" aria-selected="false">5</div>
+                        <div class="tp-item" role="option" aria-selected="false">6</div>
+                        <div class="tp-item" role="option" aria-selected="false">7</div>
+                        <div class="tp-item" role="option" aria-selected="false">8</div>
+                        <div class="tp-item selected" role="option" aria-selected="true">9</div>
+                        <div class="tp-item" role="option" aria-selected="false">10</div>
+                        <div class="tp-item" role="option" aria-selected="false">11</div>
+                        <div class="tp-item" role="option" aria-selected="false">12</div>
+                      </div>
+                      <button class="tp-inc-btn bottom" aria-label="Decrement hour"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+
+                    <!-- Minutes -->
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top" aria-label="Increment minute"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">MIN</div>
+                      <div class="tp-col-list" role="listbox" aria-label="Minute">
+                        <div class="tp-item" role="option" aria-selected="false">00</div>
+                        <div class="tp-item" role="option" aria-selected="false">05</div>
+                        <div class="tp-item" role="option" aria-selected="false">10</div>
+                        <div class="tp-item" role="option" aria-selected="false">15</div>
+                        <div class="tp-item" role="option" aria-selected="false">20</div>
+                        <div class="tp-item" role="option" aria-selected="false">25</div>
+                        <div class="tp-item selected" role="option" aria-selected="true">30</div>
+                        <div class="tp-item" role="option" aria-selected="false">35</div>
+                        <div class="tp-item" role="option" aria-selected="false">40</div>
+                        <div class="tp-item" role="option" aria-selected="false">45</div>
+                        <div class="tp-item" role="option" aria-selected="false">50</div>
+                        <div class="tp-item" role="option" aria-selected="false">55</div>
+                      </div>
+                      <button class="tp-inc-btn bottom" aria-label="Decrement minute"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+
+                    <!-- AM/PM -->
+                    <div class="tp-col ampm">
+                      <div class="tp-col-header">—</div>
+                      <div class="tp-col-list" role="listbox" aria-label="Period">
+                        <div class="tp-ampm-item selected" role="option" aria-selected="true">AM</div>
+                        <div class="tp-ampm-item" role="option" aria-selected="false">PM</div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <!-- Actions -->
+                  <div class="tp-actions">
+                    <button class="tp-action-btn danger" aria-label="Clear time">Clear</button>
+                    <button class="tp-action-btn primary" aria-label="Confirm time selection">Done</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- ── 24hr format ── -->
+            <div class="cs-doc-sub">Dropdown Panel — 24-hour format</div>
+            <p class="cs-doc-body">In 24hr mode the AM/PM column is hidden. Hours run 0–23. Input displays value in <code style="font-size:12px;background:var(--neutral-100);padding:1px 5px;border-radius:3px;">HH:MM</code> format.</p>
+
+            <div style="position:relative;padding-bottom:300px;margin-bottom:40px;">
+              <div class="tp-field filled" id="tp-24hr" style="z-index:210;position:relative;">
+                <div class="tp-input-wrap">
+                  <input class="tp-input" type="text" value="14:30" placeholder=" " readonly />
+                  <label class="tp-label">Start time</label>
+                  <button class="tp-icon-btn" aria-label="Open time picker">
+                    <i class="ti ti-clock" style="font-size:16px;"></i>
+                  </button>
+                </div>
+
+                <div class="tp-panel" role="dialog" aria-modal="true" aria-label="Choose time" style="display:none;" id="tp-24hr-panel">
+
+                  <div class="tp-format-bar">
+                    <span class="tp-format-label">Format</span>
+                    <div class="tp-format-toggle">
+                      <button class="tp-format-btn" data-fmt="12">12hr</button>
+                      <button class="tp-format-btn active" data-fmt="24">24hr</button>
+                    </div>
+                  </div>
+
+                  <div class="tp-columns">
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">HR</div>
+                      <div class="tp-col-list">
+                        <div class="tp-item">0</div><div class="tp-item">1</div><div class="tp-item">2</div>
+                        <div class="tp-item">3</div><div class="tp-item">4</div><div class="tp-item">5</div>
+                        <div class="tp-item">6</div><div class="tp-item">7</div><div class="tp-item">8</div>
+                        <div class="tp-item">9</div><div class="tp-item">10</div><div class="tp-item">11</div>
+                        <div class="tp-item">12</div><div class="tp-item">13</div>
+                        <div class="tp-item selected">14</div>
+                        <div class="tp-item">15</div><div class="tp-item">16</div><div class="tp-item">17</div>
+                        <div class="tp-item">18</div><div class="tp-item">19</div><div class="tp-item">20</div>
+                        <div class="tp-item">21</div><div class="tp-item">22</div><div class="tp-item">23</div>
+                      </div>
+                      <button class="tp-inc-btn bottom"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">MIN</div>
+                      <div class="tp-col-list">
+                        <div class="tp-item">00</div><div class="tp-item">05</div><div class="tp-item">10</div>
+                        <div class="tp-item">15</div><div class="tp-item">20</div><div class="tp-item">25</div>
+                        <div class="tp-item selected">30</div>
+                        <div class="tp-item">35</div><div class="tp-item">40</div><div class="tp-item">45</div>
+                        <div class="tp-item">50</div><div class="tp-item">55</div>
+                      </div>
+                      <button class="tp-inc-btn bottom"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+                  </div>
+
+                  <div class="tp-actions">
+                    <button class="tp-action-btn danger">Clear</button>
+                    <button class="tp-action-btn primary">Done</button>
+                  </div>
+
+                </div>
+              </div>
+              <!-- Static visual demo of 24hr open state -->
+              <div style="position:absolute;top:60px;left:0;z-index:100;">
+                <div class="tp-panel" style="position:relative;top:auto;left:auto;display:block;">
+                  <div class="tp-format-bar">
+                    <span class="tp-format-label">Format</span>
+                    <div class="tp-format-toggle">
+                      <button class="tp-format-btn" data-fmt="12">12hr</button>
+                      <button class="tp-format-btn active" data-fmt="24">24hr</button>
+                    </div>
+                  </div>
+                  <div class="tp-columns">
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">HR</div>
+                      <div class="tp-col-list" style="max-height:120px;">
+                        <div class="tp-item">12</div><div class="tp-item">13</div>
+                        <div class="tp-item selected">14</div>
+                        <div class="tp-item">15</div><div class="tp-item">16</div>
+                      </div>
+                      <button class="tp-inc-btn bottom"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+                    <div class="tp-col">
+                      <button class="tp-inc-btn top"><i class="ti ti-chevron-up" style="font-size:12px;"></i></button>
+                      <div class="tp-col-header">MIN</div>
+                      <div class="tp-col-list" style="max-height:120px;">
+                        <div class="tp-item">20</div><div class="tp-item">25</div>
+                        <div class="tp-item selected">30</div>
+                        <div class="tp-item">35</div><div class="tp-item">40</div>
+                      </div>
+                      <button class="tp-inc-btn bottom"><i class="ti ti-chevron-down" style="font-size:12px;"></i></button>
+                    </div>
+                  </div>
+                  <div class="tp-actions">
+                    <button class="tp-action-btn danger">Clear</button>
+                    <button class="tp-action-btn primary">Done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Keyboard input ── -->
+            <div class="cs-doc-sub">Keyboard Input Mode</div>
+            <p class="cs-doc-body">Users who prefer typing can enter time directly. Segment inputs are pre-formatted with placeholder — typing digits auto-advances focus to the next segment.</p>
+
+            <div style="background:var(--neutral-50);border:1px solid var(--border-subtle);border-radius:var(--radius-4);padding:32px;margin-bottom:32px;">
+              <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;">
+
+                <!-- 12hr keyboard -->
+                <div>
+                  <div class="state-label" style="margin-bottom:12px;">12-hour keyboard input</div>
+                  <div class="tp-field focused" style="width:300px;">
+                    <div class="tp-input-wrap">
+                      <input class="tp-input" type="text" placeholder=" " readonly />
+                      <label class="tp-label">Appointment time</label>
+                      <button class="tp-icon-btn"><i class="ti ti-clock" style="font-size:16px;"></i></button>
+                    </div>
+                    <div class="tp-panel" style="position:relative;top:auto;left:auto;display:block;margin-top:6px;">
+                      <div class="tp-keyboard-input">
+                        <input class="tp-segment" type="text" maxlength="2" placeholder="HH" aria-label="Hour" inputmode="numeric" />
+                        <span class="tp-sep">:</span>
+                        <input class="tp-segment" type="text" maxlength="2" placeholder="MM" aria-label="Minute" inputmode="numeric" />
+                        <span class="tp-sep" style="font-size:14px;margin-left:4px;"></span>
+                        <div class="tp-ampm-seg" role="button" aria-label="Toggle AM/PM">AM</div>
+                      </div>
+                      <div class="tp-actions">
+                        <button class="tp-action-btn danger">Clear</button>
+                        <button class="tp-action-btn primary">Done</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 24hr keyboard -->
+                <div>
+                  <div class="state-label" style="margin-bottom:12px;">24-hour keyboard input</div>
+                  <div class="tp-field focused" style="width:240px;">
+                    <div class="tp-input-wrap">
+                      <input class="tp-input" type="text" placeholder=" " readonly />
+                      <label class="tp-label">Start time</label>
+                      <button class="tp-icon-btn"><i class="ti ti-clock" style="font-size:16px;"></i></button>
+                    </div>
+                    <div class="tp-panel" style="position:relative;top:auto;left:auto;display:block;margin-top:6px;width:220px;">
+                      <div class="tp-keyboard-input">
+                        <input class="tp-segment" type="text" maxlength="2" placeholder="HH" aria-label="Hour" inputmode="numeric" />
+                        <span class="tp-sep">:</span>
+                        <input class="tp-segment" type="text" maxlength="2" placeholder="MM" aria-label="Minute" inputmode="numeric" />
+                      </div>
+                      <div class="tp-actions">
+                        <button class="tp-action-btn danger">Clear</button>
+                        <button class="tp-action-btn primary">Done</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ── Edge Cases ── -->
+            <div class="cs-doc-sub">Edge Cases</div>
+
+            <table class="token-table" style="margin-bottom:32px;">
+              <thead>
+                <tr><th>Scenario</th><th>Behavior</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Empty (no selection)</strong></td><td>Input shows placeholder. Panel opens with no selection highlighted. Hour column scrolls to top.</td></tr>
+                <tr><td><strong>Invalid time (25:99)</strong></td><td>Input enters Error state with message "Please enter a valid time." Value is not committed.</td></tr>
+                <tr><td><strong>Keyboard: out-of-range digit</strong></td><td>Invalid digit is rejected silently. Focus stays on segment.</td></tr>
+                <tr><td><strong>Disabled field</strong></td><td>Clock icon non-interactive. Panel never opens. Field reads as disabled.</td></tr>
+                <tr><td><strong>Format switch mid-session</strong></td><td>Current value converts to new format. 13:00 → 1:00 PM. 1:00 PM → 13:00.</td></tr>
+                <tr><td><strong>Minute step granularity</strong></td><td>Default step is 5 min. Can be configured to 1 min or 15 min via a <code style="font-size:12px;background:var(--neutral-100);padding:1px 4px;border-radius:3px;">data-step</code> attribute.</td></tr>
+                <tr><td><strong>Long value (24hr overflow)</strong></td><td>Input width fixed; value never exceeds 5 chars (HH:MM). No truncation needed.</td></tr>
+              </tbody>
+            </table>
+
+            <!-- ── Token Reference ── -->
+            <div class="cs-doc-sub">Token Reference</div>
+
+            <table class="token-table" style="margin-bottom:40px;">
+              <thead>
+                <tr><th style="width:240px;">Token</th><th>Maps to</th><th>Usage</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code class="tok-name">--tp-border-default</code></td><td class="tok-val">--neutral-200 (#F0F0F7)</td><td>Input border — resting</td></tr>
+                <tr><td><code class="tok-name">--tp-border-focus</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Input border — focused</td></tr>
+                <tr><td><code class="tok-name">--tp-border-error</code></td><td class="tok-val">--red-500 (#ef4444)</td><td>Input border — error state</td></tr>
+                <tr><td><code class="tok-name">--tp-item-selected-bg</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Selected time item background</td></tr>
+                <tr><td><code class="tok-name">--tp-item-hover-bg</code></td><td class="tok-val">--brand-100 (#E9F7F7)</td><td>Hovered item background</td></tr>
+                <tr><td><code class="tok-name">--tp-panel-shadow</code></td><td class="tok-val">0 8px 24px rgba(0,0,0,.10)</td><td>Panel elevation</td></tr>
+                <tr><td><code class="tok-name">--tp-panel-radius</code></td><td class="tok-val">--radius-3 (8px)</td><td>Panel corner radius</td></tr>
+                <tr><td><code class="tok-name">--tp-col-divider</code></td><td class="tok-val">--neutral-100 (#f3f4f6)</td><td>Column separator lines</td></tr>
+                <tr><td><code class="tok-name">--tp-label-focus</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Floating label — focused color</td></tr>
+              </tbody>
+            </table>
+
+          </div><!-- /tab-overview -->
+
+          <!-- ══════════ TAB: CODE ══════════ -->
+          <div class="tab-panel" id="tab-code">
+            <div class="code-empty">
+              <i class="ti ti-code"></i>
+              <p>HTML snippets coming soon.<br>Reference the token table in the Overview tab.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    /* ── Live timepicker interaction ── */
+    (function() {
+
+      // Toggle panel open/close
+      document.querySelectorAll('.tp-icon-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.tp-field');
+          if (!field || field.classList.contains('disabled')) return;
+          const panel = field.querySelector('.tp-panel');
+          if (!panel || panel.style.position === 'relative') return; // skip static demos
+          const isOpen = field.classList.contains('focused');
+          document.querySelectorAll('.tp-field.focused').forEach(f => f.classList.remove('focused'));
+          if (!isOpen) {
+            field.classList.add('focused');
+            panel.style.display = 'block';
+          } else {
+            panel.style.display = 'none';
+          }
+        });
+      });
+
+      // Item selection
+      document.querySelectorAll('.tp-item, .tp-ampm-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const col = this.closest('.tp-col-list');
+          if (!col) return;
+          col.querySelectorAll('.tp-item, .tp-ampm-item').forEach(i => {
+            i.classList.remove('selected');
+            i.setAttribute('aria-selected', 'false');
+          });
+          this.classList.add('selected');
+          this.setAttribute('aria-selected', 'true');
+          updateTimeValue(this.closest('.tp-field'));
+        });
+      });
+
+      function updateTimeValue(field) {
+        if (!field) return;
+        const panel = field.querySelector('.tp-panel');
+        if (!panel) return;
+        const hr  = panel.querySelector('.tp-col:nth-child(1) .tp-item.selected');
+        const min = panel.querySelector('.tp-col:nth-child(2) .tp-item.selected');
+        const ampm = panel.querySelector('.tp-ampm-item.selected');
+        const input = field.querySelector('.tp-input');
+        if (hr && min && input) {
+          const val = ampm ? `${hr.textContent}:${min.textContent} ${ampm.textContent}` : `${hr.textContent.padStart(2,'0')}:${min.textContent}`;
+          input.value = val;
+          field.classList.add('filled');
+        }
+      }
+
+      // Done button
+      document.querySelectorAll('.tp-action-btn.primary').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.tp-field');
+          if (!field) return;
+          updateTimeValue(field);
+          const panel = field.querySelector('.tp-panel');
+          if (panel && panel.style.position !== 'relative') panel.style.display = 'none';
+          field.classList.remove('focused');
+        });
+      });
+
+      // Clear button
+      document.querySelectorAll('.tp-action-btn.danger').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.tp-field');
+          if (!field) return;
+          const input = field.querySelector('.tp-input');
+          if (input) input.value = '';
+          field.classList.remove('filled', 'focused');
+          const panel = field.querySelector('.tp-panel');
+          if (panel && panel.style.position !== 'relative') panel.style.display = 'none';
+        });
+      });
+
+      // AM/PM toggle in keyboard mode
+      document.querySelectorAll('.tp-ampm-seg').forEach(seg => {
+        seg.addEventListener('click', function() {
+          this.textContent = this.textContent === 'AM' ? 'PM' : 'AM';
+        });
+      });
+
+      // Keyboard segment auto-advance
+      document.querySelectorAll('.tp-segment').forEach((seg, idx, all) => {
+        seg.addEventListener('input', function() {
+          if (this.value.length >= 2 && idx + 1 < all.length) {
+            all[idx + 1].focus();
+          }
+        });
+      });
+
+      // Format toggle
+      document.querySelectorAll('.tp-format-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const bar = this.closest('.tp-format-bar');
+          bar.querySelectorAll('.tp-format-btn').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.tp-field.focused').forEach(f => {
+          f.classList.remove('focused');
+          const p = f.querySelector('.tp-panel');
+          if (p && p.style.position !== 'relative') p.style.display = 'none';
+        });
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.tp-field.focused').forEach(f => {
+            f.classList.remove('focused');
+            const p = f.querySelector('.tp-panel');
+            if (p && p.style.position !== 'relative') p.style.display = 'none';
+          });
+        }
+      });
+
+    })();
+  </script>
+</body>
+</html>

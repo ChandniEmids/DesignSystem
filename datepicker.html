@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datepicker — ClearPath FDO Design System</title>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <script src="../vendor/tailwind.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+
+  <style>
+    /* ── Datepicker component tokens ── */
+    :root {
+      /* Floating-label input (extends base Input) */
+      --dp-border-default:   var(--neutral-200);
+      --dp-border-hover:     var(--neutral-600);
+      --dp-border-focus:     var(--brand-500);
+      --dp-border-filled:    var(--brand-500);
+      --dp-border-error:     var(--red-500);
+      --dp-border-disabled:  var(--neutral-200);
+
+      --dp-label-default:    var(--neutral-600);
+      --dp-label-focus:      var(--brand-500);
+      --dp-label-error:      var(--red-500);
+      --dp-label-disabled:   var(--neutral-400);
+
+      --dp-text-input:       var(--neutral-900);
+      --dp-text-placeholder: var(--neutral-400);
+      --dp-text-disabled:    var(--neutral-400);
+
+      --dp-bg-default:       var(--white);
+      --dp-bg-disabled:      var(--neutral-100);
+
+      --dp-icon-default:     var(--neutral-400);
+      --dp-icon-active:      var(--brand-500);
+
+      /* Calendar panel */
+      --dp-panel-bg:         var(--white);
+      --dp-panel-border:     var(--neutral-200);
+      --dp-panel-shadow:     0 8px 24px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+      --dp-panel-radius:     var(--radius-3);
+
+      /* Calendar day states */
+      --dp-day-text:         var(--neutral-900);
+      --dp-day-muted:        var(--neutral-400);
+      --dp-day-hover-bg:     var(--brand-100);
+      --dp-day-hover-text:   var(--brand-600);
+      --dp-day-today-bg:     var(--brand-100);
+      --dp-day-today-text:   var(--brand-600);
+      --dp-day-today-border: var(--brand-500);
+      --dp-day-selected-bg:  var(--brand-500);
+      --dp-day-selected-text:#ffffff;
+      --dp-day-range-bg:     var(--brand-200);
+      --dp-day-range-text:   var(--brand-700);
+
+      /* Nav header */
+      --dp-nav-bg:           var(--neutral-50);
+      --dp-nav-btn-hover:    var(--neutral-100);
+
+      /* Action strip */
+      --dp-action-border:    var(--neutral-100);
+    }
+
+    /* ── Floating-label input wrapper ── */
+    .dp-field {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      width: 300px;
+    }
+
+    .dp-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .dp-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--dp-label-default);
+      background: var(--dp-bg-default);
+      padding: 0 4px;
+      pointer-events: none;
+      transition: top .18s ease, font-size .18s ease, color .18s ease, transform .18s ease;
+      line-height: 1;
+      z-index: 1;
+    }
+
+    .dp-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 40px 0 12px;
+      border: 1.5px solid var(--dp-border-default);
+      border-radius: var(--radius-3);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--dp-text-input);
+      background: var(--dp-bg-default);
+      outline: none;
+      cursor: pointer;
+      transition: border-color .15s;
+      caret-color: transparent;
+    }
+
+    .dp-input::placeholder { color: transparent; }
+
+    /* Float label up when filled or focused */
+    .dp-input:focus ~ .dp-label,
+    .dp-input:not(:placeholder-shown) ~ .dp-label,
+    .dp-field.filled .dp-label,
+    .dp-field.focused .dp-label {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .dp-field.focused .dp-label    { color: var(--dp-label-focus); }
+    .dp-field.error .dp-label      { color: var(--dp-label-error); }
+    .dp-field.disabled .dp-label   { color: var(--dp-label-disabled); }
+
+    /* Border state variants */
+    .dp-field.hover   .dp-input    { border-color: var(--dp-border-hover); }
+    .dp-field.focused .dp-input    { border-color: var(--dp-border-focus); box-shadow: 0 0 0 3px rgba(39,178,178,.14); }
+    .dp-field.filled  .dp-input    { border-color: var(--dp-border-filled); }
+    .dp-field.disabled .dp-input   { border-color: var(--dp-border-disabled); background: var(--dp-bg-disabled); color: var(--dp-text-disabled); cursor: not-allowed; }
+    .dp-field.error   .dp-input    { border-color: var(--dp-border-error); box-shadow: 0 0 0 3px rgba(239,68,68,.10); }
+    .dp-field.error.focused .dp-label { color: var(--dp-label-error); }
+
+    /* Calendar icon button */
+    .dp-icon-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--dp-icon-default);
+      border-radius: var(--radius-1);
+      transition: background .12s, color .12s;
+      padding: 0;
+    }
+    .dp-icon-btn:hover { background: var(--neutral-100); color: var(--dp-icon-active); }
+    .dp-field.focused .dp-icon-btn,
+    .dp-field.filled  .dp-icon-btn { color: var(--dp-icon-active); }
+    .dp-field.disabled .dp-icon-btn { cursor: not-allowed; pointer-events: none; color: var(--dp-text-disabled); }
+
+    /* Clear button (shown when filled) */
+    .dp-clear-btn {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--neutral-200);
+      cursor: pointer;
+      color: var(--neutral-600);
+      border-radius: 50%;
+      transition: background .12s, color .12s;
+      padding: 0;
+      font-size: 10px;
+    }
+    .dp-clear-btn:hover { background: var(--neutral-400); color: var(--white); }
+    .dp-field.filled .dp-clear-btn { display: flex; }
+
+    /* Error message */
+    .dp-error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--red-600);
+      margin-top: 4px;
+      padding-left: 2px;
+    }
+    .dp-field.error .dp-error-msg { display: block; }
+
+    /* ── Calendar Panel ── */
+    .dp-panel {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: 296px;
+      background: var(--dp-panel-bg);
+      border: 1px solid var(--dp-panel-border);
+      border-radius: var(--dp-panel-radius);
+      box-shadow: var(--dp-panel-shadow);
+      z-index: 200;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Month/year nav */
+    .dp-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 12px 8px;
+      background: var(--dp-nav-bg);
+      border-bottom: 1px solid var(--dp-action-border);
+    }
+    .dp-nav-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      flex: 1;
+      text-align: center;
+    }
+    .dp-nav-btn {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      border-radius: var(--radius-1);
+      transition: background .12s, color .12s;
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .dp-nav-btn:hover { background: var(--dp-nav-btn-hover); color: var(--text-primary); }
+
+    /* Day-of-week header */
+    .dp-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 8px 8px 4px;
+      gap: 2px;
+    }
+    .dp-weekday {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 0;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* Day grid */
+    .dp-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      padding: 4px 8px 8px;
+      gap: 2px;
+    }
+    .dp-day {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dp-day-text);
+      border-radius: var(--radius-1);
+      cursor: pointer;
+      transition: background .1s, color .1s;
+      border: 1.5px solid transparent;
+    }
+    .dp-day:hover               { background: var(--dp-day-hover-bg); color: var(--dp-day-hover-text); }
+    .dp-day.outside             { color: var(--dp-day-muted); }
+    .dp-day.outside:hover       { background: var(--neutral-50); color: var(--neutral-400); }
+    .dp-day.today               { background: var(--dp-day-today-bg); color: var(--dp-day-today-text); border-color: var(--dp-day-today-border); font-weight: 700; }
+    .dp-day.selected            { background: var(--dp-day-selected-bg); color: var(--dp-day-selected-text); border-color: transparent; font-weight: 700; }
+    .dp-day.selected:hover      { background: var(--brand-600); }
+    .dp-day.in-range            { background: var(--dp-day-range-bg); color: var(--dp-day-range-text); border-radius: 0; }
+    .dp-day.range-start         { background: var(--dp-day-selected-bg); color: var(--dp-day-selected-text); border-radius: var(--radius-1) 0 0 var(--radius-1); }
+    .dp-day.range-end           { background: var(--dp-day-selected-bg); color: var(--dp-day-selected-text); border-radius: 0 var(--radius-1) var(--radius-1) 0; }
+    .dp-day.disabled-day        { color: var(--dp-day-muted); cursor: not-allowed; opacity: 0.5; }
+    .dp-day.disabled-day:hover  { background: none; color: var(--dp-day-muted); }
+
+    /* Action strip */
+    .dp-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-top: 1px solid var(--dp-action-border);
+      background: var(--neutral-50);
+    }
+    .dp-action-btn {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--brand-500);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: var(--radius-1);
+      transition: background .12s, color .12s;
+    }
+    .dp-action-btn:hover { background: var(--brand-100); }
+    .dp-action-btn.danger { color: var(--red-600); }
+    .dp-action-btn.danger:hover { background: var(--red-50); }
+
+    /* ── Demo / docs layout ── */
+    .states-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px 32px;
+      padding: 32px;
+      background: var(--neutral-50);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-4);
+    }
+    .state-item { display: flex; flex-direction: column; gap: 8px; }
+    .state-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--text-muted);
+    }
+
+    .open-demo-wrap {
+      position: relative;
+      padding-bottom: 320px;
+    }
+
+    /* Token table */
+    .token-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .token-table th {
+      font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+      color: var(--text-muted); text-align: left; padding: 6px 16px 8px; border-bottom: 2px solid var(--border-subtle);
+    }
+    .token-table td { padding: 8px 16px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .token-table tr:last-child td { border-bottom: none; }
+    .tok-name { font-family: 'Courier New', monospace; font-size: 12px; color: var(--brand-600); background: var(--brand-100); padding: 2px 6px; border-radius: 3px; }
+    .tok-val  { font-family: 'Courier New', monospace; font-size: 12px; color: var(--text-secondary); }
+    .tok-swatch { display: inline-block; width: 16px; height: 16px; border-radius: 3px; border: 1px solid rgba(0,0,0,.08); vertical-align: middle; margin-right: 8px; }
+
+    /* cs-doc styles (shared with badge) */
+    .cs-doc-sub { font-size: 13px; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: .07em; border-top: 1px solid var(--border-subtle); padding-top: 24px; margin-top: 32px; margin-bottom: 12px; }
+    .cs-doc-sub.first { border-top: none; padding-top: 0; margin-top: 0; }
+    .cs-doc-body { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 16px; }
+    .cs-principles { display: grid; grid-template-columns: repeat(auto-fill,minmax(200px,1fr)); gap: 16px; margin-bottom: 24px; }
+    .cs-principle-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-3); padding: 16px; }
+    .cs-principle-title { font-size: 13px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .cs-principle-body  { font-size: 12px; color: var(--text-secondary); line-height: 1.55; }
+
+    .doc-layout  { display: flex; gap: 40px; padding: 40px 32px; max-width: 1200px; }
+    .doc-content { flex: 1; min-width: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search design system…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item">
+      <i class="ti ti-variable" style="font-size:16px;"></i> Tokens
+    </a>
+    <a href="colors.html" class="nav-item">
+      <i class="ti ti-palette" style="font-size:16px;"></i> Colors
+    </a>
+    <a href="typography.html" class="nav-item">
+      <i class="ti ti-typography" style="font-size:16px;"></i> Typography
+    </a>
+    <a href="spacing.html" class="nav-item">
+      <i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing
+    </a>
+    <a href="border-radius.html" class="nav-item">
+      <i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius
+    </a>
+    <a href="icons.html" class="nav-item">
+      <i class="ti ti-icons" style="font-size:16px;"></i> Icons
+    </a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="Components-inventory.html#sec-buttons" class="nav-item">
+      <i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons
+    </a>
+    <a href="Components-inventory.html#sec-forms" class="nav-item">
+      <i class="ti ti-forms" style="font-size:16px;"></i> Forms
+    </a>
+    <a href="badge.html" class="nav-item">
+      <i class="ti ti-tag" style="font-size:16px;"></i> Badge
+    </a>
+    <a href="chips.html" class="nav-item">
+      <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="datepicker.html" class="nav-item active">
+      <i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker
+    </a>
+    <a href="timepicker.html" class="nav-item">
+      <i class="ti ti-clock" style="font-size:16px;"></i> Timepicker
+    </a>
+    <a href="Components-inventory.html#sec-alerts" class="nav-item">
+      <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
+    </a>
+    <a href="Components-inventory.html#sec-navigation" class="nav-item">
+      <i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Navigation
+    </a>
+    <a href="Components-inventory.html#sec-cards" class="nav-item">
+      <i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards
+    </a>
+    <a href="Components-inventory.html#sec-overlays" class="nav-item">
+      <i class="ti ti-layer-difference" style="font-size:16px;"></i> Overlays
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a href="../appointments2.html" class="nav-item">
+        <i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App
+      </a>
+    </div>
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Datepicker</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Extends the Input component with a calendar panel for selecting single dates or ranges.</div>
+          </div>
+
+          <!-- Tabs -->
+          <div class="tab-bar">
+            <button class="tab-btn active" id="tab-btn-overview" onclick="switchTab('overview')">Overview</button>
+            <button class="tab-btn" id="tab-btn-code" onclick="switchTab('code')">Code</button>
+          </div>
+
+          <!-- ══════════ TAB: OVERVIEW ══════════ -->
+          <div class="tab-panel active" id="tab-overview">
+
+            <!-- Purpose -->
+            <div class="cs-doc-sub first">Purpose</div>
+            <p class="cs-doc-body">
+              The Datepicker extends the existing outlined floating-label Input. It adds a calendar icon trigger and an attached calendar panel for selecting dates. Use it wherever a precise date is required — appointment booking, date-of-birth, scheduling windows. The base input component is unchanged; the calendar panel is layered on top.
+            </p>
+
+            <div class="cs-principles">
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-layers-intersect" style="font-size:14px;color:var(--brand-blue);"></i> Extends Input</div>
+                <div class="cs-principle-body">No new input created. All field variants (hover, focus, error, disabled) inherit from the base Input component.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-keyboard" style="font-size:14px;color:var(--brand-blue);"></i> Keyboard Ready</div>
+                <div class="cs-principle-body">Arrow keys navigate days, Enter selects, Escape closes, Tab moves focus through controls.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-calendar-event" style="font-size:14px;color:var(--brand-blue);"></i> Today + Clear</div>
+                <div class="cs-principle-body">Action strip provides quick access to today's date and a way to clear the selection without additional interactions.</div>
+              </div>
+              <div class="cs-principle-card">
+                <div class="cs-principle-title"><i class="ti ti-circle-check" style="font-size:14px;color:var(--brand-blue);"></i> Accessible</div>
+                <div class="cs-principle-body">aria-label on all controls, role="dialog" on the panel, aria-selected on days, focus trap when open.</div>
+              </div>
+            </div>
+
+            <!-- ── Section: Input States ── -->
+            <div class="cs-doc-sub">Input States</div>
+            <p class="cs-doc-body">The datepicker input shares all six states of the base Input component.</p>
+
+            <div class="states-grid">
+
+              <!-- Default -->
+              <div class="state-item">
+                <div class="state-label">Default</div>
+                <div class="dp-field">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" placeholder=" " readonly />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-icon-btn" aria-label="Open calendar">
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hover -->
+              <div class="state-item">
+                <div class="state-label">Hover</div>
+                <div class="dp-field hover">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" placeholder=" " readonly />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-icon-btn" aria-label="Open calendar">
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Focused (open) -->
+              <div class="state-item">
+                <div class="state-label">Focused</div>
+                <div class="dp-field focused">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" placeholder=" " readonly />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-icon-btn" aria-label="Open calendar">
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filled -->
+              <div class="state-item">
+                <div class="state-label">Filled</div>
+                <div class="dp-field filled">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" value="Apr 10, 2026" placeholder=" " readonly />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-clear-btn" aria-label="Clear date">
+                      <i class="ti ti-x" style="font-size:10px;"></i>
+                    </button>
+                    <button class="dp-icon-btn" aria-label="Open calendar">
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Disabled -->
+              <div class="state-item">
+                <div class="state-label">Disabled</div>
+                <div class="dp-field disabled">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" placeholder=" " readonly disabled />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-icon-btn" aria-label="Open calendar" disabled>
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Error -->
+              <div class="state-item">
+                <div class="state-label">Error</div>
+                <div class="dp-field error">
+                  <div class="dp-input-wrap">
+                    <input class="dp-input" type="text" value="Feb 30, 2026" placeholder=" " readonly />
+                    <label class="dp-label">Appointment date</label>
+                    <button class="dp-icon-btn" aria-label="Open calendar">
+                      <i class="ti ti-calendar" style="font-size:16px;"></i>
+                    </button>
+                  </div>
+                  <div class="dp-error-msg">
+                    <i class="ti ti-alert-circle" style="font-size:12px;vertical-align:middle;margin-right:3px;"></i>Please select a valid date.
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── Section: Calendar Panel ── -->
+            <div class="cs-doc-sub">Calendar Panel — Open State</div>
+            <p class="cs-doc-body">Appears 6px below the input, left-aligned. Closes on selection, Escape key, or click outside.</p>
+
+            <div style="position:relative;padding-bottom:340px;margin-bottom:40px;">
+
+              <!-- Input trigger (focused state) -->
+              <div class="dp-field focused" style="z-index:210;position:relative;">
+                <div class="dp-input-wrap">
+                  <input class="dp-input" type="text" placeholder=" " readonly />
+                  <label class="dp-label">Appointment date</label>
+                  <button class="dp-icon-btn" aria-label="Open calendar">
+                    <i class="ti ti-calendar" style="font-size:16px;"></i>
+                  </button>
+                </div>
+                <!-- Panel -->
+                <div class="dp-panel" role="dialog" aria-modal="true" aria-label="Choose date">
+                  <!-- Nav -->
+                  <div class="dp-nav">
+                    <button class="dp-nav-btn" aria-label="Previous month"><i class="ti ti-chevron-left" style="font-size:14px;"></i></button>
+                    <span class="dp-nav-title">April 2026</span>
+                    <button class="dp-nav-btn" aria-label="Next month"><i class="ti ti-chevron-right" style="font-size:14px;"></i></button>
+                  </div>
+                  <!-- Weekdays -->
+                  <div class="dp-weekdays">
+                    <div class="dp-weekday">Su</div><div class="dp-weekday">Mo</div>
+                    <div class="dp-weekday">Tu</div><div class="dp-weekday">We</div>
+                    <div class="dp-weekday">Th</div><div class="dp-weekday">Fr</div>
+                    <div class="dp-weekday">Sa</div>
+                  </div>
+                  <!-- Days -->
+                  <div class="dp-days" role="grid" aria-label="April 2026">
+                    <!-- Row 1 -->
+                    <div class="dp-day outside" role="gridcell" aria-label="March 29">29</div>
+                    <div class="dp-day outside" role="gridcell" aria-label="March 30">30</div>
+                    <div class="dp-day outside" role="gridcell" aria-label="March 31">31</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 1">1</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 2">2</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 3">3</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 4">4</div>
+                    <!-- Row 2 -->
+                    <div class="dp-day" role="gridcell" aria-label="April 5">5</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 6">6</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 7">7</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 8">8</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 9">9</div>
+                    <div class="dp-day today" role="gridcell" aria-label="April 10, today" aria-current="date">10</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 11">11</div>
+                    <!-- Row 3 -->
+                    <div class="dp-day" role="gridcell" aria-label="April 12">12</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 13">13</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 14">14</div>
+                    <div class="dp-day selected" role="gridcell" aria-label="April 15" aria-selected="true">15</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 16">16</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 17">17</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 18">18</div>
+                    <!-- Row 4 -->
+                    <div class="dp-day" role="gridcell" aria-label="April 19">19</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 20">20</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 21">21</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 22">22</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 23">23</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 24">24</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 25">25</div>
+                    <!-- Row 5 -->
+                    <div class="dp-day" role="gridcell" aria-label="April 26">26</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 27">27</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 28">28</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 29">29</div>
+                    <div class="dp-day" role="gridcell" aria-label="April 30">30</div>
+                    <div class="dp-day outside" role="gridcell" aria-label="May 1">1</div>
+                    <div class="dp-day outside" role="gridcell" aria-label="May 2">2</div>
+                  </div>
+                  <!-- Actions -->
+                  <div class="dp-actions">
+                    <button class="dp-action-btn danger" aria-label="Clear selection">Clear</button>
+                    <button class="dp-action-btn" aria-label="Go to today">Today</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── Section: Date Range Mode ── -->
+            <div class="cs-doc-sub">Date Range — Selection</div>
+            <p class="cs-doc-body">When range mode is active, two dates define start and end. Days between are highlighted with <code style="font-size:12px;background:var(--neutral-100);padding:1px 5px;border-radius:3px;">in-range</code> background.</p>
+
+            <div style="position:relative;padding-bottom:340px;margin-bottom:40px;">
+              <div class="dp-field focused" style="z-index:210;position:relative;">
+                <div class="dp-input-wrap">
+                  <input class="dp-input" type="text" value="Apr 10 → Apr 17, 2026" placeholder=" " readonly />
+                  <label class="dp-label">Date range</label>
+                  <button class="dp-icon-btn" aria-label="Open calendar">
+                    <i class="ti ti-calendar" style="font-size:16px;"></i>
+                  </button>
+                </div>
+                <div class="dp-panel" role="dialog" aria-modal="true" aria-label="Choose date range">
+                  <div class="dp-nav">
+                    <button class="dp-nav-btn"><i class="ti ti-chevron-left" style="font-size:14px;"></i></button>
+                    <span class="dp-nav-title">April 2026</span>
+                    <button class="dp-nav-btn"><i class="ti ti-chevron-right" style="font-size:14px;"></i></button>
+                  </div>
+                  <div class="dp-weekdays">
+                    <div class="dp-weekday">Su</div><div class="dp-weekday">Mo</div>
+                    <div class="dp-weekday">Tu</div><div class="dp-weekday">We</div>
+                    <div class="dp-weekday">Th</div><div class="dp-weekday">Fr</div>
+                    <div class="dp-weekday">Sa</div>
+                  </div>
+                  <div class="dp-days">
+                    <div class="dp-day outside">29</div><div class="dp-day outside">30</div><div class="dp-day outside">31</div>
+                    <div class="dp-day">1</div><div class="dp-day">2</div><div class="dp-day">3</div><div class="dp-day">4</div>
+                    <div class="dp-day">5</div><div class="dp-day">6</div><div class="dp-day">7</div><div class="dp-day">8</div>
+                    <div class="dp-day">9</div>
+                    <div class="dp-day range-start today">10</div>
+                    <div class="dp-day in-range">11</div>
+                    <div class="dp-day in-range">12</div><div class="dp-day in-range">13</div><div class="dp-day in-range">14</div>
+                    <div class="dp-day in-range">15</div><div class="dp-day in-range">16</div>
+                    <div class="dp-day range-end">17</div>
+                    <div class="dp-day">18</div>
+                    <div class="dp-day">19</div><div class="dp-day">20</div><div class="dp-day">21</div>
+                    <div class="dp-day">22</div><div class="dp-day">23</div><div class="dp-day">24</div>
+                    <div class="dp-day">25</div><div class="dp-day">26</div><div class="dp-day">27</div>
+                    <div class="dp-day">28</div><div class="dp-day">29</div><div class="dp-day">30</div>
+                    <div class="dp-day outside">1</div>
+                  </div>
+                  <div class="dp-actions">
+                    <button class="dp-action-btn danger">Clear</button>
+                    <button class="dp-action-btn">Today</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── Section: Edge Cases ── -->
+            <div class="cs-doc-sub">Edge Cases</div>
+
+            <table class="token-table" style="margin-bottom:32px;">
+              <thead>
+                <tr>
+                  <th>Scenario</th>
+                  <th>Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Empty (no selection)</strong></td>
+                  <td>Input shows placeholder state. Calendar opens with current month highlighted.</td>
+                </tr>
+                <tr>
+                  <td><strong>Invalid / out-of-range date</strong></td>
+                  <td>Input transitions to Error state. Error message shown below. Calendar highlights invalid day in muted style.</td>
+                </tr>
+                <tr>
+                  <td><strong>Min/max date constraints</strong></td>
+                  <td>Days outside allowed range rendered with <code style="font-size:12px;background:var(--neutral-100);padding:1px 4px;border-radius:3px;">.disabled-day</code> — not interactive.</td>
+                </tr>
+                <tr>
+                  <td><strong>Long date format</strong></td>
+                  <td>Input truncates with ellipsis. Full value visible in tooltip / aria-label.</td>
+                </tr>
+                <tr>
+                  <td><strong>Disabled field</strong></td>
+                  <td>Calendar icon not interactive. Field reads as disabled. No dropdown opens.</td>
+                </tr>
+                <tr>
+                  <td><strong>Very long month/year</strong></td>
+                  <td>Nav title truncates at 180px; ellipsis applied.</td>
+                </tr>
+                <tr>
+                  <td><strong>Range: start &gt; end</strong></td>
+                  <td>Swap dates silently — earlier date becomes start.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- ── Section: Token Reference ── -->
+            <div class="cs-doc-sub">Token Reference</div>
+
+            <table class="token-table" style="margin-bottom:40px;">
+              <thead>
+                <tr>
+                  <th style="width:240px;">Token</th>
+                  <th>Maps to</th>
+                  <th>Usage</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td><code class="tok-name">--dp-border-default</code></td><td class="tok-val">--neutral-200 (#F0F0F7)</td><td>Input border — resting</td></tr>
+                <tr><td><code class="tok-name">--dp-border-hover</code></td><td class="tok-val">--neutral-600 (#666689)</td><td>Input border — hovered</td></tr>
+                <tr><td><code class="tok-name">--dp-border-focus</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Input border — focused</td></tr>
+                <tr><td><code class="tok-name">--dp-border-error</code></td><td class="tok-val">--red-500 (#ef4444)</td><td>Input border — error</td></tr>
+                <tr><td><code class="tok-name">--dp-label-focus</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Floating label — focused color</td></tr>
+                <tr><td><code class="tok-name">--dp-day-selected-bg</code></td><td class="tok-val">--brand-500 (#27B2B2)</td><td>Selected day background</td></tr>
+                <tr><td><code class="tok-name">--dp-day-today-bg</code></td><td class="tok-val">--brand-100 (#E9F7F7)</td><td>Today background</td></tr>
+                <tr><td><code class="tok-name">--dp-day-range-bg</code></td><td class="tok-val">--brand-200 (#D4F0F0)</td><td>In-range day background</td></tr>
+                <tr><td><code class="tok-name">--dp-panel-shadow</code></td><td class="tok-val">0 8px 24px rgba(0,0,0,.10)</td><td>Calendar panel elevation</td></tr>
+                <tr><td><code class="tok-name">--dp-panel-radius</code></td><td class="tok-val">--radius-3 (8px)</td><td>Calendar panel corner radius</td></tr>
+              </tbody>
+            </table>
+
+          </div><!-- /tab-overview -->
+
+          <!-- ══════════ TAB: CODE ══════════ -->
+          <div class="tab-panel" id="tab-code">
+            <div class="code-empty">
+              <i class="ti ti-code"></i>
+              <p>HTML snippets coming soon.<br>Reference the token table in the Overview tab.</p>
+            </div>
+          </div>
+
+        </div><!-- /doc-content -->
+      </div><!-- /doc-layout -->
+    </main>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('tab-btn-' + name).classList.add('active');
+      document.getElementById('tab-' + name).classList.add('active');
+    }
+
+    /* ── Live datepicker interaction ── */
+    (function() {
+      document.querySelectorAll('.dp-icon-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.dp-field');
+          if (field.classList.contains('disabled')) return;
+          const panel = field.querySelector('.dp-panel');
+          if (!panel) return;
+          const isOpen = field.classList.contains('focused');
+          // Close all other open panels
+          document.querySelectorAll('.dp-field.focused').forEach(f => {
+            if (f !== field) f.classList.remove('focused');
+          });
+          field.classList.toggle('focused', !isOpen);
+        });
+      });
+
+      document.querySelectorAll('.dp-day:not(.disabled-day)').forEach(day => {
+        day.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const panel = this.closest('.dp-panel');
+          const field = this.closest('.dp-field');
+          if (!field || !panel) return;
+          // Remove existing selection in this panel
+          panel.querySelectorAll('.dp-day.selected').forEach(d => d.classList.remove('selected'));
+          this.classList.add('selected');
+          // Update input
+          const input = field.querySelector('.dp-input');
+          const label = this.getAttribute('aria-label') || this.textContent;
+          if (input) input.value = label.replace(', today','');
+          field.classList.add('filled');
+          field.classList.remove('focused');
+        });
+      });
+
+      document.querySelectorAll('.dp-action-btn.danger').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.dp-field');
+          if (!field) return;
+          const input = field.querySelector('.dp-input');
+          if (input) input.value = '';
+          field.classList.remove('filled', 'focused');
+          field.querySelectorAll('.dp-day.selected').forEach(d => d.classList.remove('selected'));
+        });
+      });
+
+      document.querySelectorAll('.dp-clear-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.dp-field');
+          if (!field) return;
+          const input = field.querySelector('.dp-input');
+          if (input) input.value = '';
+          field.classList.remove('filled', 'focused');
+        });
+      });
+
+      document.querySelectorAll('.dp-action-btn:not(.danger)').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const field = this.closest('.dp-field');
+          if (!field) return;
+          const input = field.querySelector('.dp-input');
+          if (input) input.value = 'Apr 10, 2026';
+          field.classList.add('filled');
+          field.classList.remove('focused');
+        });
+      });
+
+      // Close on outside click
+      document.addEventListener('click', function() {
+        document.querySelectorAll('.dp-field.focused').forEach(f => f.classList.remove('focused'));
+      });
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.dp-field.focused').forEach(f => f.classList.remove('focused'));
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

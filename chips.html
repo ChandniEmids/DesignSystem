@@ -65,6 +65,41 @@
     .chip-selected { background: var(--chip-selected-bg); border-color: var(--chip-selected-border); color: var(--chip-selected-text); }
     .chip-disabled { background: var(--chip-default-bg);  border-color: var(--chip-default-border);  color: var(--chip-default-text); opacity: .5; text-decoration: line-through; pointer-events: none; }
 
+    /* ── Semantic type tokens (from Figma node 2080:212) ── */
+    :root {
+      --chip-error-bg:          #fef2f2;
+      --chip-error-border:      #fecaca;
+      --chip-error-text:        #dc2626;
+      --chip-error-solid-bg:    #dc2626;
+
+      --chip-success-bg:        #f0fdf4;
+      --chip-success-border:    #bbf7d0;
+      --chip-success-text:      #15803d;
+      --chip-success-solid-bg:  #15803d;
+
+      --chip-info-bg:           #f5f5ff;
+      --chip-info-border:       #bfdbfe;
+      --chip-info-text:         #1d4ed8;
+      --chip-info-solid-bg:     #1d4ed8;
+
+      --chip-brand-bg:          #e9f7f7;
+      --chip-brand-border:      #27b2b2;
+      --chip-brand-text:        #27b2b2;
+      --chip-brand-solid-bg:    #27b2b2;
+    }
+
+    /* Outline variants */
+    .chip-error-outline   { background: var(--chip-error-bg);   border-color: var(--chip-error-border);   color: var(--chip-error-text); }
+    .chip-success-outline { background: var(--chip-success-bg); border-color: var(--chip-success-border); color: var(--chip-success-text); }
+    .chip-info-outline    { background: var(--chip-info-bg);    border-color: var(--chip-info-border);    color: var(--chip-info-text); }
+    .chip-brand-outline   { background: var(--chip-brand-bg);   border-color: var(--chip-brand-border);   color: var(--chip-brand-text); border-style: dashed; }
+
+    /* Solid variants */
+    .chip-error-solid   { background: var(--chip-error-solid-bg);   border-color: var(--chip-error-solid-bg);   color: #fff; }
+    .chip-success-solid { background: var(--chip-success-solid-bg); border-color: var(--chip-success-solid-bg); color: #fff; }
+    .chip-info-solid    { background: var(--chip-info-solid-bg);    border-color: var(--chip-info-solid-bg);    color: #fff; }
+    .chip-brand-solid   { background: var(--chip-brand-solid-bg);   border-color: var(--chip-brand-solid-bg);   color: #fff; }
+
     /* ── Variant matrix table ── */
     .variant-matrix {
       width: 100%;
@@ -163,6 +198,12 @@
     </a>
     <a href="chips.html" class="nav-item active">
       <i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip
+    </a>
+    <a href="datepicker.html" class="nav-item">
+      <i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker
+    </a>
+    <a href="timepicker.html" class="nav-item">
+      <i class="ti ti-clock" style="font-size:16px;"></i> Timepicker
     </a>
     <a href="Components-inventory.html#sec-alerts" class="nav-item">
       <i class="ti ti-alert-circle" style="font-size:16px;"></i> Alerts
@@ -363,7 +404,105 @@
 
   
 
-      
+
+            <hr class="cs-section-divider" />
+
+            <!-- ══ SEMANTIC CHIPS ══ -->
+            <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Semantic Chips</div>
+            <p class="cs-doc-body">Semantic chips communicate intent through color. Each type (Error, Info, Success, Brand) ships in two visual styles — <strong>Outline</strong> (tinted background + colored border) and <strong>Solid</strong> (filled background + white text). All semantic chips share the same anatomy as the base chip: Manrope SemiBold 12px, 4px 8px padding, 4px radius, 4px gap.</p>
+
+            <!-- Property tags -->
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Type: Error · Info · Success · Brand</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Style: Outline · Solid</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;background:#f0f3ff;color:#143AC3;border:1px solid #c7d2fe;">Leading Icon: True · False</span>
+            </div>
+
+            <div class="demo-block" style="padding:0;overflow-x:auto;margin-bottom:24px;">
+              <table class="variant-matrix">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Error</th>
+                    <th>Info</th>
+                    <th>Success</th>
+                    <th>Brand</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr class="size-header">
+                    <td colspan="5">Style = Outline</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">No icon</td>
+                    <td><span class="chip chip-xs chip-error-outline">-10</span></td>
+                    <td><span class="chip chip-xs chip-info-outline">+10</span></td>
+                    <td><span class="chip chip-xs chip-success-outline">15</span></td>
+                    <td><span class="chip chip-xs chip-brand-outline">Upcoming</span></td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Leading icon</td>
+                    <td><span class="chip chip-xs chip-error-outline"><i class="ti ti-alert-circle" style="font-size:12px;"></i>-10</span></td>
+                    <td><span class="chip chip-xs chip-info-outline"><i class="ti ti-info-circle" style="font-size:12px;"></i>+10</span></td>
+                    <td><span class="chip chip-xs chip-success-outline"><i class="ti ti-circle-check" style="font-size:12px;"></i>15</span></td>
+                    <td><span class="chip chip-xs chip-brand-outline"><i class="ti ti-sparkles" style="font-size:12px;"></i>Upcoming</span></td>
+                  </tr>
+
+                  <tr class="size-header">
+                    <td colspan="5">Style = Solid</td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">No icon</td>
+                    <td><span class="chip chip-xs chip-error-solid">-10</span></td>
+                    <td><span class="chip chip-xs chip-info-solid">+10</span></td>
+                    <td><span class="chip chip-xs chip-success-solid">15</span></td>
+                    <td><span class="chip chip-xs chip-brand-solid">12</span></td>
+                  </tr>
+                  <tr>
+                    <td class="row-label">Leading icon</td>
+                    <td><span class="chip chip-xs chip-error-solid"><i class="ti ti-alert-circle" style="font-size:12px;"></i>-10</span></td>
+                    <td><span class="chip chip-xs chip-info-solid"><i class="ti ti-info-circle" style="font-size:12px;"></i>+10</span></td>
+                    <td><span class="chip chip-xs chip-success-solid"><i class="ti ti-circle-check" style="font-size:12px;"></i>15</span></td>
+                    <td><span class="chip chip-xs chip-brand-solid"><i class="ti ti-sparkles" style="font-size:12px;"></i>12</span></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Semantic colour reference cards -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;margin-bottom:24px;">
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#dc2626;margin-bottom:6px;">Error</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Base/Danger</code> #fef2f2</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Danger</code> #fecaca</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/Danger</code> #dc2626</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Solid bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Red/600</code> #dc2626</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#1d4ed8;margin-bottom:6px;">Info</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Base/Info</code> #f5f5ff</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Info</code> #bfdbfe</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/Info</code> #1d4ed8</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Solid bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Blue/700</code> #1d4ed8</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#15803d;margin-bottom:6px;">Success</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Base/Success</code> #f0fdf4</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Border/Success</code> #bbf7d0</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Text/Success</code> #15803d</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Solid bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Green/700</code> #15803d</div>
+              </div>
+              <div style="border:1px solid var(--border-subtle);border-radius:6px;padding:10px 12px;">
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#27b2b2;margin-bottom:6px;">Brand</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Brand/100</code> #e9f7f7</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline border: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Brand/500</code> #27b2b2 dashed</div>
+                <div style="font-size:11px;color:var(--text-secondary);">Outline text: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Brand/500</code> #27b2b2</div>
+                <div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Solid bg: <code style="font-size:10px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">Brand/500</code> #27b2b2</div>
+              </div>
+            </div>
+
             <hr class="cs-section-divider" />
 
             <!-- ══ ANATOMY & SPECS ══ -->
@@ -497,6 +636,43 @@
 
 &lt;!-- Disabled --&gt;
 &lt;button class="chip chip-md chip-disabled" disabled aria-disabled="true"&gt;Label&lt;/button&gt;</code></pre>
+            </div>
+
+            <!-- Semantic chips -->
+            <div class="demo-label" style="margin-bottom:8px;">Semantic Chips — Outline Style</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Error outline --&gt;
+&lt;span class="chip chip-xs chip-error-outline"&gt;-10&lt;/span&gt;
+&lt;span class="chip chip-xs chip-error-outline"&gt;
+  &lt;i class="ti ti-alert-circle"&gt;&lt;/i&gt;-10
+&lt;/span&gt;
+
+&lt;!-- Info outline --&gt;
+&lt;span class="chip chip-xs chip-info-outline"&gt;+10&lt;/span&gt;
+
+&lt;!-- Success outline --&gt;
+&lt;span class="chip chip-xs chip-success-outline"&gt;15&lt;/span&gt;
+
+&lt;!-- Brand outline (dashed border) --&gt;
+&lt;span class="chip chip-xs chip-brand-outline"&gt;Upcoming&lt;/span&gt;</code></pre>
+            </div>
+
+            <div class="demo-label" style="margin-bottom:8px;">Semantic Chips — Solid Style</div>
+            <div class="demo-block" style="margin-bottom:24px;">
+              <pre style="font-size:12px;color:var(--text-primary);line-height:1.7;overflow-x:auto;margin:0;"><code>&lt;!-- Error solid --&gt;
+&lt;span class="chip chip-xs chip-error-solid"&gt;-10&lt;/span&gt;
+&lt;span class="chip chip-xs chip-error-solid"&gt;
+  &lt;i class="ti ti-alert-circle"&gt;&lt;/i&gt;-10
+&lt;/span&gt;
+
+&lt;!-- Info solid --&gt;
+&lt;span class="chip chip-xs chip-info-solid"&gt;+10&lt;/span&gt;
+
+&lt;!-- Success solid --&gt;
+&lt;span class="chip chip-xs chip-success-solid"&gt;15&lt;/span&gt;
+
+&lt;!-- Brand solid --&gt;
+&lt;span class="chip chip-xs chip-brand-solid"&gt;12&lt;/span&gt;</code></pre>
             </div>
 
             <!-- Filter chip -->
