@@ -1,0 +1,57 @@
+{
+  "Test-color-01": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.15294118225574493,
+        0.6980392336845398,
+        0.6980392336845398
+      ],
+      "alpha": 1,
+      "hex": "#27B2B2"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:965:11197",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ],
+      "com.figma.aliasData": {
+        "targetVariableId": "VariableID:05a320ecbf287efbdf078dbb0850d4d24aff9cac/-1:-1",
+        "targetVariableName": "Brand/500",
+        "targetVariableSetId": "VariableCollectionId:498528208b634694fa36f2ec256b958d8d7db0b0/-1:-1",
+        "targetVariableSetName": "Color Primitives"
+      },
+      "com.figma.isOverride": true
+    }
+  },
+  "Test-color-02": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.3137255012989044,
+        0.3921568691730499,
+        0.8980392217636108
+      ],
+      "alpha": 1,
+      "hex": "#5064E5"
+    },
+    "$extensions": {
+      "com.figma.variableId": "VariableID:965:11198",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ],
+      "com.figma.aliasData": {
+        "targetVariableId": "VariableID:199c476581b617058fb3ef77a7fd6cbaf4d7631a/-1:-1",
+        "targetVariableName": "Blue/500",
+        "targetVariableSetId": "VariableCollectionId:498528208b634694fa36f2ec256b958d8d7db0b0/-1:-1",
+        "targetVariableSetName": "Color Primitives"
+      },
+      "com.figma.isOverride": true
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "figma-semantics"
+  }
+}

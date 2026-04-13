@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overlay — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    :root {
+      --brand-500: #27B2B2;
+      --brand-600: #1B7D7D;
+      --brand-100: #E9F7F7;
+      --brand-300: #A9E0E0;
+      --neutral-100: #F3F4F6;
+      --neutral-400: #9CA3AF;
+      --red-50:  #FEF2F2;
+      --red-200: #FECACA;
+      --red-600: #DC2626;
+      --red-700: #B91C1C;
+    }
+
+    /* ── Backdrop ── */
+    .overlay-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+    .overlay-backdrop.is-open { display: flex; }
+
+    /* ── Modal ── */
+    .modal {
+      background: #fff;
+      border-radius: 12px;
+      width: 480px;
+      max-width: calc(100vw - 32px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+      font-family: 'Manrope', sans-serif;
+      overflow: hidden;
+    }
+    .modal-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 24px 24px 0;
+      gap: 12px;
+    }
+    .modal-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 20px;
+    }
+    .modal-icon-default     { background: var(--brand-100); color: var(--brand-500); }
+    .modal-icon-confirmation { background: var(--brand-100); color: var(--brand-500); }
+    .modal-icon-danger      { background: var(--red-50);    color: var(--red-600);   }
+    .modal-title-wrap { flex: 1; }
+    .modal-title { font-size: 16px; font-weight: 700; color: #121219; margin-bottom: 4px; }
+    .modal-subtitle { font-size: 13px; color: #666689; line-height: 1.55; }
+    .modal-close {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      background: transparent; cursor: pointer; color: #9CA3AF;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .modal-close:hover { background: #F3F4F6; color: #121219; }
+
+    .modal-body {
+      padding: 16px 24px;
+      font-size: 14px; color: #666689; line-height: 1.6;
+    }
+    .modal-footer {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 8px; padding: 16px 24px;
+      border-top: 1px solid #F3F4F6;
+    }
+
+    /* Buttons inside modal */
+    .modal-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 6px; font-family: 'Manrope', sans-serif; font-weight: 600;
+      font-size: 14px; padding: 8px 16px; border-radius: 8px;
+      border: none; cursor: pointer; transition: background 120ms;
+    }
+    .modal-btn-ghost    { background: transparent; color: #121219; }
+    .modal-btn-ghost:hover { background: #F3F4F6; }
+    .modal-btn-primary  { background: var(--brand-500); color: #fff; }
+    .modal-btn-primary:hover { background: var(--brand-600); }
+    .modal-btn-danger   { background: var(--red-600); color: #fff; }
+    .modal-btn-danger:hover  { background: var(--red-700); }
+    .modal-btn-outline  { background: #fff; color: var(--red-600); border: 1px solid var(--red-200); }
+    .modal-btn-outline:hover { background: var(--red-50); }
+
+    /* ── Tooltip ── */
+    .tooltip-wrap { position: relative; display: inline-flex; }
+    .tooltip {
+      position: absolute;
+      background: #121219; color: #fff;
+      font-family: 'Manrope', sans-serif; font-size: 12px; font-weight: 500;
+      padding: 6px 10px; border-radius: 6px;
+      white-space: nowrap; pointer-events: none;
+      opacity: 0; transition: opacity 150ms;
+      z-index: 10;
+    }
+    .tooltip::after {
+      content: ''; position: absolute;
+      border: 5px solid transparent;
+    }
+    /* Top */
+    .tooltip-top    { bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); }
+    .tooltip-top::after { top:100%; left:50%; transform:translateX(-50%); border-top-color:#121219; }
+    /* Bottom */
+    .tooltip-bottom { top: calc(100% + 8px); left: 50%; transform: translateX(-50%); }
+    .tooltip-bottom::after { bottom:100%; left:50%; transform:translateX(-50%); border-bottom-color:#121219; }
+    /* Left */
+    .tooltip-left   { right: calc(100% + 8px); top: 50%; transform: translateY(-50%); }
+    .tooltip-left::after { left:100%; top:50%; transform:translateY(-50%); border-left-color:#121219; }
+    /* Right */
+    .tooltip-right  { left: calc(100% + 8px); top: 50%; transform: translateY(-50%); }
+    .tooltip-right::after { right:100%; top:50%; transform:translateY(-50%); border-right-color:#121219; }
+
+    .tooltip-wrap:hover .tooltip { opacity: 1; }
+
+    /* ── Drawer ── */
+    .drawer-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 100;
+      backdrop-filter: blur(2px);
+    }
+    .drawer-backdrop.is-open { display: block; }
+    .drawer {
+      position: fixed; top: 0; bottom: 0;
+      width: 400px; max-width: 90vw;
+      background: #fff; z-index: 101;
+      display: flex; flex-direction: column;
+      box-shadow: 0 0 40px rgba(0,0,0,0.18);
+      font-family: 'Manrope', sans-serif;
+      transition: transform 280ms cubic-bezier(0.4,0,0.2,1);
+    }
+    .drawer-right { right: 0; transform: translateX(100%); }
+    .drawer-left  { left: 0;  transform: translateX(-100%); }
+    .drawer.is-open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px; border-bottom: 1px solid #F3F4F6;
+    }
+    .drawer-title { font-size: 16px; font-weight: 700; color: #121219; }
+    .drawer-close {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      background: transparent; cursor: pointer; color: #9CA3AF;
+      display: flex; align-items: center; justify-content: center; font-size: 16px;
+    }
+    .drawer-close:hover { background: #F3F4F6; color: #121219; }
+    .drawer-body  { flex: 1; padding: 24px; overflow-y: auto; color: #666689; font-size: 14px; line-height: 1.6; }
+    .drawer-footer {
+      padding: 16px 24px; border-top: 1px solid #F3F4F6;
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+
+    /* ── Demo helpers ── */
+    .demo-block {
+      background: #fff; border: 1px solid var(--border-subtle);
+      border-radius: 12px; padding: 24px;
+    }
+    .demo-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .trigger-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 600;
+      padding: 8px 16px; border-radius: 8px; border: 1px solid var(--brand-300);
+      background: #fff; color: var(--brand-500); cursor: pointer;
+      transition: background 120ms;
+    }
+    .trigger-btn:hover { background: var(--brand-100); }
+    .token-tag { display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:#F0F0F7;color:#666689;padding:2px 6px;border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+      <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+    </a>
+    <div class="header-search-wrap"><div class="header-search"><i class="ti ti-search" style="font-size:16px;"></i><input type="text" placeholder="Search design system…" /></div></div>
+    <div class="header-right"><div class="user-avatar">JD</div></div>
+  </header>
+
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="button.html" class="nav-item"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item active"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Overlay</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Modal · Tooltip · Drawer &nbsp;·&nbsp; 3 modal types · 4 tooltip directions · 2 drawer sides</div>
+          </div>
+
+          <!-- Purpose -->
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">Overlays surface contextual content, confirmations, and extended panels without navigating away from the current screen. ClearPath FDO uses three overlay patterns: Modals for focused actions and confirmations, Tooltips for inline help text, and Drawers for extended side panels that preserve page context.</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-focus-2" style="font-size:14px;color:var(--brand-blue);"></i> One overlay at a time</div>
+              <div class="cs-principle-body">Never stack modals or open a drawer while a modal is active. Nested overlays disorient users and make it unclear how to dismiss them.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-keyboard" style="font-size:14px;color:var(--brand-blue);"></i> Always dismissible</div>
+              <div class="cs-principle-body">Every overlay must be closeable via Escape key, the close button, and clicking the backdrop. Never trap a user inside an overlay without an exit path.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-alert-triangle" style="font-size:14px;color:var(--brand-blue);"></i> Danger type for destructive actions</div>
+              <div class="cs-principle-body">Use the Danger modal exclusively for irreversible actions — deleting a patient record, cancelling an appointment. Never use Default styling for destructive confirmations.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-lock" style="font-size:14px;color:var(--brand-blue);"></i> Focus trap inside modal</div>
+              <div class="cs-principle-body">When a modal opens, keyboard focus must be trapped inside it. Tab and Shift+Tab should only cycle through the modal's interactive elements until it is dismissed.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ── MODAL ── -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Modal</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              3 types &nbsp;·&nbsp;
+              Default <span class="token-tag">informational / form action</span> &nbsp;
+              Confirmation <span class="token-tag">requires explicit choice</span> &nbsp;
+              Danger <span class="token-tag">irreversible action</span>
+            </div>
+            <div class="demo-block">
+              <div class="demo-row">
+                <button class="trigger-btn" onclick="openOverlay('modal-default')">
+                  <i class="ti ti-layout-rows" style="font-size:14px;"></i> Default Modal
+                </button>
+                <button class="trigger-btn" onclick="openOverlay('modal-confirmation')">
+                  <i class="ti ti-circle-check" style="font-size:14px;"></i> Confirmation Modal
+                </button>
+                <button class="trigger-btn" style="border-color:#FECACA;color:#DC2626;" onclick="openOverlay('modal-danger')">
+                  <i class="ti ti-trash" style="font-size:14px;"></i> Danger Modal
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── TOOLTIP ── -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Tooltip</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              4 directions &nbsp;·&nbsp; Background <span class="token-tag">Neutral/900 #121219</span> &nbsp; Appear on hover
+            </div>
+            <div class="demo-block">
+              <div class="demo-row" style="justify-content:center;padding:32px 0;">
+                <div class="tooltip-wrap">
+                  <button class="trigger-btn">Hover Top</button>
+                  <span class="tooltip tooltip-top">Tooltip — Top</span>
+                </div>
+                <div class="tooltip-wrap">
+                  <button class="trigger-btn">Hover Bottom</button>
+                  <span class="tooltip tooltip-bottom">Tooltip — Bottom</span>
+                </div>
+                <div class="tooltip-wrap">
+                  <button class="trigger-btn">Hover Left</button>
+                  <span class="tooltip tooltip-left">Tooltip — Left</span>
+                </div>
+                <div class="tooltip-wrap">
+                  <button class="trigger-btn">Hover Right</button>
+                  <span class="tooltip tooltip-right">Tooltip — Right</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── DRAWER ── -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Drawer</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Slides in from left or right &nbsp;·&nbsp; Width <span class="token-tag">400px</span> &nbsp;·&nbsp; Preserves page context behind backdrop
+            </div>
+            <div class="demo-block">
+              <div class="demo-row">
+                <button class="trigger-btn" onclick="openDrawer('drawer-right')">
+                  <i class="ti ti-layout-sidebar-right" style="font-size:14px;"></i> Right Drawer
+                </button>
+                <button class="trigger-btn" onclick="openDrawer('drawer-left')">
+                  <i class="ti ti-layout-sidebar" style="font-size:14px;"></i> Left Drawer
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL — Default
+  ══════════════════════════════════════════ -->
+  <div id="modal-default" class="overlay-backdrop" onclick="closeOnBackdrop(event, 'modal-default')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-default-title">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-default"><i class="ti ti-info-circle"></i></div>
+        <div class="modal-title-wrap">
+          <div class="modal-title" id="modal-default-title">New Appointment</div>
+          <div class="modal-subtitle">Fill in the details to schedule a new appointment for the patient.</div>
+        </div>
+        <button class="modal-close" onclick="closeOverlay('modal-default')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        This is the default modal — used for forms, informational content, or any action that requires the user's attention without implying danger.
+        <br><br>
+        Place form fields, summaries, or supplementary detail here. Keep the content focused — if it requires scrolling, consider a Drawer instead.
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-ghost" onclick="closeOverlay('modal-default')">Cancel</button>
+        <button class="modal-btn modal-btn-primary">Save Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL — Confirmation
+  ══════════════════════════════════════════ -->
+  <div id="modal-confirmation" class="overlay-backdrop" onclick="closeOnBackdrop(event, 'modal-confirmation')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-confirmation"><i class="ti ti-circle-check"></i></div>
+        <div class="modal-title-wrap">
+          <div class="modal-title" id="modal-confirm-title">Confirm Cancellation</div>
+          <div class="modal-subtitle">Are you sure you want to cancel this appointment?</div>
+        </div>
+        <button class="modal-close" onclick="closeOverlay('modal-confirmation')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        Session #A-2041 with <strong>John Doe</strong> on <strong>14 April 2026 at 10:00 AM</strong> will be marked as cancelled. The patient will be notified via email.
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-ghost" onclick="closeOverlay('modal-confirmation')">Keep Appointment</button>
+        <button class="modal-btn modal-btn-primary">Yes, Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MODAL — Danger
+  ══════════════════════════════════════════ -->
+  <div id="modal-danger" class="overlay-backdrop" onclick="closeOnBackdrop(event, 'modal-danger')">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-danger-title">
+      <div class="modal-header">
+        <div class="modal-icon modal-icon-danger"><i class="ti ti-trash"></i></div>
+        <div class="modal-title-wrap">
+          <div class="modal-title" id="modal-danger-title">Delete Patient Record</div>
+          <div class="modal-subtitle">This action cannot be undone.</div>
+        </div>
+        <button class="modal-close" onclick="closeOverlay('modal-danger')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        You are about to permanently delete the record for <strong>John Doe</strong>. All associated appointments, notes, and history will be removed and cannot be recovered.
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-ghost" onclick="closeOverlay('modal-danger')">Cancel</button>
+        <button class="modal-btn modal-btn-danger">Delete Patient</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       DRAWER — Right
+  ══════════════════════════════════════════ -->
+  <div id="drawer-right-backdrop" class="drawer-backdrop" onclick="closeDrawer('drawer-right')"></div>
+  <div id="drawer-right" class="drawer drawer-right" role="dialog" aria-modal="true">
+    <div class="drawer-header">
+      <span class="drawer-title">Patient Details</span>
+      <button class="drawer-close" onclick="closeDrawer('drawer-right')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="drawer-body">
+      <p>This is the right-side drawer — used for extended content that supplements the current page without replacing it. Common uses: patient detail panels, filter panels, activity logs.</p>
+      <br>
+      <p style="color:#121219;font-weight:600;margin-bottom:8px;">John Doe</p>
+      <p>DOB: 12 March 1985 &nbsp;·&nbsp; Male</p>
+      <p style="margin-top:8px;">Last visit: 2 April 2026</p>
+      <p style="margin-top:8px;color:#9CA3AF;font-size:13px;">Counselling Session · Ongoing</p>
+    </div>
+    <div class="drawer-footer">
+      <button class="modal-btn modal-btn-ghost" onclick="closeDrawer('drawer-right')">Close</button>
+      <button class="modal-btn modal-btn-primary">Edit Record</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       DRAWER — Left
+  ══════════════════════════════════════════ -->
+  <div id="drawer-left-backdrop" class="drawer-backdrop" onclick="closeDrawer('drawer-left')"></div>
+  <div id="drawer-left" class="drawer drawer-left" role="dialog" aria-modal="true">
+    <div class="drawer-header">
+      <span class="drawer-title">Filters</span>
+      <button class="drawer-close" onclick="closeDrawer('drawer-left')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="drawer-body">
+      <p>The left drawer is used for navigation-adjacent panels such as filters, settings, or contextual menus that relate to the left-side layout.</p>
+      <br>
+      <p style="color:#121219;font-weight:600;margin-bottom:12px;">Appointment Type</p>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#121219;">
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" checked /> Counselling Session</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" /> Facility Tour</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" checked /> Group Therapy</label>
+        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="checkbox" /> Medical Test</label>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="modal-btn modal-btn-ghost" onclick="closeDrawer('drawer-left')">Clear All</button>
+      <button class="modal-btn modal-btn-primary">Apply Filters</button>
+    </div>
+  </div>
+
+  <script>
+    function openOverlay(id) {
+      document.getElementById(id).classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeOverlay(id) {
+      document.getElementById(id).classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    function closeOnBackdrop(e, id) {
+      if (e.target === e.currentTarget) closeOverlay(id);
+    }
+    function openDrawer(id) {
+      document.getElementById(id).classList.add('is-open');
+      document.getElementById(id + '-backdrop').classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeDrawer(id) {
+      document.getElementById(id).classList.remove('is-open');
+      document.getElementById(id + '-backdrop').classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('.overlay-backdrop.is-open').forEach(el => closeOverlay(el.id));
+      ['drawer-right','drawer-left'].forEach(id => {
+        if (document.getElementById(id)?.classList.contains('is-open')) closeDrawer(id);
+      });
+    });
+  </script>
+
+
+
+  <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

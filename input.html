@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Input Field — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    /* ── Token map (exact from Figma) ── */
+    :root {
+      --input-border-default:  #D7DDE0;
+      --input-border-hover:    #666689;
+      --input-border-focus:    #27B2B2;
+      --input-border-filled:   #27B2B2;
+      --input-border-disabled: #D7DDE0;
+      --input-border-error:    #DC2626;
+
+      --input-bg-default:      #ffffff;
+      --input-bg-focus:        #D4F0F0;
+      --input-bg-disabled:     #F5F5F5;
+
+      --input-label-default:   #666689;
+      --input-label-focus:     #27B2B2;
+      --input-label-filled:    #27B2B2;
+      --input-label-disabled:  #9CA3AF;
+      --input-label-error:     #DC2626;
+
+      --input-value-default:   #121219;
+      --input-placeholder:     #9CA3AF;
+      --input-error-text:      #DC2626;
+    }
+
+    /* ── Base input field ── */
+    .field-wrap {
+      position: relative;
+      width: 300px;
+      font-family: 'Manrope', sans-serif;
+    }
+
+    .input-box {
+      width: 100%;
+      height: 54px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1.5px solid var(--input-border-default);
+      background: var(--input-bg-default);
+      font-family: 'Manrope', sans-serif;
+      font-size: 16px;
+      color: var(--input-value-default);
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 120ms, background 120ms, box-shadow 120ms;
+    }
+    .input-box::placeholder { color: var(--input-placeholder); }
+
+    /* Floating label */
+    .floating-label {
+      position: absolute;
+      top: -9px;
+      left: 12px;
+      padding: 0 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--input-label-default);
+      background: var(--input-bg-default);
+      pointer-events: none;
+      transition: color 120ms, background 120ms;
+      line-height: 1;
+    }
+
+    /* Error message */
+    .error-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      padding: 0 4px;
+      font-size: 12px;
+      color: var(--input-error-text);
+    }
+
+    /* ── State modifiers ── */
+    /* Hover */
+    .is-hover .input-box           { border-color: var(--input-border-hover); }
+    .is-hover .floating-label      { color: var(--input-label-default); }
+
+    /* Focused */
+    .is-focused .input-box         { border: 2px solid var(--input-border-focus); background: var(--input-bg-focus); }
+    .is-focused .floating-label    { color: var(--input-label-focus); background: var(--input-bg-focus); }
+
+    /* Filled */
+    .is-filled .input-box          { border-color: var(--input-border-filled); }
+    .is-filled .floating-label     { color: var(--input-label-filled); }
+
+    /* Disabled */
+    .is-disabled .input-box        { border-color: var(--input-border-disabled); background: var(--input-bg-disabled); cursor: not-allowed; }
+    .is-disabled .floating-label   { color: var(--input-label-disabled); background: var(--input-bg-disabled); }
+
+    /* Error */
+    .is-error .input-box           { border: 2px solid var(--input-border-error); }
+    .is-error .floating-label      { color: var(--input-label-error); }
+
+    /* Interactive — real focus/hover states */
+    .field-wrap:not(.is-disabled):not(.is-error):not(.is-focused):not(.is-filled):not(.is-hover) .input-box:hover {
+      border-color: var(--input-border-hover);
+    }
+    .field-wrap:not(.is-disabled) .input-box:focus {
+      border: 2px solid var(--input-border-focus);
+      background: var(--input-bg-focus);
+    }
+    .field-wrap:not(.is-disabled) .input-box:focus + .floating-label {
+      color: var(--input-label-focus);
+      background: var(--input-bg-focus);
+    }
+
+    /* ── Demo helpers ── */
+    .demo-block {
+      background: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .state-grid-wrap { width: 100%; border-collapse: collapse; }
+    .state-grid-wrap th {
+      padding: 8px 16px; font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .08em;
+      color: var(--text-muted); border-bottom: 2px solid var(--border-subtle);
+      text-align: left;
+    }
+    .state-grid-wrap td {
+      padding: 20px 16px; border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+    .state-grid-wrap td:first-child {
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      background: var(--surface-header); white-space: nowrap; width: 100px;
+    }
+    .state-grid-wrap tr:last-child td { border-bottom: none; }
+    .token-tag { display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:#F0F0F7;color:#666689;padding:2px 6px;border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+      <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+    </a>
+    <div class="header-search-wrap"><div class="header-search"><i class="ti ti-search" style="font-size:16px;"></i><input type="text" placeholder="Search design system…" /></div></div>
+    <div class="header-right"><div class="user-avatar">JD</div></div>
+  </header>
+
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <a href="button.html" class="nav-item"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item active"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Input Field</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">6 states · Outlined floating label on border · 8px radius · Manrope 16px</div>
+          </div>
+
+          <!-- Purpose -->
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">The Input Field is the primary text entry component in ClearPath FDO. It uses a floating label pattern — the label sits on the border of the input box, keeping the field compact while always showing the field name. Six states cover every interaction: Default, Hover, Focused, Filled, Disabled, and Error.</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-tag" style="font-size:14px;color:var(--brand-blue);"></i> Label always visible</div>
+              <div class="cs-principle-body">The floating label sits on the border at all times — it never disappears inside the field. Users always know what the field is for, even after typing.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-alert-circle" style="font-size:14px;color:var(--brand-blue);"></i> Error below the field</div>
+              <div class="cs-principle-body">Error messages appear directly below the input box, never inside it. The border turns red and the label colour changes to match — never rely on colour alone.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-ban" style="font-size:14px;color:var(--brand-blue);"></i> Disabled is not editable</div>
+              <div class="cs-principle-body">Disabled inputs use a grey background and muted label. They are visible but non-interactive. Never hide a disabled field — always show it so users understand the form structure.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-cursor-text" style="font-size:14px;color:var(--brand-blue);"></i> Placeholder is not a label</div>
+              <div class="cs-principle-body">Placeholder text provides an example value, not the field name. Never use a placeholder as the only label — it disappears on typing and fails accessibility requirements.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- States table -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">States</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Focus bg <span class="token-tag">Brand/200 #D4F0F0</span> &nbsp;
+              Focus border <span class="token-tag">Brand/500 #27B2B2 · 2px</span> &nbsp;
+              Error border <span class="token-tag">Red/600 #DC2626 · 2px</span>
+            </div>
+            <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;">
+              <table class="state-grid-wrap">
+                <thead>
+                  <tr>
+                    <th>State</th>
+                    <th>Field</th>
+                    <th>Border</th>
+                    <th>Label</th>
+                    <th>Background</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Default -->
+                  <tr>
+                    <td>Default</td>
+                    <td>
+                      <div class="field-wrap">
+                        <input class="input-box" type="text" placeholder="Placeholder text" />
+                        <span class="floating-label">Label</span>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">#D7DDE0 · 1.5px</span></td>
+                    <td><span class="token-tag">#666689</span></td>
+                    <td><span class="token-tag">#ffffff</span></td>
+                  </tr>
+                  <!-- Hover -->
+                  <tr>
+                    <td>Hover</td>
+                    <td>
+                      <div class="field-wrap is-hover">
+                        <input class="input-box" type="text" placeholder="Placeholder text" />
+                        <span class="floating-label">Label</span>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">#666689 · 1.5px</span></td>
+                    <td><span class="token-tag">#666689</span></td>
+                    <td><span class="token-tag">#ffffff</span></td>
+                  </tr>
+                  <!-- Focused -->
+                  <tr>
+                    <td>Focused</td>
+                    <td>
+                      <div class="field-wrap is-focused">
+                        <input class="input-box" type="text" placeholder="Input value" />
+                        <span class="floating-label">Label</span>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">Brand/500 · 2px</span></td>
+                    <td><span class="token-tag">Brand/500</span></td>
+                    <td><span class="token-tag">Brand/200</span></td>
+                  </tr>
+                  <!-- Filled -->
+                  <tr>
+                    <td>Filled</td>
+                    <td>
+                      <div class="field-wrap is-filled">
+                        <input class="input-box" type="text" value="Input value" />
+                        <span class="floating-label">Label</span>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">Brand/500 · 1.5px</span></td>
+                    <td><span class="token-tag">Brand/500</span></td>
+                    <td><span class="token-tag">#ffffff</span></td>
+                  </tr>
+                  <!-- Disabled -->
+                  <tr>
+                    <td>Disabled</td>
+                    <td>
+                      <div class="field-wrap is-disabled">
+                        <input class="input-box" type="text" placeholder="Placeholder text" disabled />
+                        <span class="floating-label">Label</span>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">#D7DDE0 · 1.5px</span></td>
+                    <td><span class="token-tag">Neutral/400</span></td>
+                    <td><span class="token-tag">#F5F5F5</span></td>
+                  </tr>
+                  <!-- Error -->
+                  <tr>
+                    <td>Error</td>
+                    <td>
+                      <div class="field-wrap is-error">
+                        <input class="input-box" type="text" value="Invalid input" />
+                        <span class="floating-label">Label</span>
+                        <div class="error-row">
+                          <i class="ti ti-alert-circle" style="font-size:12px;"></i>
+                          This field contains an error.
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="token-tag">Red/600 · 2px</span></td>
+                    <td><span class="token-tag">Red/600</span></td>
+                    <td><span class="token-tag">#ffffff</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- Live interactive example -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Interactive</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Click each field to see focus state · Type to see filled state</div>
+            <div class="demo-block" style="display:flex;flex-direction:column;gap:28px;">
+              <div class="field-wrap">
+                <input class="input-box" type="text" placeholder="e.g. Jane Doe" id="i-name" />
+                <label class="floating-label" for="i-name">Full Name</label>
+              </div>
+              <div class="field-wrap">
+                <input class="input-box" type="email" placeholder="you@clearpath.health" id="i-email" />
+                <label class="floating-label" for="i-email">Email Address</label>
+              </div>
+              <div class="field-wrap">
+                <input class="input-box" type="password" placeholder="Min. 8 characters" id="i-pass" />
+                <label class="floating-label" for="i-pass">Password</label>
+              </div>
+              <div class="field-wrap is-disabled">
+                <input class="input-box" type="text" placeholder="Auto-assigned" disabled id="i-role" />
+                <label class="floating-label" for="i-role">System ID</label>
+              </div>
+              <div class="field-wrap is-error">
+                <input class="input-box" type="text" value="john@@" id="i-err" />
+                <label class="floating-label" for="i-err">Email</label>
+                <div class="error-row">
+                  <i class="ti ti-alert-circle" style="font-size:12px;"></i>
+                  Please enter a valid email address.
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Apply focus/filled classes to interactive inputs
+    document.querySelectorAll('.field-wrap:not(.is-disabled):not(.is-error) .input-box').forEach(input => {
+      const wrap = input.closest('.field-wrap');
+      const label = wrap.querySelector('.floating-label');
+
+      input.addEventListener('focus', () => {
+        wrap.classList.add('is-focused');
+        wrap.classList.remove('is-filled');
+        if (label) label.style.background = '#D4F0F0';
+      });
+      input.addEventListener('blur', () => {
+        wrap.classList.remove('is-focused');
+        if (input.value.trim()) {
+          wrap.classList.add('is-filled');
+          if (label) label.style.background = '#ffffff';
+        } else {
+          wrap.classList.remove('is-filled');
+          if (label) label.style.background = '#ffffff';
+        }
+      });
+    });
+  </script>
+
+
+
+  <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+
+</body>
+</html>

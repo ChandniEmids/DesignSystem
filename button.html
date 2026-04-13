@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Button — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    :root {
+      --btn-brand-100:   #E9F7F7;
+      --btn-brand-200:   #D4F0F0;
+      --btn-brand-300:   #A9E0E0;
+      --btn-brand-500:   #27B2B2;
+      --btn-brand-600:   #1B7D7D;
+      --btn-brand-700:   #104747;
+      --btn-neutral-100: #F3F4F6;
+      --btn-neutral-200: #F0F0F7;
+      --btn-neutral-400: #9CA3AF;
+      --btn-white:       #ffffff;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background 120ms ease, color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+      white-space: nowrap;
+    }
+    .btn-sm  { font-size: 14px; padding: 8px;       border-radius: 6px; }
+    .btn-md  { font-size: 14px; padding: 8px 16px;  border-radius: 8px; }
+    .btn-lg  { font-size: 16px; padding: 16px 24px; border-radius: 8px; }
+
+    /* Primary */
+    .btn-primary                   { background: var(--btn-brand-500); color: var(--btn-white); }
+    .btn-primary:hover,
+    .btn-primary.is-hover          { background: var(--btn-brand-600); color: var(--btn-white); }
+    .btn-primary:active,
+    .btn-primary.is-active         { background: var(--btn-brand-700); color: var(--btn-white); }
+    .btn-primary:focus-visible,
+    .btn-primary.is-focus          { background: var(--btn-brand-500); color: var(--btn-white); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+    .btn-primary:disabled,
+    .btn-primary.is-disabled       { background: var(--btn-neutral-100); color: var(--btn-neutral-400); cursor: not-allowed; pointer-events: none; }
+
+    /* Secondary */
+    .btn-secondary                 { background: var(--btn-white); color: var(--btn-brand-500); border-color: var(--btn-brand-300); }
+    .btn-secondary:hover,
+    .btn-secondary.is-hover        { background: var(--btn-brand-100); color: var(--btn-brand-600); border-color: var(--btn-brand-600); }
+    .btn-secondary:active,
+    .btn-secondary.is-active       { background: var(--btn-brand-200); color: var(--btn-brand-700); border-color: var(--btn-brand-700); }
+    .btn-secondary:focus-visible,
+    .btn-secondary.is-focus        { background: var(--btn-white); color: var(--btn-brand-500); border-color: var(--btn-brand-300); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+    .btn-secondary:disabled,
+    .btn-secondary.is-disabled     { background: var(--btn-white); color: var(--btn-neutral-400); border-color: var(--btn-neutral-200); cursor: not-allowed; pointer-events: none; }
+
+    /* Ghost */
+    .btn-ghost                     { background: transparent; color: var(--btn-brand-500); border-color: transparent; }
+    .btn-ghost:hover,
+    .btn-ghost.is-hover            { background: var(--btn-brand-100); color: var(--btn-brand-500); }
+    .btn-ghost:active,
+    .btn-ghost.is-active           { background: var(--btn-brand-200); color: var(--btn-brand-700); }
+    .btn-ghost:focus-visible,
+    .btn-ghost.is-focus            { background: var(--btn-brand-100); color: var(--btn-brand-500); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+    .btn-ghost:disabled,
+    .btn-ghost.is-disabled         { background: transparent; color: var(--btn-neutral-400); cursor: not-allowed; pointer-events: none; }
+
+    /* State grid table */
+    .state-grid { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .state-grid th { padding: 8px 16px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--text-muted); border-bottom: 2px solid var(--border-subtle); text-align: left; white-space: nowrap; }
+    .state-grid th:first-child { min-width: 80px; }
+    .state-grid td { padding: 16px; border-bottom: 1px solid var(--border-subtle); vertical-align: middle; }
+    .state-grid td:first-child { font-size: 11px; font-weight: 500; color: var(--text-muted); white-space: nowrap; background: var(--surface-header); }
+
+    .token-tag { display: inline-block; font-size: 11px; font-family: 'Courier New', monospace; background: #F0F0F7; color: #666689; padding: 2px 6px; border-radius: 4px; }
+
+    /* Dos & Don'ts */
+    .dd-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:8px; }
+    .dd-card { background:#fff; border:1px solid var(--border-subtle); border-radius:8px; padding:20px; }
+    .dd-card.do   { border-top:3px solid #15803D; }
+    .dd-card.dont { border-top:3px solid #DC2626; }
+    .dd-card-hd { display:flex; align-items:center; gap:8px; margin-bottom:12px; }
+    .dd-card-hd span { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; }
+    .dd-card.do   .dd-card-hd span { color:#15803D; }
+    .dd-card.dont .dd-card-hd span { color:#DC2626; }
+    .dd-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+    .dd-list li { font-size:13px; color:var(--text-secondary); line-height:1.55; }
+    .dd-list li::before { content:'—'; margin-right:6px; color:var(--text-muted); }
+
+    /* Anatomy */
+    .anatomy-wrap { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-bottom:8px; }
+    .anatomy-preview { background:#F9F9FB; border:1px solid var(--border-subtle); border-radius:8px; padding:32px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; }
+    .anatomy-btn-wrap { display:flex; align-items:center; gap:0; }
+    .anatomy-label { font-size:10px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; display:flex; align-items:center; gap:4px; }
+    .anatomy-num { width:16px; height:16px; border-radius:9999px; background:var(--brand-blue); color:#fff; font-size:9px; font-weight:700; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .spec-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .spec-table th { padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); border-bottom:2px solid var(--border-subtle); text-align:left; }
+    .spec-table td { padding:10px 12px; border-bottom:1px solid var(--border-subtle); vertical-align:middle; color:var(--text-secondary); }
+    .spec-table tr:last-child td { border-bottom:none; }
+    .spec-table td:first-child { text-align:center; width:32px; }
+    .spec-tok { font-family:'Courier New',monospace; font-size:11px; background:#F0F0F7; color:#666689; padding:2px 6px; border-radius:4px; white-space:nowrap; }
+
+    /* State token reference */
+    .state-ref-table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:8px; }
+    .state-ref-table th { padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); border-bottom:2px solid var(--border-subtle); text-align:left; background:var(--surface-header); }
+    .state-ref-table td { padding:10px 12px; border-bottom:1px solid var(--border-subtle); vertical-align:middle; font-size:12px; color:var(--text-secondary); }
+    .state-ref-table tr:last-child td { border-bottom:none; }
+    .state-ref-table td:first-child { font-weight:600; color:var(--text-primary); white-space:nowrap; width:80px; }
+
+    /* A11y + Content sections */
+    .info-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:8px; }
+    .info-card { background:#fff; border:1px solid var(--border-subtle); border-radius:8px; padding:16px; }
+    .info-card-title { font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .info-card-body { font-size:12px; color:var(--text-secondary); line-height:1.6; }
+    .voice-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .voice-table th { padding:8px 12px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); border-bottom:2px solid var(--border-subtle); text-align:left; }
+    .voice-table td { padding:10px 12px; border-bottom:1px solid var(--border-subtle); color:var(--text-secondary); vertical-align:middle; }
+    .voice-table tr:last-child td { border-bottom:none; }
+    .voice-table td:first-child { font-weight:600; color:var(--text-primary); width:160px; white-space:nowrap; }
+    .v-yes { color:#15803D; font-weight:600; }
+    .v-no  { color:#DC2626; font-weight:600; text-decoration:line-through; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+      </div>
+      <span class="header-logo-text">
+        <span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span>
+      </span>
+    </a>
+    <div class="header-search-wrap">
+      <div class="header-search">
+        <i class="ti ti-search" style="font-size:16px;"></i>
+        <input type="text" placeholder="Search design system…" />
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="user-avatar">JD</div>
+    </div>
+  </header>
+
+  <!-- ── Sidebar ── -->
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <!-- <a href="Components-inventory.html#sec-buttons" class="nav-item"><i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons</a> -->
+    <a href="button.html" class="nav-item active"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <!-- <a href="Components-inventory.html#sec-forms" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Forms</a> -->
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <!-- ── Main ── -->
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Button</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Primary · Secondary · Ghost &nbsp;·&nbsp; 3 sizes (S / M / L) &nbsp;·&nbsp; 5 states &nbsp;·&nbsp; All tokens bound to Figma variables</div>
+          </div>
+
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">Buttons are the primary trigger for actions in the UI. ClearPath FDO uses three types: Primary for the most important action on a screen, Secondary for supporting actions that need visibility without dominance, and Ghost for low-emphasis actions in toolbars or inline contexts. Every button ships in three sizes (Small, Medium, Large) and five interaction states.</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-hierarchy-2" style="font-size:14px;color:var(--brand-blue);"></i> One primary per view</div>
+              <div class="cs-principle-body">Each screen or modal should have exactly one Primary button. Multiple primary buttons compete for attention and dilute the intended action hierarchy.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-writing" style="font-size:14px;color:var(--brand-blue);"></i> Label is always a verb</div>
+              <div class="cs-principle-body">Button labels must describe the action, not the outcome. Use "Save Appointment" not "Done", "Delete Patient" not "Confirm". Ambiguous labels cause errors.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-resize" style="font-size:14px;color:var(--brand-blue);"></i> Size matches context</div>
+              <div class="cs-principle-body">Large for primary page CTAs. Medium for form actions and dialogs. Small for inline actions, table rows, and dense toolbars. Never mix sizes in the same button group.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-hand-stop" style="font-size:14px;color:var(--brand-blue);"></i> Disabled means unavailable</div>
+              <div class="cs-principle-body">Only disable a button when the action is temporarily blocked. Always pair a disabled button with a visible explanation of why — never leave the user guessing.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ══ SECTION C: ANATOMY & SPECS ══ -->
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Anatomy &amp; Specs</div>
+          <p class="cs-doc-body">The button is composed of three parts: an optional leading icon, a required label, and the container that defines sizing, radius, and all state-based tokens.</p>
+
+          <div class="anatomy-wrap">
+            <div class="anatomy-preview">
+              <button class="btn btn-primary btn-md" style="pointer-events:none;position:relative;">
+                <i class="ti ti-plus" style="font-size:16px;"></i>Label
+              </button>
+              <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center;">
+                <div class="anatomy-label"><span class="anatomy-num">1</span> Leading Icon</div>
+                <div class="anatomy-label"><span class="anatomy-num">2</span> Label</div>
+                <div class="anatomy-label"><span class="anatomy-num">3</span> Container</div>
+              </div>
+            </div>
+            <div style="border:1px solid var(--border-subtle);border-radius:8px;overflow:hidden;">
+              <table class="spec-table">
+                <thead>
+                  <tr><th>#</th><th>Element</th><th>Property</th><th>Token</th><th>Value</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="anatomy-num">3</span></td>
+                    <td>Container</td><td>Height (Md)</td>
+                    <td><span class="spec-tok">space.4</span></td><td>32px</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">3</span></td>
+                    <td>Container</td><td>Padding H</td>
+                    <td><span class="spec-tok">space.2</span></td><td>16px</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">3</span></td>
+                    <td>Container</td><td>Border Radius</td>
+                    <td><span class="spec-tok">radius.button</span></td><td>8px (Md/Lg) · 6px (Sm)</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">3</span></td>
+                    <td>Container</td><td>Background</td>
+                    <td><span class="spec-tok">button.primary.bg</span></td><td>brand.500 · #27B2B2</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">2</span></td>
+                    <td>Label</td><td>Font</td>
+                    <td><span class="spec-tok">typography.label.form</span></td><td>Manrope SemiBold 14px</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">2</span></td>
+                    <td>Label</td><td>Color</td>
+                    <td><span class="spec-tok">button.primary.text</span></td><td>#ffffff</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">1</span></td>
+                    <td>Leading Icon</td><td>Size</td>
+                    <td><span class="spec-tok">icon.size.sm</span></td><td>16px · Tabler outline</td>
+                  </tr>
+                  <tr>
+                    <td><span class="anatomy-num">1</span></td>
+                    <td>Icon → Label gap</td><td>Gap</td>
+                    <td><span class="spec-tok">space.1</span></td><td>8px</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ── PRIMARY ── -->
+          <div style="margin-bottom:48px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Primary</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Default <span class="token-tag">Brand/500 #27B2B2</span> &nbsp;
+              Hover <span class="token-tag">Brand/600</span> &nbsp;
+              Active <span class="token-tag">Brand/700</span> &nbsp;
+              Disabled <span class="token-tag">Neutral/100 bg · Neutral/400 text</span>
+            </div>
+            <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;">
+              <table class="state-grid">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Default</th><th>Hover</th><th>Active</th><th>Focus</th><th>Disabled</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Small</td>
+                    <td><button class="btn btn-primary btn-sm">Label</button></td>
+                    <td><button class="btn btn-primary btn-sm is-hover">Label</button></td>
+                    <td><button class="btn btn-primary btn-sm is-active">Label</button></td>
+                    <td><button class="btn btn-primary btn-sm is-focus">Label</button></td>
+                    <td><button class="btn btn-primary btn-sm is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Medium</td>
+                    <td><button class="btn btn-primary btn-md">Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-hover">Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-active">Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-focus">Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Large</td>
+                    <td><button class="btn btn-primary btn-lg">Label</button></td>
+                    <td><button class="btn btn-primary btn-lg is-hover">Label</button></td>
+                    <td><button class="btn btn-primary btn-lg is-active">Label</button></td>
+                    <td><button class="btn btn-primary btn-lg is-focus">Label</button></td>
+                    <td><button class="btn btn-primary btn-lg is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Med + Icon</td>
+                    <td><button class="btn btn-primary btn-md"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-hover"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-active"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-focus"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-primary btn-md is-disabled"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ── SECONDARY ── -->
+          <div style="margin-bottom:48px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Secondary</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              White bg · Border <span class="token-tag">Brand/300</span> &nbsp;
+              Text <span class="token-tag">Brand/500</span> &nbsp;
+              Hover bg <span class="token-tag">Brand/100</span> &nbsp;
+              Disabled border <span class="token-tag">Neutral/200</span>
+            </div>
+            <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;">
+              <table class="state-grid">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Default</th><th>Hover</th><th>Active</th><th>Focus</th><th>Disabled</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Small</td>
+                    <td><button class="btn btn-secondary btn-sm">Label</button></td>
+                    <td><button class="btn btn-secondary btn-sm is-hover">Label</button></td>
+                    <td><button class="btn btn-secondary btn-sm is-active">Label</button></td>
+                    <td><button class="btn btn-secondary btn-sm is-focus">Label</button></td>
+                    <td><button class="btn btn-secondary btn-sm is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Medium</td>
+                    <td><button class="btn btn-secondary btn-md">Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-hover">Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-active">Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-focus">Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Large</td>
+                    <td><button class="btn btn-secondary btn-lg">Label</button></td>
+                    <td><button class="btn btn-secondary btn-lg is-hover">Label</button></td>
+                    <td><button class="btn btn-secondary btn-lg is-active">Label</button></td>
+                    <td><button class="btn btn-secondary btn-lg is-focus">Label</button></td>
+                    <td><button class="btn btn-secondary btn-lg is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Med + Icon</td>
+                    <td><button class="btn btn-secondary btn-md"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-hover"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-active"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-focus"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-secondary btn-md is-disabled"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ── GHOST ── -->
+          <div style="margin-bottom:48px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Ghost</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Transparent bg · Text <span class="token-tag">Brand/500</span> &nbsp;
+              Hover bg <span class="token-tag">Brand/100</span> &nbsp;
+              Active bg <span class="token-tag">Brand/200</span>
+            </div>
+            <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;">
+              <table class="state-grid">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Default</th><th>Hover</th><th>Active</th><th>Focus</th><th>Disabled</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Small</td>
+                    <td><button class="btn btn-ghost btn-sm">Label</button></td>
+                    <td><button class="btn btn-ghost btn-sm is-hover">Label</button></td>
+                    <td><button class="btn btn-ghost btn-sm is-active">Label</button></td>
+                    <td><button class="btn btn-ghost btn-sm is-focus">Label</button></td>
+                    <td><button class="btn btn-ghost btn-sm is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Medium</td>
+                    <td><button class="btn btn-ghost btn-md">Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-hover">Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-active">Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-focus">Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Large</td>
+                    <td><button class="btn btn-ghost btn-lg">Label</button></td>
+                    <td><button class="btn btn-ghost btn-lg is-hover">Label</button></td>
+                    <td><button class="btn btn-ghost btn-lg is-active">Label</button></td>
+                    <td><button class="btn btn-ghost btn-lg is-focus">Label</button></td>
+                    <td><button class="btn btn-ghost btn-lg is-disabled">Label</button></td>
+                  </tr>
+                  <tr>
+                    <td>Med + Icon</td>
+                    <td><button class="btn btn-ghost btn-md"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-hover"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-active"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-focus"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                    <td><button class="btn btn-ghost btn-md is-disabled"><i class="ti ti-plus" style="font-size:16px;"></i>Label</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ── ICON ONLY ── -->
+          <div style="margin-bottom:48px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Icon Only</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">Square variants — same size tokens, no label</div>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:24px;background:#fff;border:1px solid var(--border-subtle);border-radius:12px;">
+              <button class="btn btn-primary btn-sm"   style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-primary btn-md"   style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-primary btn-lg"   style="width:54px;height:54px;padding:0;"><i class="ti ti-plus" style="font-size:20px;"></i></button>
+              <button class="btn btn-secondary btn-sm" style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-secondary btn-md" style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-secondary btn-lg" style="width:54px;height:54px;padding:0;"><i class="ti ti-plus" style="font-size:20px;"></i></button>
+              <button class="btn btn-ghost btn-sm"     style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-ghost btn-md"     style="width:35px;height:35px;padding:0;"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+              <button class="btn btn-ghost btn-lg"     style="width:54px;height:54px;padding:0;"><i class="ti ti-plus" style="font-size:20px;"></i></button>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ══ SECTION E: INTERACTION STATES ══ -->
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Interaction States</div>
+          <p class="cs-doc-body">Every button type maps its five interaction states to distinct token values. The table below documents the exact token and resolved value for each state per button type.</p>
+
+          <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:8px;">
+            <table class="state-ref-table">
+              <thead>
+                <tr><th>State</th><th>Type</th><th>Background</th><th>Text</th><th>Border</th><th>Shadow / Ring</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Default</td><td>Primary</td><td><span class="spec-tok">button.primary.bg</span> #27B2B2</td><td>#ffffff</td><td>—</td><td>—</td></tr>
+                <tr><td>Hover</td><td>Primary</td><td><span class="spec-tok">button.primary.bg.hover</span> #1B7D7D</td><td>#ffffff</td><td>—</td><td>—</td></tr>
+                <tr><td>Active</td><td>Primary</td><td><span class="spec-tok">button.primary.bg.active</span> #104747</td><td>#ffffff</td><td>—</td><td>—</td></tr>
+                <tr><td>Focus</td><td>Primary</td><td>#27B2B2</td><td>#ffffff</td><td>—</td><td>0 0 0 3px <span class="spec-tok">brand.300</span> #A9E0E0</td></tr>
+                <tr><td>Disabled</td><td>Primary</td><td><span class="spec-tok">neutral.100</span> #F3F4F6</td><td><span class="spec-tok">neutral.400</span> #9CA3AF</td><td>—</td><td>—</td></tr>
+                <tr><td>Default</td><td>Secondary</td><td>#ffffff</td><td><span class="spec-tok">brand.500</span> #27B2B2</td><td><span class="spec-tok">brand.300</span> #A9E0E0</td><td>—</td></tr>
+                <tr><td>Hover</td><td>Secondary</td><td><span class="spec-tok">brand.100</span> #E9F7F7</td><td><span class="spec-tok">brand.600</span> #1B7D7D</td><td><span class="spec-tok">brand.600</span></td><td>—</td></tr>
+                <tr><td>Active</td><td>Secondary</td><td><span class="spec-tok">brand.200</span> #D4F0F0</td><td><span class="spec-tok">brand.700</span> #104747</td><td><span class="spec-tok">brand.700</span></td><td>—</td></tr>
+                <tr><td>Default</td><td>Ghost</td><td>transparent</td><td><span class="spec-tok">brand.500</span> #27B2B2</td><td>transparent</td><td>—</td></tr>
+                <tr><td>Hover</td><td>Ghost</td><td><span class="spec-tok">brand.100</span> #E9F7F7</td><td>#27B2B2</td><td>transparent</td><td>—</td></tr>
+                <tr><td>Active</td><td>Ghost</td><td><span class="spec-tok">brand.200</span> #D4F0F0</td><td><span class="spec-tok">brand.700</span> #104747</td><td>transparent</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ══ SECTION F: ACCESSIBILITY ══ -->
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Accessibility</div>
+          <p class="cs-doc-body">All buttons must meet WCAG 2.1 AA standards. The focus ring, keyboard interaction, and screen reader labels are non-negotiable requirements for every button instance.</p>
+
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-title"><i class="ti ti-eye" style="font-size:14px;color:var(--brand-blue);"></i> WCAG Contrast</div>
+              <div class="info-card-body">
+                Minimum <strong>4.5:1</strong> for label text (14px SemiBold).<br><br>
+                Primary: white on #27B2B2 — meets AA for large text. Use brand.700 (#104747) where higher contrast is required.<br><br>
+                Disabled state is exempt from contrast requirements per WCAG 1.4.3.
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title"><i class="ti ti-speakerphone" style="font-size:14px;color:var(--brand-blue);"></i> Screen Reader</div>
+              <div class="info-card-body">
+                Use native <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;button&gt;</code> element — never <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;div&gt;</code> or <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">&lt;a&gt;</code>.<br><br>
+                Disabled: add <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-disabled="true"</code> and keep the button focusable so users know it exists.<br><br>
+                Icon-only: always add <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">aria-label="[Action]"</code>.
+              </div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-title"><i class="ti ti-keyboard" style="font-size:14px;color:var(--brand-blue);"></i> Keyboard Navigation</div>
+              <div class="info-card-body">
+                <strong>Tab</strong> — moves focus to the button.<br>
+                <strong>Enter / Space</strong> — activates the button.<br>
+                <strong>Escape</strong> — closes any triggered modal or dropdown.<br><br>
+                Focus ring: 3px solid <span class="spec-tok">brand.300</span> (#A9E0E0), always visible — never <code style="font-size:11px;background:var(--border-subtle);padding:1px 4px;border-radius:3px;">outline:none</code> without a custom ring replacement.
+              </div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ══ SECTION G: CONTENT & VOICE ══ -->
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Content &amp; Voice</div>
+          <p class="cs-doc-body">Button labels follow strict writing rules in a healthcare context. Ambiguous or passive labels increase error rates — every label must be specific, action-first, and under 24 characters.</p>
+
+          <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:32px;">
+            <table class="voice-table">
+              <thead>
+                <tr><th>Rule</th><th>Correct</th><th>Incorrect</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Always start with a verb</td>
+                  <td><span class="v-yes">Save Appointment</span></td>
+                  <td><span class="v-no">Appointment</span></td>
+                </tr>
+                <tr>
+                  <td>Be specific, not generic</td>
+                  <td><span class="v-yes">Delete Patient</span></td>
+                  <td><span class="v-no">Confirm</span></td>
+                </tr>
+                <tr>
+                  <td>Sentence case only</td>
+                  <td><span class="v-yes">Add new room</span></td>
+                  <td><span class="v-no">Add New Room</span></td>
+                </tr>
+                <tr>
+                  <td>Max 24 characters</td>
+                  <td><span class="v-yes">Schedule follow-up</span></td>
+                  <td><span class="v-no">Click here to schedule a follow-up appointment</span></td>
+                </tr>
+                <tr>
+                  <td>No filler words</td>
+                  <td><span class="v-yes">Export report</span></td>
+                  <td><span class="v-no">Click to export</span></td>
+                </tr>
+                <tr>
+                  <td>Destructive actions name the object</td>
+                  <td><span class="v-yes">Delete appointment</span></td>
+                  <td><span class="v-no">Delete</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- ══ SECTION B: DOS & DON'TS ══ -->
+          <div class="cs-doc-sub" style="border-top:none;padding-top:0;margin-top:0;">Dos &amp; Don'ts</div>
+          <p class="cs-doc-body">Following these rules prevents the most common button misuse patterns in healthcare UIs — competing actions, ambiguous labels, and inaccessible disabled states.</p>
+
+          <div class="dd-grid">
+            <div class="dd-card do">
+              <div class="dd-card-hd">
+                <i class="ti ti-thumb-up" style="font-size:16px;color:#15803D;"></i>
+                <span>Do</span>
+              </div>
+              <ul class="dd-list">
+                <li>Use one Primary button per view or modal</li>
+                <li>Start every label with a verb: "Save", "Delete", "Add", "Cancel"</li>
+                <li>Match button size to context — Large for page CTAs, Medium for forms, Small for inline actions</li>
+                <li>Pair a disabled button with a visible explanation of why it is unavailable</li>
+                <li>Use Ghost buttons for low-emphasis secondary actions in toolbars</li>
+              </ul>
+            </div>
+            <div class="dd-card dont">
+              <div class="dd-card-hd">
+                <i class="ti ti-thumb-down" style="font-size:16px;color:#DC2626;"></i>
+                <span>Don't</span>
+              </div>
+              <ul class="dd-list">
+                <li>Place two Primary buttons side by side — use Primary + Secondary instead</li>
+                <li>Use generic labels: "OK", "Done", "Yes", "Submit", "Confirm"</li>
+                <li>Mix button sizes within the same button group</li>
+                <li>Disable a button without showing the user how to unblock the action</li>
+                <li>Use Icon-only buttons without a tooltip — the action must always be discoverable</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+    <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+
+</body>
+</html>

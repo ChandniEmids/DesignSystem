@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alert — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    .alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 8px;
+      border-width: 1px;
+      border-style: solid;
+      font-family: 'Manrope', sans-serif;
+      position: relative;
+    }
+    .alert-icon   { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .alert-body   { flex: 1; }
+    .alert-title  { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .alert-desc   { font-size: 13px; font-weight: 400; line-height: 1.5; }
+    .alert-close  { font-size: 16px; cursor: pointer; flex-shrink: 0; opacity: .6; }
+    .alert-close:hover { opacity: 1; }
+
+    .alert-info    { background:#EFF5FF; border-color:#BFD9FE; color:#1D4ED8; }
+    .alert-info .alert-desc { color:#1E40AF; }
+    .alert-success { background:#EFFEF5; border-color:#BBF7D0; color:#15803D; }
+    .alert-success .alert-desc { color:#166534; }
+    .alert-warning { background:#FFFDE8; border-color:#FCD34D; color:#D97706; }
+    .alert-warning .alert-desc { color:#92400E; }
+    .alert-danger  { background:#FEF2F2; border-color:#FCA5A5; color:#DC2626; }
+    .alert-danger .alert-desc  { color:#991B1B; }
+
+    .demo-row { display: flex; flex-direction: column; gap: 12px; }
+    .token-tag { display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:#F0F0F7;color:#666689;padding:2px 6px;border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+      <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+    </a>
+    <div class="header-search-wrap"><div class="header-search"><i class="ti ti-search" style="font-size:16px;"></i><input type="text" placeholder="Search design system…" /></div></div>
+    <div class="header-right"><div class="user-avatar">JD</div></div>
+  </header>
+
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <!-- <a href="Components-inventory.html#sec-buttons" class="nav-item"><i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons</a> -->
+    <a href="button.html" class="nav-item"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <!-- <a href="Components-inventory.html#sec-forms" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Forms</a> -->
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item active"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Alert</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Inline feedback banners for Info, Success, Warning, and Danger — with and without dismiss.</div>
+          </div>
+
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">Alerts are inline feedback banners that communicate system-level messages in response to a user action or a background event. They come in four severity levels — Info, Success, Warning, and Danger — each using a distinct color and icon pair so the message type is immediately recognisable. Alerts can optionally be dismissed by the user.</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-alert-triangle" style="font-size:14px;color:var(--brand-blue);"></i> Severity is always visible</div>
+              <div class="cs-principle-body">Color and icon together communicate severity. Never rely on color alone — the icon must reinforce the message type.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-hand-stop" style="font-size:14px;color:var(--brand-blue);"></i> Never auto-dismiss critical alerts</div>
+              <div class="cs-principle-body">Warning and Danger alerts must stay visible until the user explicitly dismisses them. Only Info and Success may auto-dismiss.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-layout-rows" style="font-size:14px;color:var(--brand-blue);"></i> One alert per context</div>
+              <div class="cs-principle-body">Stack multiple alerts only when each message relates to a different part of the UI. Combine related messages into a single alert.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-writing" style="font-size:14px;color:var(--brand-blue);"></i> Title + description always</div>
+              <div class="cs-principle-body">Every alert needs a short bold title and an actionable description. Never use a description without a title.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- INFO -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Info</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">bg <span class="token-tag">Base/Info</span> border <span class="token-tag">Border/Info</span> text <span class="token-tag">Text/Info</span></div>
+            <div class="demo-row">
+              <div class="alert alert-info">
+                <i class="ti ti-info-circle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Information</div><div class="alert-desc">Your session will expire in 15 minutes. Save your work to avoid losing changes.</div></div>
+              </div>
+              <div class="alert alert-info">
+                <i class="ti ti-info-circle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Information</div><div class="alert-desc">Your session will expire in 15 minutes. Save your work to avoid losing changes.</div></div>
+                <i class="ti ti-x alert-close"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUCCESS -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Success</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">bg <span class="token-tag">Base/Success</span> border <span class="token-tag">Border/Success</span> text <span class="token-tag">Text/Success</span></div>
+            <div class="demo-row">
+              <div class="alert alert-success">
+                <i class="ti ti-circle-check alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Appointment Confirmed</div><div class="alert-desc">The appointment has been successfully scheduled for Thursday, 15 April at 10:00 AM.</div></div>
+              </div>
+              <div class="alert alert-success">
+                <i class="ti ti-circle-check alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Appointment Confirmed</div><div class="alert-desc">The appointment has been successfully scheduled for Thursday, 15 April at 10:00 AM.</div></div>
+                <i class="ti ti-x alert-close"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- WARNING -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Warning</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">bg <span class="token-tag">Base/Warning</span> border <span class="token-tag">Border/Warning</span> text <span class="token-tag">Text/Warning</span></div>
+            <div class="demo-row">
+              <div class="alert alert-warning">
+                <i class="ti ti-alert-triangle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Incomplete Profile</div><div class="alert-desc">Patient insurance details are missing. Some features may be limited until the profile is complete.</div></div>
+              </div>
+              <div class="alert alert-warning">
+                <i class="ti ti-alert-triangle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Incomplete Profile</div><div class="alert-desc">Patient insurance details are missing. Some features may be limited until the profile is complete.</div></div>
+                <i class="ti ti-x alert-close"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- DANGER -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Danger</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">bg <span class="token-tag">Base/Danger</span> border <span class="token-tag">Border/Danger</span> text <span class="token-tag">Text/Danger</span></div>
+            <div class="demo-row">
+              <div class="alert alert-danger">
+                <i class="ti ti-alert-circle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Booking Failed</div><div class="alert-desc">Unable to confirm the appointment. The selected room is no longer available. Please choose a different time slot.</div></div>
+              </div>
+              <div class="alert alert-danger">
+                <i class="ti ti-alert-circle alert-icon"></i>
+                <div class="alert-body"><div class="alert-title">Booking Failed</div><div class="alert-desc">Unable to confirm the appointment. The selected room is no longer available.</div></div>
+                <i class="ti ti-x alert-close"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- ALL VARIANTS GRID -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:16px;">All Variants</div>
+            <div style="border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;">
+              <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                <thead>
+                  <tr style="border-bottom:2px solid var(--border-subtle);">
+                    <th style="padding:8px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);text-align:left;">Variant</th>
+                    <th style="padding:8px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);text-align:left;">Without Dismiss</th>
+                    <th style="padding:8px 16px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);text-align:left;">With Dismiss</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:16px;font-size:12px;font-weight:600;color:var(--text-muted);background:var(--surface-header);white-space:nowrap;">Info</td>
+                    <td style="padding:16px;"><div class="alert alert-info" style="margin:0;"><i class="ti ti-info-circle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div></div></td>
+                    <td style="padding:16px;"><div class="alert alert-info" style="margin:0;"><i class="ti ti-info-circle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div><i class="ti ti-x alert-close"></i></div></td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:16px;font-size:12px;font-weight:600;color:var(--text-muted);background:var(--surface-header);white-space:nowrap;">Success</td>
+                    <td style="padding:16px;"><div class="alert alert-success" style="margin:0;"><i class="ti ti-circle-check alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div></div></td>
+                    <td style="padding:16px;"><div class="alert alert-success" style="margin:0;"><i class="ti ti-circle-check alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div><i class="ti ti-x alert-close"></i></div></td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-subtle);">
+                    <td style="padding:16px;font-size:12px;font-weight:600;color:var(--text-muted);background:var(--surface-header);white-space:nowrap;">Warning</td>
+                    <td style="padding:16px;"><div class="alert alert-warning" style="margin:0;"><i class="ti ti-alert-triangle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div></div></td>
+                    <td style="padding:16px;"><div class="alert alert-warning" style="margin:0;"><i class="ti ti-alert-triangle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div><i class="ti ti-x alert-close"></i></div></td>
+                  </tr>
+                  <tr>
+                    <td style="padding:16px;font-size:12px;font-weight:600;color:var(--text-muted);background:var(--surface-header);white-space:nowrap;">Danger</td>
+                    <td style="padding:16px;"><div class="alert alert-danger" style="margin:0;"><i class="ti ti-alert-circle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div></div></td>
+                    <td style="padding:16px;"><div class="alert alert-danger" style="margin:0;"><i class="ti ti-alert-circle alert-icon"></i><div class="alert-body"><div class="alert-title">Title</div><div class="alert-desc">Description text goes here.</div></div><i class="ti ti-x alert-close"></i></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+    <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

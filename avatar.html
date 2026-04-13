@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avatar — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    :root {
+      --avatar-gradient: linear-gradient(135deg, #27B2B2 0%, #104747 100%);
+      --status-online:  #22C55E;
+      --status-offline: #9CA3AF;
+      --status-busy:    #EF4444;
+      --status-away:    #F59E0B;
+    }
+
+    /* ── Base avatar ── */
+    .av {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      background: var(--avatar-gradient);
+      color: #fff;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 700;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .av-xs  { width:24px;  height:24px;  font-size:9px;  }
+    .av-sm  { width:32px;  height:32px;  font-size:11px; }
+    .av-md  { width:40px;  height:40px;  font-size:13px; }
+    .av-lg  { width:48px;  height:48px;  font-size:15px; }
+    .av-xl  { width:56px;  height:56px;  font-size:18px; }
+    .av-2xl { width:64px;  height:64px;  font-size:20px; }
+
+    .av img { width:100%; height:100%; object-fit:cover; border-radius:9999px; }
+    .av .ti { color:#fff; }
+
+    /* ── Status wrapper ── */
+    .av-wrap { position:relative; display:inline-flex; }
+    .av-status {
+      position:absolute; bottom:1px; right:1px;
+      width:10px; height:10px; border-radius:9999px;
+      border:2px solid #fff;
+    }
+    .av-md .av-status,
+    .av-wrap .av-status { width:10px; height:10px; }
+    .status-online  { background: var(--status-online);  }
+    .status-offline { background: var(--status-offline); }
+    .status-busy    { background: var(--status-busy);    }
+    .status-away    { background: var(--status-away);    }
+
+    /* ── Nav avatar (avatar + name + chevron) ── */
+    .av-nav {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Manrope',sans-serif; cursor:pointer;
+      padding:4px 8px; border-radius:8px;
+      transition: background 120ms;
+    }
+    .av-nav:hover { background: #f0f0f7; }
+    .av-nav-name  { font-size:13px; font-weight:600; color:#121219; }
+    .av-nav-role  { font-size:11px; color:#666689; }
+
+    /* ── Profile card ── */
+    .profile-card {
+      display:inline-flex; align-items:center; gap:12px;
+      background:#fff; border:1px solid #f0f0f7;
+      border-radius:12px; padding:16px 20px;
+      font-family:'Manrope',sans-serif;
+      min-width:200px;
+    }
+    .profile-card-info { display:flex; flex-direction:column; gap:2px; }
+    .profile-card-name { font-size:14px; font-weight:700; color:#121219; }
+    .profile-card-role { font-size:12px; color:#666689; }
+    .role-badge {
+      display:inline-flex; align-items:center;
+      font-size:10px; font-weight:700; text-transform:uppercase;
+      letter-spacing:.06em; padding:2px 8px; border-radius:99px;
+    }
+    .role-admin   { background:#EEF2FF; color:#4338CA; }
+    .role-doctor  { background:#F0FDFA; color:#0F766E; }
+    .role-nurse   { background:#FDF4FF; color:#9333EA; }
+    .role-viewer  { background:#F1F5F9; color:#475569; }
+
+    /* ── Demo helpers ── */
+    .demo-block {
+      background:#fff; border:1px solid var(--border-subtle);
+      border-radius:12px; padding:24px;
+    }
+    .demo-row {
+      display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    }
+    .demo-label {
+      font-size:11px; font-weight:600; color:var(--text-muted);
+      text-transform:uppercase; letter-spacing:.06em;
+      margin-bottom:12px;
+    }
+    .size-col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .size-tag { font-size:10px; color:var(--text-muted); font-family:'Courier New',monospace; }
+    .token-tag { display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:#F0F0F7;color:#666689;padding:2px 6px;border-radius:4px; }
+  </style>
+</head>
+<body>
+
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+      <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+    </a>
+    <div class="header-search-wrap"><div class="header-search"><i class="ti ti-search" style="font-size:16px;"></i><input type="text" placeholder="Search design system…" /></div></div>
+    <div class="header-right"><div class="user-avatar">JD</div></div>
+  </header>
+
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <!-- <a href="Components-inventory.html#sec-buttons" class="nav-item"><i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons</a> -->
+    <a href="button.html" class="nav-item"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <!-- <a href="Components-inventory.html#sec-forms" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Forms</a> -->
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item active"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <!-- Page header -->
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Avatar</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Initials · Image · With Status · Nav · Profile Card &nbsp;·&nbsp; 6 sizes &nbsp;·&nbsp; Teal gradient</div>
+          </div>
+
+          <!-- Purpose -->
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">Avatars represent a user or entity visually — either as initials on a teal gradient, or a profile photo. They appear in headers, nav bars, patient records, and profile cards. Five variants cover every context: standalone initials, image-based, status-tagged, nav-embedded, and the full profile card.</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-circle-letter-a" style="font-size:14px;color:var(--brand-blue);"></i> Initials are always 2 characters</div>
+              <div class="cs-principle-body">Use the first letter of first name and last name. Never show a full name, number, or icon inside an initials avatar — consistency matters at small sizes.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-circle-dot" style="font-size:14px;color:var(--brand-blue);"></i> Status dot is always bottom-right</div>
+              <div class="cs-principle-body">The status indicator sits at the bottom-right of the avatar with a 2px white border. Never move it to another corner — users learn to look there.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-ruler" style="font-size:14px;color:var(--brand-blue);"></i> Match size to context</div>
+              <div class="cs-principle-body">XS/SM for dense lists and table rows. MD for cards and comments. LG/XL for profile headers. 2XL for settings pages. Never scale manually — always use the size tokens.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-photo" style="font-size:14px;color:var(--brand-blue);"></i> Image fallback to initials</div>
+              <div class="cs-principle-body">If a profile photo fails to load, always fall back to the initials variant with the teal gradient — never show a broken image or an empty circle.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- Initials -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Initials</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Background <span class="token-tag">brand.500 → brand.700 gradient</span> &nbsp; Text <span class="token-tag">white</span>
+            </div>
+            <div class="demo-block">
+              <div class="demo-row" style="align-items:flex-end;">
+                <div class="size-col">
+                  <div class="av av-xs">JD</div>
+                  <span class="size-tag">XS · 24px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-sm">JD</div>
+                  <span class="size-tag">SM · 32px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-md">JD</div>
+                  <span class="size-tag">MD · 40px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-lg">JD</div>
+                  <span class="size-tag">LG · 48px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-xl">JD</div>
+                  <span class="size-tag">XL · 56px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-2xl">JD</div>
+                  <span class="size-tag">2XL · 64px</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Image</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Profile photo clipped to circle &nbsp;·&nbsp; Falls back to initials if image unavailable
+            </div>
+            <div class="demo-block">
+              <div class="demo-row" style="align-items:flex-end;">
+                <div class="size-col">
+                  <div class="av av-xs"><i class="ti ti-user" style="font-size:12px;"></i></div>
+                  <span class="size-tag">XS · 24px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-sm"><i class="ti ti-user" style="font-size:16px;"></i></div>
+                  <span class="size-tag">SM · 32px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-md"><i class="ti ti-user" style="font-size:20px;"></i></div>
+                  <span class="size-tag">MD · 40px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-lg"><i class="ti ti-user" style="font-size:24px;"></i></div>
+                  <span class="size-tag">LG · 48px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-xl"><i class="ti ti-user" style="font-size:28px;"></i></div>
+                  <span class="size-tag">XL · 56px</span>
+                </div>
+                <div class="size-col">
+                  <div class="av av-2xl"><i class="ti ti-user" style="font-size:32px;"></i></div>
+                  <span class="size-tag">2XL · 64px</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- With Status -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">With Status</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Status dot bottom-right &nbsp;·&nbsp; 2px white border &nbsp;·&nbsp;
+              <span class="token-tag" style="background:#DCFCE7;color:#166534;">Online</span> &nbsp;
+              <span class="token-tag" style="background:#F1F5F9;color:#475569;">Offline</span> &nbsp;
+              <span class="token-tag" style="background:#FEE2E2;color:#991B1B;">Busy</span> &nbsp;
+              <span class="token-tag" style="background:#FEF3C7;color:#92400E;">Away</span>
+            </div>
+            <div class="demo-block">
+              <div class="demo-row">
+                <div class="size-col">
+                  <div class="av-wrap">
+                    <div class="av av-md">JD</div>
+                  </div>
+                  <span class="size-tag">None</span>
+                </div>
+                <div class="size-col">
+                  <div class="av-wrap">
+                    <div class="av av-md">JD</div>
+                    <span class="av-status status-online"></span>
+                  </div>
+                  <span class="size-tag">Online</span>
+                </div>
+                <div class="size-col">
+                  <div class="av-wrap">
+                    <div class="av av-md">JD</div>
+                    <span class="av-status status-offline"></span>
+                  </div>
+                  <span class="size-tag">Offline</span>
+                </div>
+                <div class="size-col">
+                  <div class="av-wrap">
+                    <div class="av av-md">JD</div>
+                    <span class="av-status status-busy"></span>
+                  </div>
+                  <span class="size-tag">Busy</span>
+                </div>
+                <div class="size-col">
+                  <div class="av-wrap">
+                    <div class="av av-md">JD</div>
+                    <span class="av-status status-away"></span>
+                  </div>
+                  <span class="size-tag">Away</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Nav Avatar -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Nav Avatar</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Avatar + name + chevron — used in sidebar footers and top-right nav areas
+            </div>
+            <div class="demo-block" style="display:flex;flex-direction:column;gap:16px;">
+              <!-- SM -->
+              <div>
+                <div class="demo-label">SM</div>
+                <div class="av-nav">
+                  <div class="av av-sm">JD</div>
+                  <div style="display:flex;flex-direction:column;">
+                    <span class="av-nav-name">John Doe</span>
+                  </div>
+                  <i class="ti ti-chevron-down" style="font-size:14px;color:#9CA3AF;margin-left:4px;"></i>
+                </div>
+              </div>
+              <!-- MD -->
+              <div>
+                <div class="demo-label">MD</div>
+                <div class="av-nav">
+                  <div class="av av-md">JD</div>
+                  <div style="display:flex;flex-direction:column;">
+                    <span class="av-nav-name">John Doe</span>
+                    <span class="av-nav-role">Front Desk</span>
+                  </div>
+                  <i class="ti ti-chevron-down" style="font-size:14px;color:#9CA3AF;margin-left:4px;"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Card -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Profile Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Used in patient records, provider lists, and team pages — avatar + name + role badge
+            </div>
+            <div class="demo-block">
+              <div class="demo-row" style="flex-wrap:wrap;gap:16px;">
+                <div class="profile-card">
+                  <div class="av av-md">JD</div>
+                  <div class="profile-card-info">
+                    <span class="profile-card-name">Jane Doe</span>
+                    <span class="role-badge role-admin">Admin</span>
+                  </div>
+                </div>
+                <div class="profile-card">
+                  <div class="av av-md"><i class="ti ti-user" style="font-size:20px;"></i></div>
+                  <div class="profile-card-info">
+                    <span class="profile-card-name">Dr. A. Smith</span>
+                    <span class="role-badge role-doctor">Doctor</span>
+                  </div>
+                </div>
+                <div class="profile-card">
+                  <div class="av av-md">NR</div>
+                  <div class="profile-card-info">
+                    <span class="profile-card-name">Nina Ross</span>
+                    <span class="role-badge role-nurse">Nurse</span>
+                  </div>
+                </div>
+                <div class="profile-card">
+                  <div class="av av-md">TK</div>
+                  <div class="profile-card-info">
+                    <span class="profile-card-name">Tom Kumar</span>
+                    <span class="role-badge role-viewer">Viewer</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+  <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>

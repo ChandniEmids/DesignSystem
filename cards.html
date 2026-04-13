@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cards — ClearPath FDO Design System</title>
+  <script src="../vendor/tailwind.min.js"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css?v=3" />
+  <link rel="stylesheet" href="ds.css?v=3" />
+  <style>
+    .token-tag { display:inline-block;font-size:11px;font-family:'Courier New',monospace;background:#F0F0F7;color:#666689;padding:2px 6px;border-radius:4px; }
+
+    /* ── Base card ── */
+    .card {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      font-family:'Manrope',sans-serif;
+      overflow:hidden;
+    }
+
+    /* ── Stat card ── */
+    .stat-card {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      padding:20px 24px;
+      font-family:'Manrope',sans-serif;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .stat-card-label { font-size:12px; font-weight:600; color:#9CA3AF; text-transform:uppercase; letter-spacing:.06em; }
+    .stat-card-value { font-size:28px; font-weight:700; color:#121219; line-height:1; }
+    .stat-card-delta { font-size:12px; font-weight:600; display:inline-flex; align-items:center; gap:3px; }
+    .stat-card-delta.up   { color:#15803D; }
+    .stat-card-delta.down { color:#DC2626; }
+    .stat-card-sub { font-size:12px; color:#9CA3AF; }
+
+    /* ── Appointment card ── */
+    .appt-card {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      padding:20px;
+      font-family:'Manrope',sans-serif;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .appt-card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+    .appt-card-time { font-size:12px; color:#9CA3AF; font-weight:500; }
+    .appt-card-title { font-size:14px; font-weight:600; color:#121219; margin-top:2px; }
+    .appt-card-meta { display:flex; flex-direction:column; gap:4px; }
+    .appt-meta-row { display:flex; align-items:center; gap:6px; font-size:13px; color:#666689; }
+    .appt-meta-row i { font-size:14px; color:#9CA3AF; }
+    .appt-card-footer { display:flex; align-items:center; justify-content:space-between; padding-top:8px; border-top:1px solid #F3F4F6; }
+
+    /* ── Status badge (inline in card) ── */
+    .status-pill {
+      display:inline-flex; align-items:center; gap:4px;
+      font-size:11px; font-weight:600; padding:2px 8px; border-radius:99px;
+    }
+    .status-pill.upcoming  { background:#EEF2FF; color:#143AC3; }
+    .status-pill.ongoing   { background:#ECFDF5; color:#047857; }
+    .status-pill.cancelled { background:#FEF2F2; color:#DC2626; }
+    .status-pill.pending   { background:#FFFBEB; color:#D97706; }
+
+    /* ── Type badge ── */
+    .type-pill {
+      display:inline-flex; align-items:center;
+      font-size:11px; font-weight:600; padding:2px 8px; border-radius:4px;
+    }
+    .type-pill.counselling  { background:#E8F6FA; color:#0C5E73; }
+    .type-pill.tour         { background:#FFF3EE; color:#9A3412; }
+    .type-pill.therapy      { background:#FCF0FD; color:#A21CAF; }
+    .type-pill.evaluation   { background:#F2F9E8; color:#4A6B00; }
+    .type-pill.medical      { background:#F1F5F9; color:#1E293B; }
+
+    /* ── Avatar ── */
+    .avatar {
+      width:32px; height:32px; border-radius:9999px;
+      background:#104747; color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:700; flex-shrink:0;
+    }
+
+    /* ── Patient card ── */
+    .patient-card {
+      background:#fff;
+      border:1px solid #E5E7EB;
+      border-radius:12px;
+      padding:20px;
+      font-family:'Manrope',sans-serif;
+      display:flex;
+      align-items:flex-start;
+      gap:16px;
+    }
+    .patient-info { flex:1; min-width:0; }
+    .patient-name { font-size:14px; font-weight:600; color:#121219; }
+    .patient-id   { font-size:12px; color:#9CA3AF; margin-top:2px; }
+    .patient-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+
+    /* ── Section header ── */
+    .section-header {
+      background:#F9F9FB;
+      padding:12px 20px;
+      border-bottom:1px solid #E5E7EB;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .section-header-title { font-size:13px; font-weight:600; color:#121219; font-family:'Manrope',sans-serif; }
+    .section-header-action { font-size:12px; font-weight:600; color:#104747; text-decoration:underline; cursor:pointer; font-family:'Manrope',sans-serif; }
+
+    /* ── List row ── */
+    .list-row {
+      display:flex; align-items:center; gap:12px;
+      padding:12px 20px;
+      border-bottom:1px solid #F3F4F6;
+      font-family:'Manrope',sans-serif;
+    }
+    .list-row:last-child { border-bottom:none; }
+    .list-row-main { flex:1; min-width:0; }
+    .list-row-title { font-size:13px; font-weight:600; color:#121219; }
+    .list-row-sub   { font-size:12px; color:#9CA3AF; margin-top:1px; }
+
+    /* ── Demo grid ── */
+    .demo-2col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .demo-3col { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .demo-4col { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+
+    .demo-block { background:#F9F9FB; border:1px solid #E5E7EB; border-radius:12px; padding:24px; }
+  </style>
+</head>
+<body>
+
+  <header id="appHeader">
+    <a href="../appointments2.html" class="header-logo">
+      <div class="header-logo-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg></div>
+      <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+    </a>
+    <div class="header-search-wrap"><div class="header-search"><i class="ti ti-search" style="font-size:16px;"></i><input type="text" placeholder="Search design system…" /></div></div>
+    <div class="header-right"><div class="user-avatar">JD</div></div>
+  </header>
+
+  <nav id="appSidebar">
+    <span class="nav-section-label">Foundation</span>
+    <a href="index.html" class="nav-item"><i class="ti ti-variable" style="font-size:16px;"></i> Tokens</a>
+    <a href="colors.html" class="nav-item"><i class="ti ti-palette" style="font-size:16px;"></i> Colors</a>
+    <a href="typography.html" class="nav-item"><i class="ti ti-typography" style="font-size:16px;"></i> Typography</a>
+    <a href="spacing.html" class="nav-item"><i class="ti ti-spacing-horizontal" style="font-size:16px;"></i> Spacing</a>
+    <a href="border-radius.html" class="nav-item"><i class="ti ti-radius-bottom-left" style="font-size:16px;"></i> Border Radius</a>
+    <a href="icons.html" class="nav-item"><i class="ti ti-icons" style="font-size:16px;"></i> Icons</a>
+    <span class="nav-section-label admin-label">Components</span>
+    <!-- <a href="Components-inventory.html#sec-buttons" class="nav-item"><i class="ti ti-cursor-text" style="font-size:16px;"></i> Buttons</a> -->
+    <a href="button.html" class="nav-item"><i class="ti ti-hand-click" style="font-size:16px;"></i> Button</a>
+    <a href="input.html" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Input Field</a>
+    <!-- <a href="Components-inventory.html#sec-forms" class="nav-item"><i class="ti ti-forms" style="font-size:16px;"></i> Forms</a> -->
+    <a href="checkbox.html" class="nav-item"><i class="ti ti-checkbox" style="font-size:16px;"></i> Checkbox</a>
+    <a href="radio.html" class="nav-item"><i class="ti ti-circle-dot" style="font-size:16px;"></i> Radio</a>
+    <a href="badge.html" class="nav-item"><i class="ti ti-tag" style="font-size:16px;"></i> Badge</a>
+    <a href="chips.html" class="nav-item"><i class="ti ti-toggle-left" style="font-size:16px;"></i> Chip</a>
+    <a href="breadcrumb.html" class="nav-item"><i class="ti ti-layout-navbar" style="font-size:16px;"></i> Breadcrumb</a>
+    <a href="avatar.html" class="nav-item"><i class="ti ti-user-circle" style="font-size:16px;"></i> Avatar</a>
+    <a href="datepicker.html" class="nav-item"><i class="ti ti-calendar" style="font-size:16px;"></i> Datepicker</a>
+    <a href="timepicker.html" class="nav-item"><i class="ti ti-clock" style="font-size:16px;"></i> Timepicker</a>
+    <a href="alerts.html" class="nav-item"><i class="ti ti-alert-circle" style="font-size:16px;"></i> Alert</a>
+    <a href="cards.html" class="nav-item active"><i class="ti ti-layout-cards" style="font-size:16px;"></i> Cards</a>
+    <a href="overlay.html" class="nav-item"><i class="ti ti-layout-sidebar" style="font-size:16px;"></i> Overlay</a>
+    <div class="nav-spacer"></div>
+    <!-- <div class="nav-bottom"><a href="../appointments2.html" class="nav-item"><i class="ti ti-arrow-left" style="font-size:16px;"></i> Back to App</a></div> -->
+  </nav>
+
+  <div id="appBody">
+    <main id="appMain">
+      <div class="doc-layout">
+        <div class="doc-content">
+
+          <div style="margin-bottom:32px;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:3px 10px;border-radius:99px;background:#f0fdfa;color:#0f766e;margin-bottom:10px;">
+              <i class="ti ti-puzzle" style="font-size:12px;"></i> Component
+            </div>
+            <div style="font-size:22px;font-weight:700;color:var(--text-primary);letter-spacing:-0.02em;">Cards</div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-top:6px;">Surface containers for grouping related content — Stat, Appointment, Patient, and List variants.</div>
+          </div>
+
+          <div class="cs-doc-sub first">Purpose</div>
+          <p class="cs-doc-body">Cards are white surface containers that group related content into a single scannable unit. They provide visual separation from the page background and define a clear boundary around a piece of information or a task. ClearPath FDO uses four card variants: Stat (single metrics), Appointment (full context), Patient (record summary), and List (section with repeating rows).</p>
+
+          <div class="cs-principles">
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-layout-cards" style="font-size:14px;color:var(--brand-blue);"></i> Surface, not decoration</div>
+              <div class="cs-principle-body">Cards group related content into a scannable unit. Never use a card purely for visual decoration — every card must contain meaningful, actionable content.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-arrows-maximize" style="font-size:14px;color:var(--brand-blue);"></i> Consistent padding</div>
+              <div class="cs-principle-body">All cards use 20px or 24px inner padding on the 8px grid. Never mix padding values within the same card grid — visual rhythm breaks immediately.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-hierarchy" style="font-size:14px;color:var(--brand-blue);"></i> One primary action</div>
+              <div class="cs-principle-body">Each card should have at most one primary call-to-action. Secondary actions (Reschedule, Cancel) must be visually subordinate — never competing with the primary.</div>
+            </div>
+            <div class="cs-principle-card">
+              <div class="cs-principle-title"><i class="ti ti-stack" style="font-size:14px;color:var(--brand-blue);"></i> Never nest cards</div>
+              <div class="cs-principle-body">Cards inside cards create ambiguous depth. Use list rows, dividers, or subtle background tints to separate sub-content within a single card surface.</div>
+            </div>
+          </div>
+
+          <hr class="cs-section-divider" />
+
+          <!-- STAT CARDS -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Stat Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Displays a single metric with label, value, and optional delta. Background <span class="token-tag">Surface/0</span> &nbsp; Border <span class="token-tag">Border/Subtle</span> &nbsp; Radius <span class="token-tag">Radius/12</span>
+            </div>
+            <div class="demo-4col">
+              <!-- Total Appointments -->
+              <div class="stat-card">
+                <div class="stat-card-label">Total Appointments</div>
+                <div class="stat-card-value">1,284</div>
+                <div>
+                  <span class="stat-card-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> +8.3%</span>
+                  <span class="stat-card-sub" style="margin-left:4px;">vs last month</span>
+                </div>
+              </div>
+              <!-- Today's Appointments -->
+              <div class="stat-card">
+                <div class="stat-card-label">Today's Appointments</div>
+                <div class="stat-card-value">24</div>
+                <div>
+                  <span class="stat-card-delta up"><i class="ti ti-trending-up" style="font-size:12px;"></i> +3</span>
+                  <span class="stat-card-sub" style="margin-left:4px;">vs yesterday</span>
+                </div>
+              </div>
+              <!-- Active Patients -->
+              <div class="stat-card">
+                <div class="stat-card-label">Active Patients</div>
+                <div class="stat-card-value">342</div>
+                <div>
+                  <span class="stat-card-delta down"><i class="ti ti-trending-down" style="font-size:12px;"></i> -1.2%</span>
+                  <span class="stat-card-sub" style="margin-left:4px;">vs last month</span>
+                </div>
+              </div>
+              <!-- Available Rooms -->
+              <div class="stat-card">
+                <div class="stat-card-label">Available Rooms</div>
+                <div class="stat-card-value">7</div>
+                <div class="stat-card-sub">of 12 total</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- APPOINTMENT CARD -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Appointment Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Shows full appointment context: time, type, patient, provider, room, and status.
+            </div>
+            <div class="demo-2col">
+              <!-- Upcoming -->
+              <div class="appt-card">
+                <div class="appt-card-header">
+                  <div>
+                    <div class="appt-card-time">Today · 10:00 AM – 11:00 AM</div>
+                    <div class="appt-card-title">Counselling Session</div>
+                  </div>
+                  <span class="status-pill upcoming">Upcoming</span>
+                </div>
+                <div class="appt-card-meta">
+                  <div class="appt-meta-row"><i class="ti ti-user"></i> Marcus Webb</div>
+                  <div class="appt-meta-row"><i class="ti ti-stethoscope"></i> Dr. Amara Osei</div>
+                  <div class="appt-meta-row"><i class="ti ti-door"></i> Room 204</div>
+                </div>
+                <div class="appt-card-footer">
+                  <span class="type-pill counselling">Counselling</span>
+                  <div style="display:flex;gap:8px;">
+                    <button style="font-size:12px;font-weight:600;color:#666689;background:none;border:none;cursor:pointer;padding:0;font-family:'Manrope',sans-serif;">Reschedule</button>
+                    <button style="font-size:12px;font-weight:600;color:#DC2626;background:none;border:none;cursor:pointer;padding:0;font-family:'Manrope',sans-serif;">Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ongoing -->
+              <div class="appt-card">
+                <div class="appt-card-header">
+                  <div>
+                    <div class="appt-card-time">Today · 09:00 AM – 10:00 AM</div>
+                    <div class="appt-card-title">Group Therapy</div>
+                  </div>
+                  <span class="status-pill ongoing">Ongoing</span>
+                </div>
+                <div class="appt-card-meta">
+                  <div class="appt-meta-row"><i class="ti ti-users"></i> 6 Patients</div>
+                  <div class="appt-meta-row"><i class="ti ti-stethoscope"></i> Dr. Lisa Park</div>
+                  <div class="appt-meta-row"><i class="ti ti-door"></i> Room 101</div>
+                </div>
+                <div class="appt-card-footer">
+                  <span class="type-pill therapy">Group Therapy</span>
+                  <button style="font-size:12px;font-weight:600;color:#047857;background:none;border:none;cursor:pointer;padding:0;font-family:'Manrope',sans-serif;">Mark Complete</button>
+                </div>
+              </div>
+
+              <!-- Cancelled -->
+              <div class="appt-card" style="opacity:.7;">
+                <div class="appt-card-header">
+                  <div>
+                    <div class="appt-card-time">Today · 02:00 PM – 03:00 PM</div>
+                    <div class="appt-card-title">Facility Tour</div>
+                  </div>
+                  <span class="status-pill cancelled">Cancelled</span>
+                </div>
+                <div class="appt-card-meta">
+                  <div class="appt-meta-row"><i class="ti ti-user"></i> Jordan Blake</div>
+                  <div class="appt-meta-row"><i class="ti ti-stethoscope"></i> Dr. Kim Yoon</div>
+                  <div class="appt-meta-row"><i class="ti ti-door"></i> Lobby</div>
+                </div>
+                <div class="appt-card-footer">
+                  <span class="type-pill tour">Facility Tour</span>
+                  <button style="font-size:12px;font-weight:600;color:#143AC3;background:none;border:none;cursor:pointer;padding:0;font-family:'Manrope',sans-serif;">Rebook</button>
+                </div>
+              </div>
+
+              <!-- Pending -->
+              <div class="appt-card">
+                <div class="appt-card-header">
+                  <div>
+                    <div class="appt-card-time">Tomorrow · 11:00 AM – 12:00 PM</div>
+                    <div class="appt-card-title">Psychological Evaluation</div>
+                  </div>
+                  <span class="status-pill pending">Pending</span>
+                </div>
+                <div class="appt-card-meta">
+                  <div class="appt-meta-row"><i class="ti ti-user"></i> Sara Novak</div>
+                  <div class="appt-meta-row"><i class="ti ti-stethoscope"></i> Dr. Raj Patel</div>
+                  <div class="appt-meta-row"><i class="ti ti-door"></i> Room 305</div>
+                </div>
+                <div class="appt-card-footer">
+                  <span class="type-pill evaluation">Evaluation</span>
+                  <button style="font-size:12px;font-weight:600;color:#047857;background:none;border:none;cursor:pointer;padding:0;font-family:'Manrope',sans-serif;">Confirm</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PATIENT CARD -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Patient Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Summary view of a patient record with avatar, ID, and appointment tags.
+            </div>
+            <div class="demo-3col">
+              <div class="patient-card">
+                <div class="avatar">MW</div>
+                <div class="patient-info">
+                  <div class="patient-name">Marcus Webb</div>
+                  <div class="patient-id">ID: P-00142</div>
+                  <div class="patient-tags">
+                    <span class="type-pill counselling">Counselling</span>
+                    <span class="status-pill upcoming" style="font-size:10px;padding:1px 7px;">Upcoming</span>
+                  </div>
+                </div>
+              </div>
+              <div class="patient-card">
+                <div class="avatar" style="background:#0C5E73;">JB</div>
+                <div class="patient-info">
+                  <div class="patient-name">Jordan Blake</div>
+                  <div class="patient-id">ID: P-00217</div>
+                  <div class="patient-tags">
+                    <span class="type-pill tour">Facility Tour</span>
+                    <span class="status-pill cancelled" style="font-size:10px;padding:1px 7px;">Cancelled</span>
+                  </div>
+                </div>
+              </div>
+              <div class="patient-card">
+                <div class="avatar" style="background:#A21CAF;">SN</div>
+                <div class="patient-info">
+                  <div class="patient-name">Sara Novak</div>
+                  <div class="patient-id">ID: P-00389</div>
+                  <div class="patient-tags">
+                    <span class="type-pill evaluation">Evaluation</span>
+                    <span class="status-pill pending" style="font-size:10px;padding:1px 7px;">Pending</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LIST CARD -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">List Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Card with a header row and repeated list items — used for today's schedule, room list, etc.
+            </div>
+            <div class="demo-2col">
+              <!-- Today's Schedule -->
+              <div class="card">
+                <div class="section-header">
+                  <span class="section-header-title">Today's Schedule</span>
+                  <span class="section-header-action">View all</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:48px;text-align:center;flex-shrink:0;">
+                    <div style="font-size:12px;font-weight:700;color:#121219;font-family:'Manrope',sans-serif;">09:00</div>
+                    <div style="font-size:10px;color:#9CA3AF;font-family:'Manrope',sans-serif;">AM</div>
+                  </div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Group Therapy</div>
+                    <div class="list-row-sub">Dr. Lisa Park · Room 101</div>
+                  </div>
+                  <span class="status-pill ongoing">Ongoing</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:48px;text-align:center;flex-shrink:0;">
+                    <div style="font-size:12px;font-weight:700;color:#121219;font-family:'Manrope',sans-serif;">10:00</div>
+                    <div style="font-size:10px;color:#9CA3AF;font-family:'Manrope',sans-serif;">AM</div>
+                  </div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Counselling Session</div>
+                    <div class="list-row-sub">Dr. Amara Osei · Room 204</div>
+                  </div>
+                  <span class="status-pill upcoming">Upcoming</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:48px;text-align:center;flex-shrink:0;">
+                    <div style="font-size:12px;font-weight:700;color:#121219;font-family:'Manrope',sans-serif;">11:30</div>
+                    <div style="font-size:10px;color:#9CA3AF;font-family:'Manrope',sans-serif;">AM</div>
+                  </div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Medical Test</div>
+                    <div class="list-row-sub">Dr. Raj Patel · Lab 2</div>
+                  </div>
+                  <span class="status-pill upcoming">Upcoming</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:48px;text-align:center;flex-shrink:0;">
+                    <div style="font-size:12px;font-weight:700;color:#121219;font-family:'Manrope',sans-serif;">02:00</div>
+                    <div style="font-size:10px;color:#9CA3AF;font-family:'Manrope',sans-serif;">PM</div>
+                  </div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Facility Tour</div>
+                    <div class="list-row-sub">Dr. Kim Yoon · Lobby</div>
+                  </div>
+                  <span class="status-pill cancelled">Cancelled</span>
+                </div>
+              </div>
+
+              <!-- Room Status -->
+              <div class="card">
+                <div class="section-header">
+                  <span class="section-header-title">Room Status</span>
+                  <span class="section-header-action">Manage</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:10px;height:10px;border-radius:9999px;background:#047857;flex-shrink:0;"></div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Room 101</div>
+                    <div class="list-row-sub">Group Therapy · until 10:00 AM</div>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:#047857;font-family:'Manrope',sans-serif;">In use</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:10px;height:10px;border-radius:9999px;background:#D97706;flex-shrink:0;"></div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Room 204</div>
+                    <div class="list-row-sub">Reserved · 10:00 AM</div>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:#D97706;font-family:'Manrope',sans-serif;">Reserved</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:10px;height:10px;border-radius:9999px;background:#E5E7EB;flex-shrink:0;"></div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Room 305</div>
+                    <div class="list-row-sub">Available all day</div>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:#9CA3AF;font-family:'Manrope',sans-serif;">Available</span>
+                </div>
+                <div class="list-row">
+                  <div style="width:10px;height:10px;border-radius:9999px;background:#E5E7EB;flex-shrink:0;"></div>
+                  <div class="list-row-main">
+                    <div class="list-row-title">Lab 2</div>
+                    <div class="list-row-sub">Reserved · 11:30 AM</div>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:#D97706;font-family:'Manrope',sans-serif;">Reserved</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- EMPTY STATE CARD -->
+          <div style="margin-bottom:40px;">
+            <div style="font-size:16px;font-weight:600;color:var(--text-primary);margin-bottom:4px;">Empty State Card</div>
+            <div style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">
+              Used when a list or section has no content yet. Centered icon, message, and optional CTA.
+            </div>
+            <div style="max-width:480px;">
+              <div class="card" style="padding:48px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;">
+                <div style="width:56px;height:56px;border-radius:12px;background:#F0F3FF;display:flex;align-items:center;justify-content:center;">
+                  <i class="ti ti-calendar" style="font-size:24px;color:#143AC3;"></i>
+                </div>
+                <div style="font-size:15px;font-weight:600;color:#121219;font-family:'Manrope',sans-serif;">No appointments yet</div>
+                <div style="font-size:13px;color:#666689;font-family:'Manrope',sans-serif;line-height:1.5;">There are no appointments scheduled for today. Add one to get started.</div>
+                <button style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;padding:8px 20px;border-radius:8px;background:linear-gradient(90deg,#143AC3 0%,#5F50E5 100%);color:#fff;font-size:13px;font-weight:600;font-family:'Manrope',sans-serif;border:none;cursor:pointer;">
+                  <i class="ti ti-plus" style="font-size:14px;"></i> New Appointment
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+  </div>
+    <script> 
+
+    function pushToFigma() { 
+
+      var btn = document.getElementById('figmaPushBtn'); 
+
+      if (!window.figma || typeof window.figma.captureForDesign !== 'function') { 
+
+        btn.innerText = 'capture.js not ready'; 
+
+        return; 
+
+      } 
+
+      btn.innerText = 'Capturing…'; 
+
+      btn.disabled = true; 
+
+      window.figma.captureForDesign({ selector: 'body' }).then(function(res) { 
+
+        btn.innerText = res && res.success ? '✓ Copied — paste in Figma (⌘V)' : '✗ Failed — check console'; 
+
+        btn.disabled = false; 
+
+      }).catch(function(err) { 
+
+        btn.innerText = '✗ Error — check console'; 
+
+        btn.disabled = false; 
+
+        console.error(err); 
+
+      }); 
+
+    } 
+
+  </script> 
+
+  
+
+  <!-- Figma push button — fixed bottom-right --> 
+
+  <div style="position:fixed;bottom:24px;right:24px;z-index:9999;"> 
+
+    <button id="figmaPushBtn" onclick="pushToFigma()" style=" 
+
+      display:flex;align-items:center;gap:8px; 
+
+      height:40px;padding:0 20px; 
+
+      background:linear-gradient(90deg,#143AC3,#5F50E5); 
+
+      color:white;border:none;border-radius:8px; 
+
+      font-family:'Google Sans',sans-serif;font-size:13px;font-weight:600; 
+
+      cursor:pointer;box-shadow:0 2px 12px rgba(20,58,195,.4); 
+
+      transition:opacity .15s; 
+
+    "> 
+
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7-7 7 7"/></svg> 
+
+      Push to Figma 
+
+    </button> 
+
+  </div> 
+
+</body>
+</html>
