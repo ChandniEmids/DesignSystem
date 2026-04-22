@@ -53,6 +53,18 @@
   --radius-5:    16px;
   --radius-full: 9999px;
 
+  /* Button component tokens (mirrors Brand scale — explicit layer for button component) */
+  --btn-brand-100:   #E9F7F7;
+  --btn-brand-200:   #D4F0F0;
+  --btn-brand-300:   #A9E0E0;
+  --btn-brand-500:   #27B2B2;
+  --btn-brand-600:   #1B7D7D;
+  --btn-brand-700:   #104747;
+  --btn-neutral-100: #F3F4F6;
+  --btn-neutral-200: #F0F0F7;
+  --btn-neutral-400: #9CA3AF;
+  --btn-white:       #ffffff;
+
   /* Brand scale */
   --brand-100: #E9F7F7;
   --brand-200: #D4F0F0;
@@ -92,6 +104,17 @@
   --teal-600: #0d9488;
   --teal-700: #0f766e;
   --teal-800: #115e59;
+
+  /* Grey (Figma: Color Primitives / Grey) */
+  --grey-10: #F5F5F5;
+  --grey-20: #E6E6E6;
+  --grey-30: #D7DDE0;
+  --grey-40: #B0B5B8;
+  --grey-50: #898D8F;
+  --grey-60: #646769;
+  --grey-70: #494B4D;
+  --grey-80: #404142;
+  --grey-90: #282829;
 
   /* Neutral */
   --neutral-50:   #fafafa;
@@ -274,8 +297,9 @@
   --text-muted:     var(--neutral-400);
 
   /* Borders */
-  --border-subtle: var(--neutral-100);
-  --border-input:  var(--neutral-200);
+  --border-subtle: var(--grey-30);   /* #D7DDE0 — Figma: Border/Subtle → Grey/30 */
+  --border-dark:   var(--grey-50);   /* #898D8F — Figma: Border/Dark  → Grey/50 */
+  --border-input:  var(--neutral-200); /* #F0F0F7 — Figma: Border/Input → Neutral/200 */
 
   /* Brand & Actions */
   --brand-blue:      var(--brand-600);
@@ -556,3 +580,83 @@ body { background: var(--bg-page); margin: 0; padding: 0; }
 /* ── App layout ── */
 #appBody { display: flex; padding-top: var(--header-height); }
 #appMain  { background: var(--bg-main); flex: 1; margin-left: var(--sidebar-width); min-height: calc(100vh - var(--header-height)); overflow-x: auto; }
+
+/* ── Button component ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+.btn-sm { font-size: var(--font-size-sm); padding: var(--space-1);              border-radius: var(--radius-sm); }
+.btn-md { font-size: var(--font-size-sm); padding: var(--space-1) var(--space-2); border-radius: var(--radius-md); }
+.btn-lg { font-size: var(--font-size-md); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); }
+
+.btn-primary,
+.btn-primary.is-default        { background: var(--btn-brand-500); color: var(--btn-white); }
+.btn-primary:hover,
+.btn-primary.is-hover          { background: var(--btn-brand-600); color: var(--btn-white); }
+.btn-primary:active,
+.btn-primary.is-active         { background: var(--btn-brand-700); color: var(--btn-white); }
+.btn-primary:focus-visible,
+.btn-primary.is-focus          { background: var(--btn-brand-500); color: var(--btn-white); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+.btn-primary:disabled,
+.btn-primary.is-disabled       { background: var(--btn-neutral-100); color: var(--btn-neutral-400); cursor: not-allowed; pointer-events: none; }
+
+.btn-secondary,
+.btn-secondary.is-default      { background: var(--btn-white); color: var(--btn-brand-500); border-color: var(--btn-brand-300); }
+.btn-secondary:hover,
+.btn-secondary.is-hover        { background: var(--btn-brand-100); color: var(--btn-brand-600); border-color: var(--btn-brand-600); }
+.btn-secondary:active,
+.btn-secondary.is-active       { background: var(--btn-brand-200); color: var(--btn-brand-700); border-color: var(--btn-brand-700); }
+.btn-secondary:focus-visible,
+.btn-secondary.is-focus        { background: var(--btn-white); color: var(--btn-brand-500); border-color: var(--btn-brand-300); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+.btn-secondary:disabled,
+.btn-secondary.is-disabled     { background: var(--btn-white); color: var(--btn-neutral-400); border-color: var(--btn-neutral-200); cursor: not-allowed; pointer-events: none; }
+
+.btn-ghost,
+.btn-ghost.is-default          { background: transparent; color: var(--btn-brand-500); border-color: transparent; }
+.btn-ghost:hover,
+.btn-ghost.is-hover            { background: var(--btn-brand-100); color: var(--btn-brand-500); }
+.btn-ghost:active,
+.btn-ghost.is-active           { background: var(--btn-brand-200); color: var(--btn-brand-700); }
+.btn-ghost:focus-visible,
+.btn-ghost.is-focus            { background: var(--btn-brand-100); color: var(--btn-brand-500); outline: none; box-shadow: 0 0 0 3px var(--btn-brand-300); }
+.btn-ghost:disabled,
+.btn-ghost.is-disabled         { background: transparent; color: var(--btn-neutral-400); cursor: not-allowed; pointer-events: none; }
+
+/* ── Input component tokens ── */
+:root {
+  --input-border-default:  var(--grey-30);      /* #D7DDE0 — matches input.html + Figma Grey/30 */
+  --input-border-hover:    var(--neutral-600);   /* #666689 */
+  --input-border-focus:    var(--brand-500);     /* #27B2B2 */
+  --input-border-filled:   var(--brand-500);     /* #27B2B2 */
+  --input-border-disabled: var(--grey-30);       /* #D7DDE0 */
+  --input-border-error:    var(--red-600);       /* #DC2626 */
+  --input-bg-default:      var(--white);         /* #ffffff */
+  --input-bg-focus:        var(--brand-200);     /* #D4F0F0 */
+  --input-bg-disabled:     var(--grey-10);       /* #F5F5F5 */
+  --input-label-default:   var(--neutral-600);   /* #666689 */
+  --input-label-focus:     var(--brand-500);     /* #27B2B2 */
+  --input-label-filled:    var(--brand-500);     /* #27B2B2 */
+  --input-label-disabled:  var(--neutral-400);   /* #9CA3AF */
+  --input-label-error:     var(--red-600);       /* #DC2626 */
+  --input-value-default:   var(--neutral-900);   /* #121219 */
+  --input-placeholder:     var(--neutral-400);   /* #9CA3AF */
+  --input-error-text:      var(--red-600);       /* #DC2626 */
+}
+
+/* ── Card base component ── */
+.card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  font-family: inherit;
+}
