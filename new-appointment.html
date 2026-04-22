@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Appointment — ClearPath FDO</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://mcp.figma.com/mcp/html-to-design/capture.js" async></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="global.css">
+  <style>
+    .booking-shell { display:flex; flex:1; align-items:flex-start; gap:var(--space-3); padding:var(--space-4); }
+
+    /* ── Live Preview Sidebar ── */
+    .booking-preview {
+      width:296px; flex-shrink:0; position:sticky; top:calc(var(--header-height) + 32px);
+      max-height:calc(100vh - var(--header-height) - 64px); overflow-y:auto;
+      border-radius:var(--radius-lg); border:1.5px solid var(--border-subtle); background:var(--bg-surface);
+      display:flex; flex-direction:column;
+    }
+    .preview-head {
+      padding:16px 20px 14px; border-bottom:1px solid var(--border-subtle);
+      font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); text-transform:uppercase; letter-spacing:.07em;
+      color:var(--text-muted); display:flex; align-items:center; gap:7px; flex-shrink:0;
+    }
+    .preview-body { padding:16px 20px; display:flex; flex-direction:column; gap:14px; flex:1; }
+    .preview-row { display:flex; flex-direction:column; gap:3px; }
+    .preview-label { font-size:10px; font-weight:var(--font-weight-semibold); text-transform:uppercase; letter-spacing:.06em; color:var(--text-muted); }
+    .preview-value { font-size:13px; font-weight:var(--font-weight-medium); color:var(--text-primary); display:flex; align-items:center; gap:6px; line-height:1.4; flex-wrap:wrap; }
+    .preview-value.empty { color:var(--text-muted); font-weight:var(--font-weight-regular); font-style:italic; font-size:var(--font-size-xs); }
+    .preview-type-pill { display:inline-flex; align-items:center; gap:5px; padding:2px 9px; border-radius:var(--radius-pill); font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); }
+    .preview-divider { height:1px; background:var(--border-subtle); }
+    .preview-patient-chip { display:flex; align-items:center; gap:6px; font-size:var(--font-size-xs); color:var(--text-primary); }
+    .preview-patient-avatar {
+      width:22px; height:22px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#0f766e);
+      display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:var(--font-weight-bold); color:#fff; flex-shrink:0;
+    }
+    .preview-conflict {
+      margin:0 12px 12px; padding:11px 13px; border-radius:var(--radius-md);
+      background:var(--color-danger-bg); border:1.5px solid var(--color-danger-border); flex-shrink:0;
+    }
+    .preview-conflict-title { display:flex; align-items:center; gap:6px; font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:var(--color-danger-text); margin-bottom:4px; }
+    .preview-conflict-msg { font-size:var(--font-size-xs); color:var(--color-danger-text); line-height:1.5; }
+    [data-theme="dark"] .preview-conflict { background:rgba(185,28,28,.1); border-color:rgba(185,28,28,.25); }
+    [data-theme="dark"] .preview-conflict-title { color:#FCA5A5; }
+    [data-theme="dark"] .preview-conflict-msg { color:#FECACA; }
+    .preview-footer { padding:12px 14px; border-top:1px solid var(--border-subtle); flex-shrink:0; }
+    .preview-footer .btn-confirm-canvas { width:100%; justify-content:center; padding: var(--space-1) var(--space-2); }
+
+    /* ── LEFT STEPPER RAIL ── */
+    .stepper-rail {
+      width:220px; flex-shrink:0;
+      /* background:var(--bg-surface); */
+       border-right:1px solid var(--border-subtle);
+      display:flex; flex-direction:column; padding:32px 0; overflow-y:auto;
+    }
+    .stepper-header { padding:0 24px 28px; }
+    .stepper-header h2 { font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:var(--text-muted); letter-spacing:.08em; text-transform:uppercase; margin:0 0 4px; line-height:1.43; }
+    .stepper-header p { font-size:var(--font-size-xs); color:var(--text-muted); margin:0; line-height:1.43; }
+    .live-badge { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:var(--font-weight-bold); color:#0f766e; background:var(--teal-50); border:1px solid var(--teal-200); padding:2px 8px; border-radius:var(--radius-pill); margin-bottom:10px; }
+    [data-theme="dark"] .live-badge { background:rgba(13,148,136,.15); border-color:rgba(13,148,136,.3); color:var(--teal-400); }
+    .live-dot { width:6px; height:6px; border-radius:50%; background:#0d9488; animation:pulse-dot 1.5s ease-in-out infinite; }
+
+    .stepper-steps { padding:0 12px; flex:1; }
+    .step-item { display:flex; align-items:flex-start; gap:12px; padding:10px 8px; border-radius:var(--radius-md); cursor:pointer; margin-bottom:2px; }
+    .step-item:hover:not(.active) { background:var(--nav-item-hover-bg); }
+    .step-item.active { background:var(--teal-50); }
+    [data-theme="dark"] .step-item.active { background:rgba(13,148,136,.1); }
+    .step-item.completed .step-num { background:var(--teal-600); border-color:var(--teal-600); color:white; }
+    .step-connector { width:2px; height:20px; background:var(--border-subtle); margin:0 0 2px 27px; border-radius:2px; }
+    .step-connector.done { background:var(--teal-400); }
+    .step-num {
+      width:32px; height:32px; border-radius:50%; flex-shrink:0;
+      border:2px solid var(--border-input);
+      display:flex; align-items:center; justify-content:center;
+      font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:var(--text-muted); background:var(--bg-surface);
+    }
+    .step-item.active .step-num { border-color:var(--teal-600); background:var(--teal-600); color:white; }
+    .step-info { flex:1; padding-top:4px; }
+    .step-label { font-size:10px; font-weight:var(--font-weight-semibold); color:var(--text-muted); letter-spacing:.04em; text-transform:uppercase; }
+    .step-item.active .step-label { color:var(--teal-700); }
+    [data-theme="dark"] .step-item.active .step-label { color:var(--teal-400); }
+    .step-title { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); margin-top:1px; }
+    .step-item.active .step-title { color:var(--teal-800); }
+    [data-theme="dark"] .step-item.active .step-title { color:var(--teal-200); }
+    .step-desc { font-size:var(--font-size-xs); color:var(--text-muted); margin-top:1px; line-height:1.43; }
+    .step-item.active .step-desc { color:var(--teal-600); }
+    [data-theme="dark"] .step-item.active .step-desc { color:var(--teal-400); }
+    .stepper-footer { padding:20px 16px 0; border-top:1px solid var(--border-subtle); margin-top:auto; }
+    .stepper-footer p { font-size:var(--font-size-xs); color:var(--text-muted); line-height:1.43; }
+
+    /* ── CENTER CANVAS ── */
+    .booking-canvas { flex:1; min-width:0; display:flex; flex-direction:column; gap:var(--space-3); }
+    .canvas-header h1 { font-size:var(--font-size-xl); font-weight:var(--font-weight-bold); color:var(--text-primary); margin:0 0 6px; }
+    .canvas-header p { font-size:var(--font-size-sm); color:var(--text-secondary); margin:0; }
+    .breadcrumb { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+    .breadcrumb span { font-size:var(--font-size-xs); color:var(--text-muted); }
+    .breadcrumb i { font-size:10px; color:var(--text-muted); }
+    .step-pills { display:flex; gap:6px; }
+    .step-pill { height:4px; border-radius:var(--radius-xs); transition:all .3s ease; }
+    .step-pill.active { width:32px; background:var(--teal-600); }
+    .step-pill.done   { width:16px; background:var(--teal-400); }
+    .step-pill.todo   { width:16px; background:var(--border-input); }
+
+    /* ── APPOINTMENT TYPE RADIOS ── */
+    .appt-type-radios { display:flex; gap:var(--space-1); margin-top:4px; }
+    .appt-type-radio { cursor:pointer; }
+    .appt-type-radio input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+    .appt-radio-box {
+      display:flex; align-items:center; gap:7px;
+      height:34px; padding:0 14px; border-radius:var(--radius-pill);
+      border:1.5px solid var(--border-subtle); background:var(--bg-surface);
+      transition:all .15s ease; cursor:pointer; white-space:nowrap;
+    }
+    .appt-radio-box:hover { border-color:var(--teal-400); background:var(--teal-50); }
+    [data-theme="dark"] .appt-radio-box:hover { background:rgba(13,148,136,.08); }
+    .appt-type-radio input:checked + .appt-radio-box {
+      border:2px solid var(--teal-600); background:var(--teal-50);
+      box-shadow:0 0 0 3px rgba(13,148,136,.12);
+    }
+    [data-theme="dark"] .appt-type-radio input:checked + .appt-radio-box { background:rgba(13,148,136,.12); }
+    .appt-radio-icon { color:var(--text-muted); transition:color .15s; line-height:1; }
+    .appt-type-radio input:checked + .appt-radio-box .appt-radio-icon { color:var(--teal-600); }
+    .appt-radio-title { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+
+    /* ── TYPE CARDS ── */
+    .type-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(175px,1fr)); gap:14px; margin-top:24px; }
+    .type-card {
+      border-width:1.5px; padding:20px 16px; cursor:pointer;
+      display:flex; flex-direction:column; align-items:flex-start; gap:10px;
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      position:relative;
+    }
+    .type-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.07); }
+    .type-card.selected { border:2px solid var(--teal-600); background:var(--card-bg); box-shadow:0 0 0 3px rgba(13,148,136,.12); }
+    .selected-badge { position:absolute; top:10px; right:10px; width:20px; height:20px; border-radius:50%; background:var(--card-color); color:white; display:none; align-items:center; justify-content:center; }
+    .type-card.selected .selected-badge { display:flex; }
+    .type-icon { width:44px; height:44px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:var(--font-size-xl); }
+    .type-name { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); line-height:1.3; }
+    .type-desc { font-size:var(--font-size-xs); color:var(--text-secondary); line-height:1.43; }
+    .type-tag { font-size:10px; font-weight:var(--font-weight-semibold); letter-spacing:.04em; text-transform:uppercase; padding:2px 8px; border-radius:var(--radius-pill); }
+
+    .type-card[data-type="tour"]    { --card-color:#9A3412; --card-bg:#FFF3EE; --card-ring:rgba(154,52,18,.1); }
+    .type-card[data-type="counsel"] { --card-color:#0C5E73; --card-bg:#E8F6FA; --card-ring:rgba(12,94,115,.1); }
+    .type-card[data-type="group"]   { --card-color:#A21CAF; --card-bg:#FCF0FD; --card-ring:rgba(162,28,175,.1); }
+    .type-card[data-type="psych"]   { --card-color:#4A6B00; --card-bg:#F2F9E8; --card-ring:rgba(74,107,0,.1); }
+    .type-card[data-type="medical"] { --card-color:#1E293B; --card-bg:#F1F5F9; --card-ring:rgba(30,41,59,.1); }
+
+    .type-card[data-type="tour"]    .type-icon { background:#FFF3EE; color:#9A3412; }
+    .type-card[data-type="counsel"] .type-icon { background:#E8F6FA; color:#0C5E73; }
+    .type-card[data-type="group"]   .type-icon { background:#FCF0FD; color:#A21CAF; }
+    .type-card[data-type="psych"]   .type-icon { background:#F2F9E8; color:#4A6B00; }
+    .type-card[data-type="medical"] .type-icon { background:#F1F5F9; color:#1E293B; }
+    .type-card[data-type="tour"].selected    .type-icon { background:rgba(154,52,18,.18); }
+    .type-card[data-type="counsel"].selected .type-icon { background:rgba(12,94,115,.18); }
+    .type-card[data-type="group"].selected   .type-icon { background:rgba(162,28,175,.18); }
+    .type-card[data-type="psych"].selected   .type-icon { background:rgba(74,107,0,.18); }
+    .type-card[data-type="medical"].selected .type-icon { background:rgba(30,41,59,.18); }
+    .type-card[data-type="tour"]    .type-tag { background:#FFF3EE; color:#9A3412; }
+    .type-card[data-type="counsel"] .type-tag { background:#E8F6FA; color:#0C5E73; }
+    .type-card[data-type="group"]   .type-tag { background:#FCF0FD; color:#A21CAF; }
+    .type-card[data-type="psych"]   .type-tag { background:#F2F9E8; color:#4A6B00; }
+    .type-card[data-type="medical"] .type-tag { background:#F1F5F9; color:#1E293B; }
+    [data-theme="dark"] .type-card { background:var(--bg-surface); border-color:var(--border-subtle); }
+    [data-theme="dark"] .type-card[data-type="tour"].selected    { --card-bg:rgba(154,52,18,.08); }
+    [data-theme="dark"] .type-card[data-type="counsel"].selected { --card-bg:rgba(12,94,115,.08); }
+    [data-theme="dark"] .type-card[data-type="group"].selected   { --card-bg:rgba(162,28,175,.08); }
+    [data-theme="dark"] .type-card[data-type="psych"].selected   { --card-bg:rgba(74,107,0,.08); }
+    [data-theme="dark"] .type-card[data-type="medical"].selected { --card-bg:rgba(30,41,59,.08); }
+
+    /* ── Section card ── */
+    .section-card { padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+    [data-theme="dark"] .section-card { box-shadow:0 1px 3px rgba(0,0,0,.3); }
+    .section-label { font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:var(--text-primary); text-transform:uppercase; letter-spacing:.06em; margin-bottom:14px; display:flex; align-items:center; gap:6px; }
+
+    /* ── Search bar ── */
+    .search-bar { display:flex; gap:var(--space-1); align-items:center; background:var(--input-bg-default); border:1.5px solid var(--input-border-default); border-radius:var(--radius-md); padding:0 14px; height:46px; transition:border-color 120ms, background 120ms; }
+    .search-bar:focus-within { border:2px solid var(--input-border-focus); background:var(--input-bg-focus); }
+    .search-bar i { color:var(--text-muted); font-size:var(--font-size-lg); flex-shrink:0; }
+    .search-bar input { flex:1; border:none; outline:none; background:transparent; font-size:var(--font-size-sm); color:var(--text-primary); }
+    .search-bar input::placeholder { color:var(--text-muted); }
+    .search-bar .search-kbd { font-size:10px; font-weight:var(--font-weight-semibold); color:var(--text-muted); background:var(--border-subtle); padding:2px 6px; border-radius:var(--radius-xs); flex-shrink:0; }
+
+    /* Patient result */
+    .patient-result { display:none; margin-top:12px; background:var(--teal-50); border:2px solid var(--teal-600); border-radius:var(--radius-md); padding:14px; align-items:center; gap:14px; box-shadow:0 0 0 3px rgba(13,148,136,.08); }
+    [data-theme="dark"] .patient-result { background:rgba(13,148,136,.08); border-color:rgba(13,148,136,.25); }
+    .patient-result.visible { display:flex; }
+    .patient-result-photo { width:44px; height:44px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#0d9488,#0f766e); display:flex; align-items:center; justify-content:center; font-size:var(--font-size-md); font-weight:var(--font-weight-bold); color:white; }
+    .patient-result-name { font-size:var(--font-size-sm); font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .patient-result-meta { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:2px; }
+    .patient-tag { display:inline-flex; align-items:center; gap:4px; font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); color:var(--teal-700); background:white; border:1px solid var(--teal-200); padding:2px 8px; border-radius:var(--radius-pill); margin-top:5px; }
+    [data-theme="dark"] .patient-tag { background:rgba(13,148,136,.18); border-color:rgba(13,148,136,.4); color:var(--teal-200); }
+
+    /* Quick-add grid */
+    .quick-add-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .quick-add-grid.cols3 { grid-template-columns:1fr 1fr 1fr; }
+    .field-group label { display:block; font-size:var(--font-size-xs); font-weight:var(--font-weight-medium); color:var(--text-primary); margin-bottom:6px; }
+    .field-group > label > span { color:var(--input-border-error); }
+    .field-input { width:100%; height:40px; padding:0 12px; border:1.5px solid var(--input-border-default); border-radius:var(--radius-md); font-size:var(--font-size-sm); color:var(--input-value-default); background:var(--input-bg-default); outline:none; transition:border-color 120ms, background 120ms, box-shadow 120ms; }
+    .field-input:hover { border-color:var(--input-border-hover); }
+    .field-input:focus { border:2px solid var(--input-border-focus); background:var(--input-bg-focus); }
+    .field-input::placeholder { color:var(--input-placeholder); }
+    .field-input.input-error { border:2px solid var(--input-border-error); }
+    .field-input.input-error:focus { border:2px solid var(--input-border-error); background:var(--input-bg-default); }
+    .field-error-msg { display:none; font-size:var(--font-size-xs); color:#ef4444; margin-top:4px; line-height:1.43; }
+    .field-error-msg.visible { display:block; }
+
+    /* ── STAFF CARDS ── */
+    .staff-grid { display:grid; grid-template-columns:1fr 1fr; gap:var(--space-1); }
+    .staff-card {
+      display:flex; align-items:center; gap:10px;
+      padding:12px; cursor:pointer; border-width:1.5px; overflow:visible;
+      transition:all .18s ease; position:relative;
+    }
+    .staff-card:hover:not(.busy-card) { border-color:var(--teal-400); background:var(--teal-50); }
+    [data-theme="dark"] .staff-card:hover:not(.busy-card) { background:rgba(13,148,136,.08); }
+    .staff-card.selected { border:2px solid var(--teal-600); background:var(--teal-50); box-shadow:0 0 0 3px rgba(13,148,136,.1); }
+    [data-theme="dark"] .staff-card.selected { background:rgba(13,148,136,.12); }
+    .staff-card.busy-card { opacity:.5; cursor:not-allowed; }
+    .staff-avatar { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:white; }
+    .staff-name { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .staff-role { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:1px; line-height:1.43; }
+    .staff-status { position:absolute; top:8px; right:8px; display:flex; align-items:center; gap:4px; font-size:10px; font-weight:var(--font-weight-semibold); padding:2px 6px; border-radius:var(--radius-pill); }
+    .staff-status.avail { background:var(--color-success-bg); color:var(--color-success-text); border:1px solid var(--color-success-border); }
+    .staff-status.busy  { background:var(--color-danger-bg); color:var(--color-danger-text); border:1px solid var(--color-danger-border); }
+    [data-theme="dark"] .staff-status.avail { background:rgba(21,128,61,.15); border-color:rgba(21,128,61,.3); }
+    [data-theme="dark"] .staff-status.busy  { background:rgba(185,28,28,.15); border-color:rgba(185,28,28,.3); }
+    .avail-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+    .avail-dot.green { background:#22c55e; }
+    .avail-dot.red   { background:#ef4444; animation:pulse-dot 1.5s infinite; }
+    .staff-busy-until { font-size:10px; color:var(--text-muted); margin-top:2px; }
+
+    /* Re-verifying overlay */
+    @keyframes shimmer {
+      0%   { background-position:-600px 0; }
+      100% { background-position: 600px 0; }
+    }
+    @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+    @keyframes fadeSlideIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+    .reverifying-overlay {
+      position:absolute; inset:0; border-radius:var(--radius-md); z-index:5;
+      background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.7) 50%,transparent 100%);
+      background-size:600px 100%;
+      animation:shimmer 1.2s linear infinite;
+      pointer-events:none; display:none;
+    }
+    [data-theme="dark"] .reverifying-overlay { background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.15) 50%,transparent 100%); background-size:600px 100%; animation:shimmer 1.2s linear infinite; }
+    .reverifying .reverifying-overlay { display:block; }
+    .reverifying { pointer-events:none; }
+
+    .reverify-banner {
+      display:none; align-items:center; gap:var(--space-1);
+      background:var(--color-warning-bg); border:1px solid var(--color-warning-border);
+      border-radius:var(--radius-md); padding:10px 14px;
+      font-size:var(--font-size-xs); font-weight:var(--font-weight-medium); color:var(--color-warning-text);
+    }
+    [data-theme="dark"] .reverify-banner { background:rgba(251,191,36,.08); border-color:rgba(251,191,36,.3); color:#fcd34d; }
+    .reverify-banner.visible { display:flex; }
+    .spin { animation:spin 1s linear infinite; }
+    @keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+    /* ── STEP 2 ── */
+    #step2Content { display:none; flex-direction:column; gap:var(--space-3); }
+    #step2Content.visible { display:flex; }
+
+    /* Date + time section */
+    .datetime-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:var(--space-2); }
+    .date-input-wrap { position:relative; }
+    .date-input-wrap i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-muted); pointer-events:none; }
+    .suggested-slots-row { margin-top:16px; }
+    .suggested-slots-label { font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+    .suggested-slots-label i { font-size:var(--font-size-xs); }
+    .date-input-wrap input { padding-left:38px; }
+
+    /* Time slots */
+    .time-slots { display:flex; flex-wrap:wrap; gap:var(--space-1); margin-top:4px; }
+    .time-slot {
+      padding:5px 11px; border-radius:var(--radius-md); font-size:11.5px; font-weight:var(--font-weight-semibold);
+      border:1.5px solid var(--border-input); cursor:pointer;
+      color:var(--text-secondary); background:var(--bg-surface);
+      transition:all .15s ease; white-space:nowrap; letter-spacing:.01em;
+    }
+    .time-slot:hover:not(.taken) { border-color:var(--teal-400); color:var(--teal-700); background:var(--teal-50); }
+    [data-theme="dark"] .time-slot:hover:not(.taken) { background:rgba(13,148,136,.1); }
+    .time-slot.selected { border:2px solid var(--teal-600); background:var(--teal-600); color:white; box-shadow:0 0 0 2px rgba(13,148,136,.15); }
+    .time-slot.taken { background:var(--border-subtle); color:var(--text-muted); cursor:not-allowed; border-color:var(--border-subtle); text-decoration:line-through; opacity:.6; }
+
+    /* Room cards */
+    .room-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(224px,1fr)); gap:var(--space-2); }
+    .room-card {
+      border-width:1.5px; padding:20px 20px 18px; cursor:pointer;
+      transition:all .2s ease; position:relative;
+      display:flex; flex-direction:column;
+    }
+    .room-card:hover:not(.room-busy) { border-color:var(--teal-400); box-shadow:0 6px 20px rgba(0,0,0,.07); transform:translateY(-2px); }
+    .room-card.room-selected { border:2px solid var(--teal-600); background:var(--teal-50); box-shadow:0 0 0 3px rgba(13,148,136,.1); }
+    [data-theme="dark"] .room-card.room-selected { background:rgba(13,148,136,.1); }
+    .room-card.room-busy { opacity:.5; cursor:not-allowed; }
+    .room-card.room-filtered { display:none; }
+    .room-status-badge { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:var(--font-weight-bold); padding:3px 9px; border-radius:var(--radius-pill); margin-bottom:14px; width:fit-content; }
+    .room-status-badge.avail { background:var(--color-success-bg); color:var(--color-success-text); border:1px solid var(--color-success-border); }
+    .room-status-badge.busy  { background:var(--color-danger-bg); color:var(--color-danger-text); border:1px solid var(--color-danger-border); }
+    [data-theme="dark"] .room-status-badge.avail { background:rgba(21,128,61,.12); border-color:rgba(21,128,61,.25); }
+    [data-theme="dark"] .room-status-badge.busy  { background:rgba(185,28,28,.12); border-color:rgba(185,28,28,.25); }
+    .room-name { font-size:var(--font-size-sm); font-weight:var(--font-weight-bold); color:var(--text-primary); margin-bottom:3px; }
+    .room-type { font-size:var(--font-size-xs); color:var(--text-secondary); margin-bottom:12px; }
+    .room-capacity { display:flex; align-items:center; gap:5px; font-size:var(--font-size-xs); color:var(--text-secondary); margin-bottom:14px; }
+    .room-features { display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:4px; }
+    .room-feature { font-size:10px; font-weight:var(--font-weight-medium); color:var(--text-muted); background:var(--border-subtle); padding:3px 8px; border-radius:var(--radius-pill); }
+    .room-card.room-selected .room-feature { background:rgba(13,148,136,.12); color:var(--teal-700); }
+    [data-theme="dark"] .room-card.room-selected .room-feature { color:var(--teal-300, #5eead4); }
+    /* Lab capabilities */
+    .lab-capabilities { margin:0 0 14px; }
+    .lab-cap-label { font-size:10px; font-weight:var(--font-weight-bold); text-transform:uppercase; letter-spacing:.05em; color:#475569; margin-bottom:7px; display:flex; align-items:center; gap:4px; }
+    .lab-cap-list { display:flex; flex-wrap:wrap; gap:5px; }
+    .lab-cap-chip { font-size:10px; font-weight:var(--font-weight-medium); color:#1E293B; background:#F1F5F9; border:1px solid #E2E8F0; padding:3px 9px; border-radius:var(--radius-pill); }
+    .room-card.room-selected .lab-cap-chip { background:rgba(13,148,136,.1); border-color:rgba(13,148,136,.3); color:var(--teal-700); }
+    .room-card.room-selected .lab-cap-label { color:var(--teal-700); }
+    .room-busy-label { font-size:var(--font-size-xs); color:var(--color-danger-text); margin-top:10px; line-height:1.43; }
+    [data-theme="dark"] .room-busy-label { color:#fca5a5; }
+    .room-selected-check { position:absolute; top:14px; right:14px; width:22px; height:22px; border-radius:50%; background:var(--teal-600); color:white; display:none; align-items:center; justify-content:center; }
+    .room-card.room-selected .room-selected-check { display:flex; }
+
+    .filter-note { display:flex; align-items:center; gap:6px; font-size:var(--font-size-xs); color:var(--teal-700); background:var(--teal-50); border:1px solid var(--teal-200); border-radius:var(--radius-md); padding:8px 12px; }
+    [data-theme="dark"] .filter-note { background:rgba(13,148,136,.08); border-color:rgba(13,148,136,.2); color:var(--teal-400); }
+
+    /* ── Bottom actions ── */
+    .canvas-actions { display:flex; align-items:center; justify-content:space-between; padding:20px 0 0; border-top:1px solid rgba(0,0,0,.06); }
+    [data-theme="dark"] .canvas-actions { border-top-color:rgba(255,255,255,.06); }
+    .btn-back { border-width: 1.5px; }
+    .btn-next { opacity:.4; pointer-events:none; transition:opacity .2s; }
+    .btn-next.enabled { opacity:1; pointer-events:all; }
+
+    /* ── RIGHT SIDEBAR ── */
+    .sidebar-head { padding:20px 20px 14px; border-bottom:1px solid rgba(0,0,0,.06); }
+    [data-theme="dark"] .sidebar-head { border-bottom-color:rgba(255,255,255,.06); }
+    .sidebar-head h3 { font-size:13px; font-weight:var(--font-weight-bold); color:var(--text-primary); margin:0 0 2px; }
+    .sidebar-head p { font-size:var(--font-size-xs); color:var(--text-secondary); margin:0; line-height:1.43; }
+
+    .sidebar-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 20px; text-align:center; }
+    .sidebar-empty .empty-icon { width:56px; height:56px; border-radius:var(--radius-lg); background:var(--teal-50); color:var(--teal-600); display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 14px; }
+    [data-theme="dark"] .sidebar-empty .empty-icon { background:rgba(13,148,136,.1); }
+    .sidebar-empty h4 { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); margin:0 0 6px; }
+    .sidebar-empty p  { font-size:var(--font-size-xs); color:var(--text-muted); line-height:1.5; margin:0; }
+    .empty-steps { margin-top:18px; text-align:left; width:100%; }
+    .empty-step { display:flex; gap:10px; align-items:flex-start; margin-bottom:10px; }
+    .empty-step-num { width:20px; height:20px; border-radius:50%; background:var(--teal-600); color:white; font-size:10px; font-weight:var(--font-weight-bold); display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+    .empty-step-text { font-size:var(--font-size-xs); color:var(--text-secondary); line-height:1.4; }
+
+    .sidebar-summary { display:none; flex-direction:column; }
+    .sidebar-summary.visible { display:flex; }
+    .summary-section { padding:14px 20px; border-bottom:1px solid rgba(0,0,0,.05); }
+    [data-theme="dark"] .summary-section { border-bottom-color:rgba(255,255,255,.05); }
+    .summary-section:last-child { border-bottom:none; }
+    .sum-label { font-size:10px; font-weight:var(--font-weight-bold); color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+
+    .patient-card-sm { display:flex; gap:10px; align-items:center; }
+    .patient-photo-sm { width:40px; height:40px; border-radius:50%; flex-shrink:0; background:linear-gradient(135deg,#0d9488,#0f766e); display:flex; align-items:center; justify-content:center; font-size:var(--font-size-sm); font-weight:var(--font-weight-bold); color:white; }
+    .patient-name-sm { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .patient-id-sm { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:1px; line-height:1.43; }
+    .patient-pill { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:var(--font-weight-semibold); padding:2px 7px; border-radius:var(--radius-pill); margin-top:5px; }
+    .patient-pill.active { color:#0f766e; background:var(--teal-50); border:1px solid var(--teal-200); }
+    .patient-pill.lead   { color:#9a3412; background:#fff7ed; border:1px solid #fed7aa; }
+    [data-theme="dark"] .patient-pill.active { background:rgba(13,148,136,.15); border-color:rgba(13,148,136,.3); }
+    [data-theme="dark"] .patient-pill.lead   { background:rgba(194,65,12,.12); border-color:rgba(194,65,12,.3); }
+
+    .sum-type-pill { display:inline-flex; align-items:center; gap:6px; font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); padding:5px 12px; border-radius:var(--radius-pill); }
+    .caretaker-row { display:flex; align-items:center; gap:10px; background:var(--nav-item-hover-bg); border-radius:var(--radius-md); padding:10px 12px; }
+    .caretaker-avatar { width:30px; height:30px; border-radius:50%; background:#e0e7ff; color:#143AC3; font-size:11px; font-weight:var(--font-weight-semibold); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .caretaker-name { font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .caretaker-rel  { font-size:var(--font-size-xs); color:var(--text-secondary); line-height:1.43; }
+
+    /* Summary detail rows */
+    .sum-detail { display:flex; align-items:center; gap:var(--space-1); font-size:var(--font-size-xs); color:var(--text-secondary); padding:4px 0; }
+    .sum-detail i { font-size:var(--font-size-sm); color:var(--text-muted); flex-shrink:0; }
+    .sum-detail.highlight { color:var(--teal-700); font-weight:var(--font-weight-medium); }
+    [data-theme="dark"] .sum-detail.highlight { color:var(--teal-400); }
+
+    /* Progress checklist */
+    .checklist-item { display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid rgba(0,0,0,.04); }
+    [data-theme="dark"] .checklist-item { border-bottom-color:rgba(255,255,255,.04); }
+    .checklist-item:last-child { border-bottom:none; }
+    .check-icon { width:18px; height:18px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:9px; }
+    .check-icon.done   { background:var(--teal-100); color:var(--teal-700); }
+    .check-icon.todo   { background:var(--border-subtle); color:var(--text-muted); }
+    .check-icon.active { background:#dbeafe; color:#1d4ed8; }
+    .checklist-text { font-size:var(--font-size-xs); color:var(--text-secondary); }
+    .checklist-text.done { color:var(--text-muted); text-decoration:line-through; }
+    .checklist-text.active { color:var(--text-primary); font-weight:var(--font-weight-medium); }
+
+    /* Conflict alert — sidebar */
+    .conflict-alert {
+      margin:12px 16px 4px;
+      background:var(--color-danger-bg);
+      border-left:3px solid #ef4444;
+      border:1px solid var(--color-danger-border);
+      border-left-width:3px;
+      border-radius:var(--radius-md); padding:12px 14px; display:none;
+    }
+    [data-theme="dark"] .conflict-alert { background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.3); border-left-color:#ef4444; }
+    .conflict-alert.visible { display:block; animation:fadeSlideIn .2s ease; }
+    .conflict-head { display:flex; align-items:center; gap:7px; font-size:var(--font-size-xs); font-weight:var(--font-weight-bold); color:var(--color-danger-text); margin-bottom:5px; }
+    .conflict-head i { font-size:var(--font-size-sm); flex-shrink:0; }
+    .conflict-body { font-size:var(--font-size-xs); color:var(--color-danger-text); line-height:1.43; padding-left:21px; }
+    [data-theme="dark"] .conflict-head { color:#fca5a5; }
+    [data-theme="dark"] .conflict-body { color:#fca5a5; }
+
+    /* ── STEP 3: CHECKLIST ITEMS ── */
+    .checklist-card {
+      display:flex; align-items:center; gap:14px;
+      padding:14px 16px; cursor:pointer; border-width:1.5px; overflow:visible;
+      margin-bottom:var(--space-1); transition:all .15s ease;
+      user-select:none;
+    }
+    .checklist-card:last-child { margin-bottom:0; }
+    .checklist-card:hover { border-color:var(--teal-400); background:var(--teal-50); }
+    [data-theme="dark"] .checklist-card:hover { background:rgba(13,148,136,.06); }
+    .checklist-card.checked { border-color:var(--teal-600); background:var(--teal-50); }
+    [data-theme="dark"] .checklist-card.checked { background:rgba(13,148,136,.1); }
+
+    .cl-checkbox {
+      width:20px; height:20px; border-radius:var(--radius-sm); flex-shrink:0;
+      border:2px solid var(--border-input);
+      display:flex; align-items:center; justify-content:center;
+      transition:all .15s ease; background:var(--bg-surface);
+    }
+    .checklist-card.checked .cl-checkbox {
+      background:var(--teal-600); border-color:var(--teal-600);
+    }
+    .cl-checkbox i { display:none; font-size:11px; color:white; }
+    .checklist-card.checked .cl-checkbox i { display:block; }
+
+    .cl-icon { width:32px; height:32px; border-radius:var(--radius-md); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:15px; background:var(--border-subtle); color:var(--text-secondary); transition:all .15s; }
+    .checklist-card.checked .cl-icon { background:var(--teal-100); color:var(--teal-700); }
+    [data-theme="dark"] .checklist-card.checked .cl-icon { background:rgba(13,148,136,.2); color:var(--teal-400); }
+
+    .cl-label { flex:1; font-size:13px; font-weight:var(--font-weight-medium); color:var(--text-primary); line-height:1.3; }
+    .checklist-card.checked .cl-label { color:var(--teal-800); }
+    [data-theme="dark"] .checklist-card.checked .cl-label { color:var(--teal-300, #5eead4); }
+    .cl-req { font-size:10px; font-weight:var(--font-weight-semibold); color:#ef4444; background:var(--color-danger-bg); border:1px solid var(--color-danger-border); padding:2px 7px; border-radius:var(--radius-pill); flex-shrink:0; }
+    [data-theme="dark"] .cl-req { background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.3); }
+    .cl-req.satisfied { color:var(--color-success-text); background:var(--color-success-bg); border-color:var(--color-success-border); }
+    [data-theme="dark"] .cl-req.satisfied { background:rgba(21,128,61,.12); border-color:rgba(21,128,61,.3); }
+
+    /* ── NOTES AREA ── */
+    .notes-wrap { position:relative; }
+    .notes-area {
+      width:100%; min-height:120px; padding:14px 16px;
+      border:1.5px solid var(--input-border-default); border-radius:var(--radius-md);
+      font-size:13px; line-height:1.7; color:var(--input-value-default);
+      background:var(--input-bg-default); outline:none; resize:vertical;
+      font-family:inherit; transition:border-color 120ms, background 120ms;
+    }
+    .notes-area:focus { border:2px solid var(--input-border-focus); background:var(--input-bg-focus); }
+    .notes-area::placeholder { color:var(--text-muted); }
+    .notes-hint { display:flex; align-items:center; gap:var(--space-1); margin-top:8px; flex-wrap:wrap; }
+    .md-badge { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:var(--font-weight-semibold); color:var(--text-muted); background:var(--border-subtle); padding:2px 8px; border-radius:var(--radius-pill); }
+    .md-sample { font-size:var(--font-size-xs); color:var(--text-muted); font-family:monospace; background:var(--border-subtle); padding:1px 6px; border-radius:var(--radius-xs); }
+
+    /* ── TOGGLE SWITCHES ── */
+    .toggle-row {
+      display:flex; align-items:center; justify-content:space-between;
+      gap:var(--space-2); padding:14px 0;
+      border-bottom:1px solid var(--border-subtle);
+    }
+    .toggle-row:last-child { border-bottom:none; padding-bottom:0; }
+    .toggle-row:first-child { padding-top:0; }
+    .toggle-left { display:flex; align-items:center; gap:12px; }
+    .toggle-icon { width:34px; height:34px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:var(--font-size-md); flex-shrink:0; }
+    .toggle-icon.sms   { background:#eff6ff; color:#0369a1; }
+    .toggle-icon.email { background:#f5f3ff; color:#6d28d9; }
+    [data-theme="dark"] .toggle-icon.sms   { background:rgba(3,105,161,.12); }
+    [data-theme="dark"] .toggle-icon.email { background:rgba(109,40,217,.12); }
+    .toggle-title { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .toggle-sub   { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:1px; line-height:1.43; }
+
+    .tgl { position:relative; width:44px; height:24px; flex-shrink:0; }
+    .tgl input { opacity:0; width:0; height:0; position:absolute; }
+    .tgl-track {
+      position:absolute; inset:0; border-radius:var(--radius-pill);
+      background:var(--border-input); cursor:pointer;
+      transition:background .2s ease;
+    }
+    .tgl input:checked + .tgl-track { background:var(--teal-600); }
+    .tgl-track::after {
+      content:''; position:absolute; left:3px; top:3px;
+      width:18px; height:18px; border-radius:50%; background:white;
+      transition:transform .2s ease;
+      box-shadow:0 1px 4px rgba(0,0,0,.18);
+    }
+    .tgl input:checked + .tgl-track::after { transform:translateX(20px); }
+    .tgl input:focus + .tgl-track { box-shadow:0 0 0 3px rgba(13,148,136,.15); }
+
+    /* ── BOOKING SNAPSHOT (step 3 mini-summary) ── */
+    .booking-snapshot {
+      display:grid; grid-template-columns:1fr 1fr; gap:0;
+      background:var(--teal-50); border:1.5px solid var(--teal-200);
+      border-radius:var(--radius-md); overflow:hidden;
+    }
+    [data-theme="dark"] .booking-snapshot { background:rgba(13,148,136,.08); border-color:rgba(13,148,136,.2); }
+    .snap-cell {
+      padding:14px 16px;
+      border-right:1px solid rgba(13,148,136,.15); border-bottom:1px solid rgba(13,148,136,.15);
+    }
+    [data-theme="dark"] .snap-cell { border-color:rgba(13,148,136,.15); }
+    .snap-cell:nth-child(2n) { border-right:none; }
+    .snap-cell:nth-last-child(-n+2) { border-bottom:none; }
+    .snap-cell-label { font-size:10px; font-weight:var(--font-weight-bold); color:var(--teal-700); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px; }
+    [data-theme="dark"] .snap-cell-label { color:var(--teal-400); }
+    .snap-cell-value { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); display:flex; align-items:center; gap:6px; }
+
+    /* ── SIDEBAR: scrollable + pinned CTA ── */
+    .booking-sidebar {
+      width:288px; flex-shrink:0; background:var(--bg-surface);
+      border-left:1px solid var(--border-subtle);
+      display:flex; flex-direction:column; overflow:hidden;
+    }
+    .sidebar-scroll { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+    .sidebar-confirm {
+      flex-shrink:0; padding:16px 20px;
+      border-top:1px solid var(--border-subtle);
+      background:var(--bg-surface);
+    }
+    .btn-confirm { width:100%; }
+    .btn-confirm:hover:not(:disabled) { transform:translateY(-1px); }
+    .btn-confirm:active:not(:disabled) { transform:translateY(0); }
+    .confirm-note { font-size:var(--font-size-xs); color:var(--text-secondary); text-align:center; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:4px; line-height:1.43; }
+
+    /* ── SUCCESS OVERLAY ── */
+    .success-overlay {
+      position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,.4);
+      display:none; align-items:center; justify-content:center;
+      padding:var(--space-3);
+    }
+    .success-overlay.show { display:flex; }
+    @keyframes scaleIn { from{opacity:0;transform:scale(.9)} to{opacity:1;transform:scale(1)} }
+    .success-card {
+      background:var(--bg-surface); border-radius:var(--radius-md);
+      padding:40px 32px; max-width:420px; width:100%;
+      text-align:center; animation:scaleIn .25s ease;
+      box-shadow:0 24px 64px rgba(0,0,0,.2);
+    }
+    .success-icon { width:72px; height:72px; border-radius:50%; background:linear-gradient(135deg,#0d9488,#0f766e); margin:0 auto 20px; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 24px rgba(13,148,136,.35); }
+    .success-icon i { font-size:32px; color:white; }
+    .success-card h2 { font-size:22px; font-weight:var(--font-weight-bold); color:var(--text-primary); margin:0 0 8px; }
+    .success-card p  { font-size:var(--font-size-sm); color:var(--text-secondary); margin:0 0 24px; line-height:1.5; }
+    .success-meta { background:var(--teal-50); border:1px solid var(--teal-200); border-radius:var(--radius-md); padding:14px 16px; margin-bottom:24px; text-align:left; }
+    [data-theme="dark"] .success-meta { background:rgba(13,148,136,.1); border-color:rgba(13,148,136,.25); }
+    .success-meta-row { display:flex; align-items:center; gap:var(--space-1); font-size:13px; color:var(--text-secondary); padding:4px 0; }
+    .success-meta-row i { font-size:var(--font-size-sm); color:var(--teal-600); flex-shrink:0; }
+    .btn-view-calendar { padding: var(--space-1) 28px; }
+
+    /* Toast */
+    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#121219; color:#fff; border-radius:var(--radius-md); padding:10px 20px; font-size:var(--font-size-sm); font-weight:var(--font-weight-medium); box-shadow:0 4px 16px rgba(0,0,0,.18); transition:transform .3s ease,opacity .3s ease; opacity:0; z-index:9999; }
+    #toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+
+    /* ── STEP 2: PATIENT SEARCH ── */
+    .pt-search-results {
+      margin-top:8px; border:1.5px solid var(--border-input);
+      border-radius:var(--radius-md); overflow:hidden; display:none;
+    }
+    .pt-search-results.visible { display:block; animation:fadeSlideIn .15s ease; }
+    .pt-result-row {
+      display:flex; align-items:center; gap:12px;
+      padding:10px 14px; cursor:pointer;
+      border-bottom:1px solid var(--border-subtle);
+      background:var(--bg-surface); transition:background .12s;
+    }
+    .pt-result-row:last-child { border-bottom:none; }
+    .pt-result-row:hover:not(.already-added) { background:var(--teal-50); }
+    [data-theme="dark"] .pt-result-row:hover:not(.already-added) { background:rgba(13,148,136,.07); }
+    .pt-result-row.already-added { opacity:.5; cursor:default; }
+    .pt-result-photo { width:36px; height:36px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,#0d9488,#0f766e);
+      display:flex; align-items:center; justify-content:center;
+      font-size:13px; font-weight:var(--font-weight-bold); color:white; }
+    .pt-result-info { flex:1; min-width:0; }
+    .pt-result-name { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); display:flex; align-items:center; gap:6px; }
+    .pt-result-meta { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:1px; line-height:1.43; }
+    .btn-add-pt { flex-shrink:0; border-width: 1.5px; }
+
+    /* Selected patients list */
+    .selected-patients { margin-top:12px; display:flex; flex-direction:column; gap:7px; }
+    .selected-pt-card {
+      display:flex; align-items:center; gap:10px;
+      padding:10px 12px; border-radius:var(--radius-md);
+      background:var(--teal-50); border:1.5px solid var(--teal-200);
+      animation:fadeSlideIn .18s ease; position:relative;
+    }
+    [data-theme="dark"] .selected-pt-card { background:rgba(13,148,136,.1); border-color:rgba(13,148,136,.25); }
+    .selected-pt-card.has-conflict {
+      background:var(--color-danger-bg); border-color:var(--color-danger-border);
+      box-shadow:0 0 0 3px rgba(239,68,68,.1);
+    }
+    [data-theme="dark"] .selected-pt-card.has-conflict { background:rgba(239,68,68,.08); border-color:rgba(239,68,68,.3); }
+    .selected-pt-photo { width:32px; height:32px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,#0d9488,#0f766e);
+      display:flex; align-items:center; justify-content:center;
+      font-size:11px; font-weight:var(--font-weight-bold); color:white; }
+    .selected-pt-card.has-conflict .selected-pt-photo { background:linear-gradient(135deg,#ef4444,#dc2626); }
+    .selected-pt-name { font-size:13px; font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .selected-pt-meta { font-size:var(--font-size-xs); color:var(--text-secondary); margin-top:1px; line-height:1.43; }
+    .conflict-chip { display:inline-flex; align-items:center; gap:4px; font-size:10px; font-weight:var(--font-weight-bold);
+      color:var(--color-danger-text); background:var(--color-danger-bg); border:1px solid var(--color-danger-border);
+      padding:2px 7px; border-radius:var(--radius-pill); margin-top:3px; }
+    [data-theme="dark"] .conflict-chip { background:rgba(239,68,68,.12); border-color:rgba(239,68,68,.3); color:#fca5a5; }
+    .btn-remove-pt { margin-left:auto; flex-shrink:0; width:24px; height:24px; border-radius:50%; padding:0; }
+    .btn-remove-pt:hover { background: var(--color-danger-bg); color: var(--color-danger); }
+
+    /* Conflict glow on busy staff/room cards */
+    .staff-card.busy-card {
+      border-color:var(--color-danger-border);
+      box-shadow:0 0 0 3px rgba(239,68,68,.08);
+    }
+    .room-card.room-busy {
+      border-color:var(--color-danger-border);
+      box-shadow:0 0 0 3px rgba(239,68,68,.08);
+    }
+
+    /* Conflict tooltip */
+    .has-tip { position:relative; }
+    .has-tip::before {
+      content:attr(data-tip);
+      position:absolute; bottom:calc(100% + 8px); left:50%; transform:translateX(-50%);
+      background:#1f2937; color:#fff; font-size:var(--font-size-xs); font-weight:var(--font-weight-medium);
+      padding:5px 10px; border-radius:var(--radius-sm); white-space:nowrap;
+      opacity:0; pointer-events:none; transition:opacity .15s; z-index:60;
+    }
+    .has-tip::after {
+      content:''; position:absolute; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%);
+      border:4px solid transparent; border-top-color:#1f2937;
+      opacity:0; pointer-events:none; transition:opacity .15s; z-index:60;
+    }
+    .has-tip:hover::before,.has-tip:hover::after { opacity:1; }
+
+    /* Recurrence expand */
+    .recurrence-expand {
+      margin-top:14px; padding-top:14px;
+      border-top:1px dashed var(--border-subtle);
+      display:none;
+    }
+    .recurrence-expand.visible { display:grid; grid-template-columns:1fr 1fr; gap:12px; animation:fadeSlideIn .2s ease; }
+    .group-hint {
+      display:flex; align-items:center; gap:var(--space-1);
+      font-size:var(--font-size-xs); color:var(--text-secondary);
+      background:var(--teal-50); border:1px solid var(--teal-200);
+      border-radius:var(--radius-md); padding:8px 12px; margin-bottom:12px;
+    }
+    [data-theme="dark"] .group-hint { background:rgba(13,148,136,.08); border-color:rgba(13,148,136,.2); }
+
+    /* ── Patient search toolbar ── */
+    .pt-toolbar { display:flex; align-items:center; gap:12px; }
+    .pt-toolbar .search-bar { flex:1; height:36px; padding:0 10px; }
+    .pt-toolbar .search-bar i { font-size:15px; }
+    .pt-toolbar .search-bar input { font-size:13px; }
+    .pt-filter-group { display:flex; align-items:center; gap:4px; flex-shrink:0; }
+    .pt-filter-group-label {
+      font-size:10px; font-weight:var(--font-weight-semibold); color:var(--text-muted); text-transform:uppercase;
+      letter-spacing:.04em; padding:0 6px 0 2px; white-space:nowrap;
+    }
+    .pt-filter-chip {
+      height:26px; padding:0 10px; border-radius:var(--radius-pill); font-size:var(--font-size-xs); font-weight:var(--font-weight-medium);
+      border:1.5px solid var(--border-subtle); background:var(--bg-surface);
+      color:var(--text-secondary); cursor:pointer; transition:all .15s ease; white-space:nowrap;
+    }
+    .pt-filter-chip:hover { border-color:#143AC3; color:#143AC3; }
+    .pt-filter-chip.active { background:#F0F3FF; border-color:#143AC3; color:#143AC3; font-weight:var(--font-weight-semibold); }
+    .pt-filter-divider { width:1px; height:16px; background:var(--border-subtle); margin:0 4px; flex-shrink:0; }
+
+    /* ── SIDEBAR: group patient rows ── */
+    .sum-group-row {
+      display:flex; align-items:center; gap:9px;
+      padding:6px 0; border-bottom:1px solid rgba(0,0,0,.04);
+    }
+    [data-theme="dark"] .sum-group-row { border-bottom-color:rgba(255,255,255,.04); }
+    .sum-group-row:last-child { border-bottom:none; }
+    .sum-group-avatar {
+      width:26px; height:26px; border-radius:50%; flex-shrink:0;
+      background:linear-gradient(135deg,#0d9488,#0f766e);
+      display:flex; align-items:center; justify-content:center;
+      font-size:10px; font-weight:var(--font-weight-bold); color:white;
+    }
+    .sum-group-avatar.conflict { background:linear-gradient(135deg,#ef4444,#dc2626); }
+    .sum-group-name { font-size:var(--font-size-xs); font-weight:var(--font-weight-semibold); color:var(--text-primary); }
+    .sum-group-id   { font-size:var(--font-size-xs); color:var(--text-secondary); line-height:1.43; }
+    .sum-conflict-dot { width:6px; height:6px; border-radius:50%; background:#ef4444;
+      flex-shrink:0; margin-left:auto; }
+
+    /* ── SIDEBAR: recurrence row ── */
+    .sum-recurrence-row {
+      display:flex; align-items:center; gap:var(--space-1);
+      font-size:var(--font-size-xs); font-weight:var(--font-weight-medium); color:var(--teal-700);
+      background:var(--teal-50); border:1px solid var(--teal-200);
+      border-radius:var(--radius-md); padding:7px 10px; margin-top:4px;
+    }
+    [data-theme="dark"] .sum-recurrence-row { background:rgba(13,148,136,.1); border-color:rgba(13,148,136,.25); color:var(--teal-300,#5eead4); }
+
+    /* ── Step 3: confirm button (canvas) ── */
+    .btn-confirm-canvas { padding: var(--space-1) 28px; letter-spacing:.01em; }
+    .btn-confirm-canvas:hover { transform:translateY(-1px); opacity:.95; }
+    .btn-confirm-canvas:active { transform:translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="appHeader">
+  <a href="appointments.html" class="header-logo">
+    <div class="header-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+    </div>
+    <span class="header-logo-text"><span class="clear">Clear </span><span class="path">Path</span><span class="fdo"> FDO</span></span>
+  </a>
+  <div class="header-search-wrap">
+    <div class="header-search">
+      <i class="ti ti-search" style="font-size:16px;"></i>
+      <input type="text" placeholder="Search patients, appointments, rooms…" />
+    </div>
+  </div>
+  <div class="header-right">
+    <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" style="color:var(--text-secondary);">
+      <i class="ti ti-sun" style="font-size:17px;"></i>
+    </button>
+    <div class="user-avatar-wrap">
+      <div class="user-avatar">JS</div>
+      <i class="ti ti-chevron-down" style="font-size:14px;color:var(--text-muted);"></i>
+    </div>
+  </div>
+</header>
+
+<div id="appBody">
+
+  <!-- NAV SIDEBAR -->
+  <nav id="appSidebar">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item active" href="appointments.html"><i class="ti ti-calendar" style="font-size:16px;"></i> Appointments</a>
+    <a class="nav-item" href="appointments2.html"><i class="ti ti-calendar-stats" style="font-size:16px;"></i> Appointments2</a>
+    <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-users" style="font-size:16px;"></i> Patients</a>
+    <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-stethoscope" style="font-size:16px;"></i> Providers</a>
+    <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-door" style="font-size:16px;"></i> Rooms</a>
+    <div class="nav-section-label admin-label">Admin</div>
+    <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-chart-bar" style="font-size:16px;"></i> Reports</a>
+    <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-settings" style="font-size:16px;"></i> Settings</a>
+    <div class="nav-spacer"></div>
+    <div class="nav-bottom">
+      <a class="nav-item" href="#" onclick="return false;"><i class="ti ti-help-circle" style="font-size:16px;"></i> Help &amp; Support</a>
+    </div>
+  </nav>
+
+  <main id="appMain">
+  <div class="booking-shell">
+    <section class="booking-canvas" id="bookingCanvas">
+
+      <!-- Page header -->
+      <div class="canvas-header">
+        <div class="breadcrumb">
+          <span>Appointments</span>
+          <i class="ti ti-chevron-right"></i>
+          <span style="color:var(--text-primary);font-weight:500;">New Booking</span>
+        </div>
+        <h1>Book Appointment</h1>
+        <p>Fill in all the details below to schedule a new appointment.</p>
+      </div>
+
+      <!-- ── Appointment Details (Name + Type + Service) ── -->
+      <div class="card section-card">
+        <div class="section-label">
+          <i class="ti ti-forms" style="font-size:14px;color:var(--teal-600);"></i>
+          Appointment Details
+        </div>
+
+        <!-- Name -->
+        <div class="field-group" style="margin-bottom:16px;">
+          <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">
+            Name <span style="color:#ef4444;">*</span>
+          </label>
+          <input type="text" id="appointmentName" class="field-input"
+                 placeholder="e.g. Initial Counselling Session with Maria Santos"
+                 oninput="syncConfirmBtn()" />
+        </div>
+
+        <!-- Type -->
+        <div class="field-group" style="margin-bottom:16px;">
+          <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">
+            Appointment Type <span style="color:#ef4444;">*</span>
+          </label>
+          <div class="appt-type-radios">
+            <label class="appt-type-radio" id="radioLabelIndividual">
+              <input type="radio" name="apptType" value="individual" onchange="selectApptType('individual')" />
+              <span class="appt-radio-box">
+                <span class="appt-radio-icon"><i class="ti ti-user" style="font-size:14px;"></i></span>
+                <span class="appt-radio-title">Individual</span>
+              </span>
+            </label>
+            <label class="appt-type-radio" id="radioLabelGroup">
+              <input type="radio" name="apptType" value="group" onchange="selectApptType('group')" />
+              <span class="appt-radio-box">
+                <span class="appt-radio-icon"><i class="ti ti-users" style="font-size:14px;"></i></span>
+                <span class="appt-radio-title">Group</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Service Type -->
+        <div class="field-group">
+          <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">
+            Service Type <span style="color:#ef4444;">*</span>
+          </label>
+          <div class="type-grid" style="margin-top:0;">
+            <div class="card type-card" data-type="tour"    onclick="selectType(this,'tour')">
+              <div class="selected-badge"><i class="ti ti-check" style="font-size:10px;"></i></div>
+              <div class="type-icon"><i class="ti ti-building"></i></div>
+              <div><div class="type-name">Facility Tour</div><div class="type-desc" style="margin-top:3px;">Walk-through for new patients &amp; families</div></div>
+              <span class="type-tag">New Lead</span>
+            </div>
+            <div class="card type-card" data-type="counsel" onclick="selectType(this,'counsel')">
+              <div class="selected-badge"><i class="ti ti-check" style="font-size:10px;"></i></div>
+              <div class="type-icon"><i class="ti ti-heart-handshake"></i></div>
+              <div><div class="type-name">Counselling Session</div><div class="type-desc" style="margin-top:3px;">1-on-1 with a licensed counselor</div></div>
+              <span class="type-tag">Individual</span>
+            </div>
+            <div class="card type-card" data-type="psych"   onclick="selectType(this,'psych')">
+              <div class="selected-badge"><i class="ti ti-check" style="font-size:10px;"></i></div>
+              <div class="type-icon"><i class="ti ti-clipboard-pulse"></i></div>
+              <div><div class="type-name">Psych Evaluation</div><div class="type-desc" style="margin-top:3px;">Comprehensive psychological assessment</div></div>
+              <span class="type-tag">Evaluation</span>
+            </div>
+            <div class="card type-card" data-type="medical" onclick="selectType(this,'medical')">
+              <div class="selected-badge"><i class="ti ti-check" style="font-size:10px;"></i></div>
+              <div class="type-icon"><i class="ti ti-stethoscope"></i></div>
+              <div><div class="type-name">Medical Test</div><div class="type-desc" style="margin-top:3px;">Lab work, drug screening &amp; vitals</div></div>
+              <span class="type-tag">Medical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 2. Patient Search ── -->
+      <div class="card section-card" id="step2PatientSection">
+        <div class="section-label">
+          <i class="ti ti-users" style="font-size:14px;color:var(--teal-600);"></i>
+          <span id="step2PatientLabel">Select Patient</span>
+          <span id="groupPatientCount" style="display:none;font-size:10px;font-weight:600;color:var(--teal-600);background:var(--teal-50);border:1px solid var(--teal-200);padding:1px 7px;border-radius:var(--radius-pill);text-transform:none;letter-spacing:0;margin-left:6px;"></span>
+        </div>
+        <div class="group-hint" id="groupPatientHint" style="display:none;">
+          <i class="ti ti-info-circle" style="font-size:14px;color:var(--teal-600);flex-shrink:0;"></i>
+          Group Therapy requires 4–12 participants. Search and add each patient below.
+        </div>
+        <!-- Single-row toolbar: search + filters -->
+        <div class="pt-toolbar">
+          <div class="search-bar" id="step2SearchBar">
+            <i class="ti ti-search"></i>
+            <input type="text" id="step2PatientInput"
+                   placeholder="Search by name or ID…"
+                   oninput="handleStep2PatientSearch(this.value)"
+                   autocomplete="off" />
+          </div>
+          <div class="pt-filter-group">
+            <span class="pt-filter-group-label">Status</span>
+            <button class="pt-filter-chip" data-filter="status" data-value="lead" onclick="setPatientStatusFilter('lead')">Lead</button>
+            <button class="pt-filter-chip" data-filter="status" data-value="admitted" onclick="setPatientStatusFilter('admitted')">Admitted</button>
+          </div>
+          <div class="pt-filter-divider"></div>
+          <div class="pt-filter-group">
+            <span class="pt-filter-group-label">Gender</span>
+            <button class="pt-filter-chip" data-filter="gender" data-value="male" onclick="setPatientGenderFilter('male')">Male</button>
+            <button class="pt-filter-chip" data-filter="gender" data-value="female" onclick="setPatientGenderFilter('female')">Female</button>
+          </div>
+        </div>
+        <div class="pt-search-results" id="ptSearchResults"></div>
+        <div class="selected-patients" id="selectedPatientsList" style="display:none;"></div>
+      </div>
+
+      <!-- ── 4. Facilitator ── -->
+      <div class="card section-card" id="staffSection">
+        <div class="section-label"><i class="ti ti-stethoscope" style="font-size:14px;color:var(--teal-600);"></i> Facilitator</div>
+        <!-- Single-row toolbar: search + filters -->
+        <div class="pt-toolbar">
+          <div class="search-bar" id="staffSearchBar">
+            <i class="ti ti-search"></i>
+            <input type="text" id="staffSearchInput" placeholder="Search by name…"
+                   oninput="handleStaffSearch(this.value)" autocomplete="off" />
+          </div>
+          <div class="pt-filter-group">
+            <span class="pt-filter-group-label">Role</span>
+            <button class="pt-filter-chip" data-filter="staffRole" data-value="Licensed Counselor"  onclick="setStaffRoleFilter('Licensed Counselor')">Counselor</button>
+            <button class="pt-filter-chip" data-filter="staffRole" data-value="Psychiatrist"         onclick="setStaffRoleFilter('Psychiatrist')">Psychiatrist</button>
+            <button class="pt-filter-chip" data-filter="staffRole" data-value="Medical Director"     onclick="setStaffRoleFilter('Medical Director')">Medical Dir.</button>
+            <button class="pt-filter-chip" data-filter="staffRole" data-value="Registered Nurse"     onclick="setStaffRoleFilter('Registered Nurse')">Nurse</button>
+            <button class="pt-filter-chip" data-filter="staffRole" data-value="Facility Coordinator" onclick="setStaffRoleFilter('Facility Coordinator')">Coordinator</button>
+          </div>
+          <div class="pt-filter-divider"></div>
+          <div class="pt-filter-group">
+            <span class="pt-filter-group-label">Dept</span>
+            <button class="pt-filter-chip" data-filter="staffDept" data-value="Counseling" onclick="setStaffDeptFilter('Counseling')">Counseling</button>
+            <button class="pt-filter-chip" data-filter="staffDept" data-value="Psychiatry" onclick="setStaffDeptFilter('Psychiatry')">Psychiatry</button>
+            <button class="pt-filter-chip" data-filter="staffDept" data-value="Medical"    onclick="setStaffDeptFilter('Medical')">Medical</button>
+            <button class="pt-filter-chip" data-filter="staffDept" data-value="Admin"      onclick="setStaffDeptFilter('Admin')">Admin</button>
+          </div>
+        </div>
+        <div class="pt-search-results" id="staffSearchResults"></div>
+        <div id="selectedStaffWrap" style="display:none;margin-top:12px;"></div>
+
+        <!-- Inline Add Facilitator form (hidden by default) -->
+        <div id="addFacilitatorForm" style="display:none;margin-top:12px;padding:16px;border:1.5px solid var(--border-input);border-radius:var(--radius-md);background:#fafafa;">
+          <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+            <i class="ti ti-user-plus" style="font-size:15px;color:#143AC3;"></i> Add New Facilitator
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+            <div class="field-group" style="grid-column:1/-1;">
+              <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Full Name <span style="color:#ef4444;">*</span></label>
+              <input type="text" id="newFacName" placeholder="e.g. Dr. Alex Rivera" class="field-input" style="height:36px;font-size:13px;" />
+            </div>
+            <div class="field-group">
+              <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Role <span style="color:#ef4444;">*</span></label>
+              <select id="newFacRole" class="field-input" style="height:36px;font-size:13px;">
+                <option value="">Select role…</option>
+                <option value="Licensed Counselor">Licensed Counselor</option>
+                <option value="Psychiatrist">Psychiatrist</option>
+                <option value="Medical Director">Medical Director</option>
+                <option value="Registered Nurse">Registered Nurse</option>
+                <option value="Group Therapist">Group Therapist</option>
+                <option value="Facility Coordinator">Facility Coordinator</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Department <span style="color:#ef4444;">*</span></label>
+              <select id="newFacDept" class="field-input" style="height:36px;font-size:13px;">
+                <option value="">Select department…</option>
+                <option value="Counseling">Counseling</option>
+                <option value="Psychiatry">Psychiatry</option>
+                <option value="Medical">Medical</option>
+                <option value="Admin">Admin</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div id="addFacError" style="display:none;font-size:12px;color:#ef4444;margin-bottom:10px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="submitAddFacilitator()"
+                    style="height:34px;padding:0 18px;background:var(--cta-gradient);color:white;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 2px 8px rgba(20,58,195,.25);">
+              Add &amp; Select
+            </button>
+            <button onclick="cancelAddFacilitator()"
+                    style="height:34px;padding:0 14px;background:white;border:1.5px solid var(--border-input);border-radius:8px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. Date & Time ── -->
+      <div class="card section-card" id="dateTimeSection">
+        <div class="section-label"><i class="ti ti-calendar" style="font-size:14px;color:var(--teal-600);"></i> Date &amp; Time</div>
+        <div class="datetime-row">
+          <div class="field-group">
+            <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Date <span style="color:#ef4444;">*</span></label>
+            <div class="date-input-wrap">
+              <i class="ti ti-calendar" style="font-size:15px;"></i>
+              <input type="date" id="bookDate" class="field-input" onchange="onDateChange()" />
+            </div>
+            <span id="dateError" style="display:none;font-size:12px;color:#ef4444;margin-top:4px;display:none;align-items:center;gap:3px;line-height:1.43;">
+              <i class="ti ti-alert-circle" style="font-size:11px;"></i><span id="dateErrorMsg"></span>
+            </span>
+          </div>
+          <div class="field-group">
+            <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Start Time <span style="color:#ef4444;">*</span></label>
+            <div class="date-input-wrap">
+              <i class="ti ti-clock" style="font-size:15px;"></i>
+              <input type="time" id="bookStartTime" class="field-input" onchange="onStartTimeChange()" />
+            </div>
+            <span id="startTimeError" style="display:none;font-size:12px;color:#ef4444;margin-top:4px;align-items:center;gap:3px;line-height:1.43;">
+              <i class="ti ti-alert-circle" style="font-size:11px;"></i><span id="startTimeErrorMsg"></span>
+            </span>
+          </div>
+          <div class="field-group">
+            <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">End Time</label>
+            <div class="date-input-wrap">
+              <i class="ti ti-clock-off" style="font-size:15px;"></i>
+              <input type="time" id="bookEndTime" class="field-input" onchange="onEndTimeChange()" />
+            </div>
+            <span id="endTimeError" style="display:none;font-size:12px;color:#ef4444;margin-top:4px;align-items:center;gap:3px;line-height:1.43;">
+              <i class="ti ti-alert-circle" style="font-size:11px;"></i><span id="endTimeErrorMsg"></span>
+            </span>
+          </div>
+        </div>
+        <!-- Suggested time slots -->
+        <div class="suggested-slots-row">
+          <div class="suggested-slots-label">
+            <i class="ti ti-bolt"></i> Suggested Slots
+          </div>
+          <div class="time-slots" id="timeSlots"></div>
+        </div>
+        <div class="reverify-banner" id="reverifyBanner" style="margin-top:14px;">
+          <i class="ti ti-refresh spin" style="font-size:15px;"></i>
+          Re-verifying availability for the new time…
+        </div>
+
+        <!-- Room Selection (inside Date & Time) -->
+        <div style="border-top:1px solid var(--border-subtle);margin-top:20px;padding-top:20px;">
+          <div class="section-label" style="margin-bottom:12px;"><i class="ti ti-door" style="font-size:14px;color:var(--teal-600);"></i> Select Room</div>
+          <!-- Room filter note (group) -->
+          <div class="filter-note" id="roomFilterNote" style="display:none;margin-bottom:10px;">
+            <i class="ti ti-filter" style="font-size:14px;color:var(--teal-600);"></i>
+            <span>Group Therapy requires a room with capacity &ge; 8 people. Smaller rooms are hidden.</span>
+          </div>
+          <div class="room-grid" id="roomGrid"></div>
+        </div>
+
+        <!-- Recurring Appointment (inside Date & Time) -->
+        <div style="border-top:1px solid var(--border-subtle);margin-top:20px;padding-top:16px;" id="recurrenceSection">
+          <div class="toggle-row" style="padding:0;border-bottom:none;">
+            <div class="toggle-left">
+              <div class="toggle-icon" style="background:var(--teal-50);color:var(--teal-600);"><i class="ti ti-refresh"></i></div>
+              <div>
+                <div class="toggle-title">Recurring Appointment</div>
+                <div class="toggle-sub">Repeat this booking on a schedule</div>
+              </div>
+            </div>
+            <label class="tgl">
+              <input type="checkbox" id="toggleRecurrence" onchange="onRecurrenceToggle()" />
+              <span class="tgl-track"></span>
+            </label>
+          </div>
+          <div class="recurrence-expand" id="recurrenceExpand">
+            <div class="field-group">
+              <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">Frequency</label>
+              <select class="field-input" id="recurrenceFreq" onchange="onRecurrenceChange()" style="appearance:auto;">
+                <option value="daily">Daily</option>
+                <option value="weekly" selected>Weekly</option>
+                <option value="biweekly">Bi-weekly</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">End Date</label>
+              <div class="date-input-wrap">
+                <i class="ti ti-calendar" style="font-size:15px;"></i>
+                <input type="date" class="field-input" id="recurrenceEnd" oninput="onRecurrenceChange()" style="padding-left:38px;" />
+              </div>
+            </div>
+            <div id="recurrenceSummary" style="grid-column:1/-1;font-size:12px;color:var(--teal-700);background:var(--teal-50);border:1px solid var(--teal-200);border-radius:8px;padding:8px 12px;display:none;">
+              <i class="ti ti-calendar-repeat" style="font-size:13px;"></i> <span id="recurrenceSummaryText"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 8. Notes & Notifications ── -->
+      <div class="card section-card" id="notesSection">
+        <div class="section-label">
+          <i class="ti ti-notes" style="font-size:14px;color:var(--teal-600);"></i>
+          Notes &amp; Notifications
+        </div>
+
+        <!-- Additional Notes -->
+        <div class="field-group" style="margin-bottom:16px;">
+          <label style="font-size:12px;font-weight:500;color:var(--text-primary);margin-bottom:6px;display:block;">
+            Additional Notes <span style="font-size:10px;font-weight:400;color:var(--text-muted);">— optional</span>
+          </label>
+          <textarea id="clinicalNotes" class="notes-area"
+            rows="3" style="resize:none;min-height:unset;"
+            placeholder="Add clinical or reception notes here…"></textarea>
+        </div>
+
+        <!-- Notifications -->
+        <div style="border-top:1px solid var(--border-subtle);padding-top:14px;display:flex;flex-direction:column;gap:0;" id="notificationsSection">
+          <div class="toggle-row" style="padding-bottom:12px;">
+            <div class="toggle-left">
+              <div class="toggle-icon sms"><i class="ti ti-message"></i></div>
+              <div>
+                <div class="toggle-title">Send SMS Reminder</div>
+                <div class="toggle-sub">Patient receives a text 1 hour before the appointment</div>
+              </div>
+            </div>
+            <label class="tgl">
+              <input type="checkbox" id="toggleSMS" checked />
+              <span class="tgl-track"></span>
+            </label>
+          </div>
+          <div class="toggle-row" style="border-bottom:none;padding-bottom:0;">
+            <div class="toggle-left">
+              <div class="toggle-icon email"><i class="ti ti-mail"></i></div>
+              <div>
+                <div class="toggle-title">Email Caretaker</div>
+                <div class="toggle-sub" id="caretakerToggleSub">Sends appointment summary to caretaker</div>
+              </div>
+            </div>
+            <label class="tgl">
+              <input type="checkbox" id="toggleEmail" checked />
+              <span class="tgl-track"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Actions ── -->
+      <div class="canvas-actions" id="formActions">
+        <a href="appointments2.html" class="btn btn-secondary btn-md btn-back"><i class="ti ti-arrow-left" style="font-size:15px;"></i> Cancel</a>
+      </div>
+
+    </section>
+
+    <!-- ── Live Preview Sidebar ── -->
+    <aside class="booking-preview" id="bookingPreview">
+      <div class="preview-head">
+        <i class="ti ti-eye" style="font-size:13px;"></i> Booking Preview
+      </div>
+      <div class="preview-body" id="previewBody">
+        <div class="preview-row" id="pvName">
+          <span class="preview-label">Appointment Name</span>
+          <span class="preview-value empty" id="pvNameVal">Not entered</span>
+        </div>
+        <div class="preview-divider"></div>
+        <div class="preview-row" id="pvService">
+          <span class="preview-label">Service Type</span>
+          <span class="preview-value empty" id="pvServiceVal">Not selected</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-label">Appointment Type</span>
+          <span class="preview-value empty" id="pvApptTypeVal">Not selected</span>
+        </div>
+        <div class="preview-divider"></div>
+        <div class="preview-row">
+          <span class="preview-label">Patient(s)</span>
+          <span class="preview-value empty" id="pvPatientVal">Not selected</span>
+        </div>
+        <div class="preview-divider"></div>
+        <div class="preview-row">
+          <span class="preview-label">Facilitator</span>
+          <span class="preview-value empty" id="pvStaffVal">Not selected</span>
+        </div>
+        <div class="preview-divider"></div>
+        <div class="preview-row">
+          <span class="preview-label">Date</span>
+          <span class="preview-value empty" id="pvDateVal">Not selected</span>
+        </div>
+        <div class="preview-row">
+          <span class="preview-label">Time</span>
+          <span class="preview-value empty" id="pvTimeVal">Not selected</span>
+        </div>
+        <div class="preview-divider"></div>
+        <div class="preview-row">
+          <span class="preview-label">Room</span>
+          <span class="preview-value empty" id="pvRoomVal">Not selected</span>
+        </div>
+        <div class="preview-row" id="pvRecurrenceRow" style="display:none;">
+          <span class="preview-label">Recurrence</span>
+          <span class="preview-value" id="pvRecurrenceVal"></span>
+        </div>
+      </div>
+      <!-- Conflict alert -->
+      <div class="preview-conflict" id="previewConflict" style="display:none;">
+        <div class="preview-conflict-title">
+          <i class="ti ti-alert-triangle" style="font-size:13px;"></i> Scheduling Conflict
+        </div>
+        <div class="preview-conflict-msg" id="previewConflictMsg"></div>
+      </div>
+      <!-- Confirm button -->
+      <div class="preview-footer">
+        <button class="btn btn-primary btn-md btn-confirm-canvas" id="btnConfirm" onclick="confirmBooking()" disabled style="opacity:.4;pointer-events:none;">
+          <i class="ti ti-circle-check" style="font-size:15px;"></i>
+          Confirm &amp; Book
+        </button>
+      </div>
+    </aside>
+
+  </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<!-- ── SUCCESS OVERLAY ── -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon"><i class="ti ti-circle-check"></i></div>
+    <h2>Booking Confirmed!</h2>
+    <p>The appointment has been scheduled and notifications are on their way.</p>
+    <div class="success-meta">
+      <div class="success-meta-row"><i class="ti ti-user"></i> <span id="successPatient">—</span></div>
+      <div class="success-meta-row"><i class="ti ti-clipboard-list"></i> <span id="successType">—</span></div>
+      <div class="success-meta-row"><i class="ti ti-calendar"></i> <span id="successDateTime">—</span></div>
+      <div class="success-meta-row"><i class="ti ti-door"></i> <span id="successRoom">—</span></div>
+      <div class="success-meta-row"><i class="ti ti-stethoscope"></i> <span id="successStaff">—</span></div>
+    </div>
+    <a href="appointments2.html" class="btn btn-primary btn-md btn-view-calendar">
+      <i class="ti ti-calendar" style="font-size:16px;"></i>
+      View in Calendar
+    </a>
+  </div>
+</div>
+
+<script>
+// ─── THEME ────────────────────────────────────────────────────────────────────
+const savedTheme = localStorage.getItem('fdo-theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+function toggleTheme() {
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('fdo-theme', next);
+  document.querySelector('#themeToggle i').className = next === 'dark' ? 'ti ti-moon' : 'ti ti-sun';
+  document.querySelector('#themeToggle i').style.fontSize = '17px';
+}
+if (savedTheme === 'dark') document.querySelector('#themeToggle i').className = 'ti ti-moon';
+
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const TYPE_META = {
+  tour:    { label:'Facility Tour',           color:'#9A3412', bg:'#FFF3EE', icon:'ti-building',        tag:'New Lead'   },
+  counsel: { label:'Counselling Session',      color:'#0C5E73', bg:'#E8F6FA', icon:'ti-heart-handshake', tag:'Individual' },
+  group:   { label:'Group Therapy',            color:'#A21CAF', bg:'#FCF0FD', icon:'ti-users',           tag:'Group'      },
+  psych:   { label:'Psych Evaluation',         color:'#4A6B00', bg:'#F2F9E8', icon:'ti-clipboard-pulse', tag:'Evaluation' },
+  medical: { label:'Medical Test',             color:'#1E293B', bg:'#F1F5F9', icon:'ti-stethoscope',     tag:'Medical'    },
+};
+
+const PATIENTS = [
+  { name:'Maria Santos',   initials:'MS', id:'PT-00421', dob:'04/12/1988', status:'lead',     gender:'female', caretaker:'Dana Kim',    ctInitials:'DK', rel:'Sister',  phone:'(555) 204-9812' },
+  { name:'James Thornton', initials:'JT', id:'PT-00389', dob:'08/30/1975', status:'admitted', gender:'male',   caretaker:'Rita Thornton', ctInitials:'RT', rel:'Spouse', phone:'(555) 871-3300' },
+  { name:'Aisha Williams', initials:'AW', id:'PT-00512', dob:'02/14/1992', status:'admitted', gender:'female', caretaker:'Kevin Williams', ctInitials:'KW', rel:'Brother', phone:'(555) 349-7201' },
+  { name:'David Park',     initials:'DP', id:'PT-00467', dob:'11/03/1985', status:'lead',     gender:'male',   caretaker:'Susan Park',  ctInitials:'SP', rel:'Mother',  phone:'(555) 590-4420' },
+  { name:'Carlos Rivera',  initials:'CR', id:'PT-00448', dob:'06/22/1990', status:'admitted', gender:'male',   caretaker:'Ana Rivera',  ctInitials:'AR', rel:'Sister',  phone:'(555) 213-8847' },
+  { name:'Sarah Moore',    initials:'SM', id:'PT-00501', dob:'03/17/1983', status:'lead',     gender:'female', caretaker:null },
+  { name:'Chandni Best',   initials:'CB', id:'PT-00513', dob:'07/08/1995', status:'admitted', gender:'female', caretaker:null },
+  { name:'Swati Sharma',   initials:'SS', id:'PT-00514', dob:'11/22/1989', status:'admitted', gender:'female', caretaker:null },
+  { name:'Mohammad Asif',  initials:'MA', id:'PT-00515', dob:'03/14/1987', status:'lead',     gender:'male',   caretaker:null },
+  { name:'Sachin Verma',   initials:'SV', id:'PT-00516', dob:'09/05/1991', status:'admitted', gender:'male',   caretaker:null },
+  { name:'Sarah Goyal',    initials:'SG', id:'PT-00517', dob:'01/30/1993', status:'lead',     gender:'female', caretaker:null },
+  { name:'Payal Mehta',    initials:'PM', id:'PT-00518', dob:'06/18/1990', status:'admitted', gender:'female', caretaker:null },
+];
+
+// Staff: busyUntil in 24h "HH:MM"
+const STAFF_DATA = [
+  { id:'s1', name:'Dr. Emily Chen',   role:'Licensed Counselor',  dept:'Counseling', initials:'EC', color:'#7c3aed', busyUntil:null,    types:['counsel','psych'] },
+  { id:'s2', name:'Dr. Marcus Reed',  role:'Psychiatrist',         dept:'Psychiatry', initials:'MR', color:'#0369a1', busyUntil:'11:00', types:['psych','medical'] },
+  { id:'s3', name:'Dr. Arun Patel',   role:'Medical Director',     dept:'Medical',    initials:'AP', color:'#0369a1', busyUntil:'10:00', types:['medical','psych'] },
+  { id:'s4', name:'Nurse Kelly',      role:'Registered Nurse',     dept:'Medical',    initials:'NK', color:'#0f766e', busyUntil:null,    types:['medical','tour','counsel'] },
+  { id:'s5', name:'James Carter',     role:'Group Therapist',      dept:'Counseling', initials:'JC', color:'#be185d', busyUntil:null,    types:['group','counsel'] },
+  { id:'s6', name:'Sarah Mitchell',   role:'Facility Coordinator', dept:'Admin',      initials:'SM', color:'#c2410c', busyUntil:'09:30', types:['tour'] },
+];
+
+// Rooms: busySlots maps "HH:MM" => true
+// labCapabilities: only present on medical/lab rooms
+const ROOMS_DATA = [
+  { id:'r101', name:'Room 101',   type:'Private Office',     capacity:2,  features:['Whiteboard','Window'],            tags:['counsel','psych','medical','tour'], busySlots:{'09:00':true,'09:30':true} },
+  { id:'r102', name:'Room 102',   type:'Private Office',     capacity:2,  features:['Computer','Window'],              tags:['counsel','psych','medical'],         busySlots:{'10:00':true,'10:30':true,'11:00':true} },
+  { id:'r203', name:'Room 203',   type:'Consultation Room',  capacity:8,  features:['Projector','Whiteboard','A/C'],   tags:['group','counsel','tour','psych'],    busySlots:{'14:00':true,'14:30':true} },
+  { id:'r205', name:'Room 205',   type:'Group Room',         capacity:15, features:['TV Screen','Flex Seating'],       tags:['group','tour'],                      busySlots:{} },
+  { id:'rSun', name:'Sunroom',    type:'Large Group Space',  capacity:24, features:['Natural Light','Outdoor Access'], tags:['group','tour'],                      busySlots:{'13:00':true} },
+  // Lab rooms — only shown for Medical Test
+  {
+    id:'rLab1', name:'Lab A — Phlebotomy', type:'Blood Draw Lab', capacity:3,
+    features:['Recliner Chairs','Sharps Disposal','Emergency Kit'],
+    tags:['medical'],
+    labCapabilities:['Blood Draw','CBC Panel','Metabolic Panel','Coagulation Tests'],
+    busySlots:{'09:00':true,'09:30':true,'10:00':true},
+  },
+  {
+    id:'rLab2', name:'Lab B — Specimen', type:'Specimen Collection Lab', capacity:2,
+    features:['Bio-safety Cabinet','Centrifuge','Cold Storage'],
+    tags:['medical'],
+    labCapabilities:['Urine Analysis','Stool Culture','Throat Swab','Rapid Strep'],
+    busySlots:{'13:00':true,'13:30':true},
+  },
+  {
+    id:'rLab3', name:'Lab C — Drug Screen', type:'Toxicology Lab', capacity:2,
+    features:['Chain-of-Custody Kit','DOT Certified','Privacy Partition'],
+    tags:['medical'],
+    labCapabilities:['10-Panel Drug Screen','Alcohol Breathalyzer','Hair Follicle Test','DOT Physical'],
+    busySlots:{},
+  },
+  {
+    id:'rLab4', name:'Vitals Bay', type:'Clinical Assessment Room', capacity:4,
+    features:['BP Monitor','ECG Machine','Pulse Oximeter','Height/Weight Scale'],
+    tags:['medical'],
+    labCapabilities:['Vitals Check','BMI Assessment','ECG / EKG','SpO₂ Monitoring'],
+    busySlots:{'11:00':true,'11:30':true},
+  },
+];
+
+// Clinic operating hours
+const DAY_START_MINS = 8 * 60;   // 08:00
+const DAY_END_MINS   = 17 * 60;  // 17:00 (last slot must end by here)
+
+// Patient schedule conflicts (mock — patient IDs that are busy at certain time slots)
+const PATIENT_CONFLICTS = {
+  'PT-00421': ['09:00','09:30'],     // Maria Santos
+  'PT-00389': ['10:00','10:30'],     // James Thornton
+  'PT-00512': ['13:00','13:30'],     // Aisha Williams
+};
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let state = {
+  step: 1,
+  apptType: null,      // 'individual' | 'group'
+  type: null,
+  patient: null,
+  patients: [],
+  staffId: null,
+  date: new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' }),
+  timeSlot: null,
+  startTime: null,
+  endTime: null,
+  roomId: null,
+  recurrence: { enabled: false, freq: 'weekly', endDate: '' },
+  patientStatusFilter: null,  // 'lead' | 'admitted' | null
+  patientGenderFilter: null,  // 'male' | 'female' | null
+  staffSearchQuery: '',
+  staffRoleFilter: null,
+  staffDeptFilter: null,
+};
+
+// ─── PATIENT STATUS FILTER ───────────────────────────────────────────────────
+function setPatientStatusFilter(status) {
+  state.patientStatusFilter = state.patientStatusFilter === status ? null : status;
+  document.querySelectorAll('.pt-filter-chip[data-filter="status"]').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.value === state.patientStatusFilter);
+  });
+  const val = document.getElementById('step2PatientInput').value;
+  handleStep2PatientSearch(val);
+}
+
+function setPatientGenderFilter(gender) {
+  state.patientGenderFilter = state.patientGenderFilter === gender ? null : gender;
+  document.querySelectorAll('.pt-filter-chip[data-filter="gender"]').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.value === state.patientGenderFilter);
+  });
+  const val = document.getElementById('step2PatientInput').value;
+  handleStep2PatientSearch(val);
+}
+
+// ─── APPOINTMENT TYPE RADIO (Individual / Group) ─────────────────────────────
+function selectApptType(apptType) {
+  state.apptType = apptType;
+  const isGroup = apptType === 'group';
+
+  // Reset patients when switching mode
+  state.patients = [];
+  state.patient = null;
+  document.getElementById('step2PatientInput').value = '';
+  document.getElementById('ptSearchResults').classList.remove('visible');
+  renderSelectedPatients();
+
+  // Update patient section label and group hint
+  document.getElementById('step2PatientLabel').textContent = isGroup ? 'Group Patients' : 'Select Patient';
+  document.getElementById('groupPatientHint').style.display = isGroup ? 'flex' : 'none';
+
+  // Group room filter note
+  document.getElementById('roomFilterNote').style.display = isGroup ? 'flex' : 'none';
+
+  // Re-render grids if type already selected
+  if (state.type) {
+    renderRoomGrid();
+    renderStaffGrid('staffGridStep2', state.type, state.timeSlot);
+  }
+
+  syncConfirmBtn();
+}
+
+// ─── SELECT TYPE ─────────────────────────────────────────────────────────────
+function selectType(card, type) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  state.type = type;
+  state.staffId = null;
+
+  // Auto-set patient status filter: Lead for Facility Tour, clear otherwise
+  const autoFilter = type === 'tour' ? 'lead' : null;
+  state.patientStatusFilter = autoFilter;
+  document.querySelectorAll('.pt-filter-chip[data-filter="status"]').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.value === autoFilter);
+  });
+  // Re-run search in case input has text
+  const val = document.getElementById('step2PatientInput').value;
+  if (val && val.length >= 2) handleStep2PatientSearch(val);
+
+  // Re-render grids for new type
+  renderRoomGrid();
+  renderStaffGrid('staffGridStep2', type, state.timeSlot);
+
+  syncConfirmBtn();
+}
+
+// ─── STAFF SEARCH & SELECT ────────────────────────────────────────────────────
+function staffIsAvailable(staff, timeSlot) {
+  if (!staff.busyUntil || !timeSlot) return true;
+  return toMins(timeSlot) >= toMins(staff.busyUntil);
+}
+
+let staffSearchTimer;
+
+function handleStaffSearch(val) {
+  state.staffSearchQuery = val.trim().toLowerCase();
+  clearTimeout(staffSearchTimer);
+  const resultsEl = document.getElementById('staffSearchResults');
+  if (!val || val.length < 1) {
+    // If filters active, still show filtered results
+    if (state.staffRoleFilter || state.staffDeptFilter) {
+      renderStaffResults();
+    } else {
+      resultsEl.classList.remove('visible');
+    }
+    return;
+  }
+  staffSearchTimer = setTimeout(renderStaffResults, 200);
+}
+
+function setStaffRoleFilter(role) {
+  state.staffRoleFilter = state.staffRoleFilter === role ? null : role;
+  document.querySelectorAll('.pt-filter-chip[data-filter="staffRole"]').forEach(c => {
+    c.classList.toggle('active', c.dataset.value === state.staffRoleFilter);
+  });
+  renderStaffResults();
+}
+
+function setStaffDeptFilter(dept) {
+  state.staffDeptFilter = state.staffDeptFilter === dept ? null : dept;
+  document.querySelectorAll('.pt-filter-chip[data-filter="staffDept"]').forEach(c => {
+    c.classList.toggle('active', c.dataset.value === state.staffDeptFilter);
+  });
+  renderStaffResults();
+}
+
+function renderStaffResults() {
+  const resultsEl = document.getElementById('staffSearchResults');
+  const hasQuery = !!state.staffSearchQuery;
+  const hasFilter = !!(state.staffRoleFilter || state.staffDeptFilter);
+  if (!hasQuery && !hasFilter) { resultsEl.classList.remove('visible'); return; }
+
+  const matches = STAFF_DATA.filter(s => {
+    if (state.staffSearchQuery && !s.name.toLowerCase().includes(state.staffSearchQuery)) return false;
+    if (state.staffRoleFilter && s.role !== state.staffRoleFilter) return false;
+    if (state.staffDeptFilter && s.dept !== state.staffDeptFilter) return false;
+    return true;
+  }).slice(0, 6);
+
+  const alreadySelectedId = state.staffId;
+
+  let rows = matches.map(s => {
+    const avail = staffIsAvailable(s, state.timeSlot);
+    const isSelected = alreadySelectedId === s.id;
+    const busyHtml = !avail
+      ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:#b91c1c;"><i class="ti ti-alert-triangle" style="font-size:10px;"></i> Busy until ${s.busyUntil}</span>`
+      : '';
+    const addBtn = isSelected
+      ? `<span style="font-size:12px;color:var(--text-secondary);flex-shrink:0;">Selected</span>`
+      : `<button class="btn btn-secondary btn-sm btn-add-pt" onclick="event.stopPropagation();selectStaff('${s.id}')">
+           <i class="ti ti-plus" style="font-size:11px;"></i> Select
+         </button>`;
+    return `
+      <div class="pt-result-row${isSelected ? ' already-added' : ''}"
+           onclick="${isSelected ? '' : `selectStaff('${s.id}')`}">
+        <div class="pt-result-photo" style="background:${s.color};">${s.initials}</div>
+        <div class="pt-result-info">
+          <div class="pt-result-name">${s.name} ${busyHtml}</div>
+          <div class="pt-result-meta">${s.role} · ${s.dept}</div>
+        </div>
+        ${addBtn}
+      </div>`;
+  }).join('');
+
+  if (matches.length === 0) {
+    rows = `<div style="padding:12px 14px;font-size:13px;color:var(--text-muted);text-align:center;">
+      <i class="ti ti-search-off" style="font-size:18px;display:block;margin-bottom:4px;"></i>No facilitators found</div>`;
+  }
+
+  // Always append "Add new facilitator" option at the bottom
+  rows += `
+    <div class="pt-result-row" style="border-top:1px solid var(--border-subtle);"
+         onclick="openAddFacilitatorForm()">
+      <div class="pt-result-photo" style="background:#F0F3FF;">
+        <i class="ti ti-plus" style="font-size:16px;color:#143AC3;"></i>
+      </div>
+      <div class="pt-result-info">
+        <div class="pt-result-name" style="color:#143AC3;">Add new facilitator</div>
+        <div class="pt-result-meta">Create a new entry in the system</div>
+      </div>
+    </div>`;
+
+  resultsEl.innerHTML = rows;
+  resultsEl.classList.add('visible');
+}
+
+function selectStaff(id) {
+  state.staffId = id;
+  document.getElementById('staffSearchInput').value = '';
+  state.staffSearchQuery = '';
+  document.getElementById('staffSearchResults').classList.remove('visible');
+  renderSelectedStaff();
+  renderTimeSlots();
+  syncConfirmBtn();
+}
+
+function removeStaff() {
+  state.staffId = null;
+  renderSelectedStaff();
+  renderTimeSlots();
+  syncConfirmBtn();
+}
+
+function renderSelectedStaff() {
+  const wrap = document.getElementById('selectedStaffWrap');
+  if (!wrap) return;
+  if (!state.staffId) { wrap.style.display = 'none'; return; }
+  const s = STAFF_DATA.find(x => x.id === state.staffId);
+  if (!s) { wrap.style.display = 'none'; return; }
+  const avail = staffIsAvailable(s, state.timeSlot);
+  const conflictHtml = !avail
+    ? `<span class="conflict-chip"><i class="ti ti-alert-triangle" style="font-size:9px;"></i> Conflict at ${state.timeSlot}</span>`
+    : '';
+  wrap.style.display = 'block';
+  wrap.innerHTML = `
+    <div class="selected-pt-card${!avail ? ' has-conflict' : ''}">
+      <div class="selected-pt-photo" style="background:${s.color};">${s.initials}</div>
+      <div style="flex:1;min-width:0;">
+        <div class="selected-pt-name">${s.name} ${conflictHtml}</div>
+        <div class="selected-pt-meta">${s.role} · ${s.dept}</div>
+      </div>
+      <button onclick="removeStaff()" style="width:26px;height:26px;border-radius:50%;border:none;background:rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="ti ti-x" style="font-size:13px;color:var(--text-secondary);"></i>
+      </button>
+    </div>`;
+}
+
+// ─── ADD NEW FACILITATOR ──────────────────────────────────────────────────────
+function openAddFacilitatorForm() {
+  document.getElementById('staffSearchResults').classList.remove('visible');
+  document.getElementById('addFacilitatorForm').style.display = 'block';
+  document.getElementById('newFacName').focus();
+}
+
+function cancelAddFacilitator() {
+  document.getElementById('addFacilitatorForm').style.display = 'none';
+  document.getElementById('newFacName').value = '';
+  document.getElementById('newFacRole').value = '';
+  document.getElementById('newFacDept').value = '';
+  const errEl = document.getElementById('addFacError');
+  if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+}
+
+function submitAddFacilitator() {
+  const name = document.getElementById('newFacName').value.trim();
+  const role = document.getElementById('newFacRole').value;
+  const dept = document.getElementById('newFacDept').value;
+  const errEl = document.getElementById('addFacError');
+  if (!name || !role || !dept) {
+    errEl.textContent = 'Please fill in all fields.';
+    errEl.style.display = 'block';
+    return;
+  }
+  errEl.style.display = 'none';
+  const initials = name.split(' ').filter(Boolean).map(w => w[0].toUpperCase()).slice(0,2).join('');
+  const colors = ['#7c3aed','#0369a1','#0f766e','#be185d','#c2410c','#b45309','#4f46e5'];
+  const color  = colors[STAFF_DATA.length % colors.length];
+  const newId  = 'sNew_' + Date.now();
+  const newStaff = { id:newId, name, role, dept, initials, color, busyUntil:null, types:['counsel','psych','medical','tour','group'] };
+  STAFF_DATA.push(newStaff);
+  cancelAddFacilitator();
+  selectStaff(newId);
+}
+
+// ─── legacy shim (called by some old re-render paths) ────────────────────────
+function renderStaffGrid(containerId, type, timeSlot) { renderSelectedStaff(); }
+
+
+
+// ─── STEP 2: PATIENT SEARCH ──────────────────────────────────────────────────
+let step2SearchTimer;
+
+function handleStep2PatientSearch(val) {
+  clearTimeout(step2SearchTimer);
+  const resultsEl = document.getElementById('ptSearchResults');
+  if (!val || val.length < 2) {
+    resultsEl.classList.remove('visible');
+    return;
+  }
+  step2SearchTimer = setTimeout(() => {
+    const matches = PATIENTS.filter(p => {
+      const textMatch = p.name.toLowerCase().includes(val.toLowerCase()) ||
+                        p.id.toLowerCase().includes(val.toLowerCase());
+      const statusMatch = !state.patientStatusFilter || p.status === state.patientStatusFilter;
+      const genderMatch = !state.patientGenderFilter || p.gender === state.patientGenderFilter;
+      return textMatch && statusMatch && genderMatch;
+    }).slice(0, 5);
+
+    if (matches.length === 0) {
+      const parts = [];
+      if (state.patientStatusFilter) parts.push(`status: <strong>${state.patientStatusFilter}</strong>`);
+      if (state.patientGenderFilter) parts.push(`gender: <strong>${state.patientGenderFilter}</strong>`);
+      const filterNote = parts.length ? ` (${parts.join(', ')})` : '';
+      resultsEl.innerHTML = `<div style="padding:12px 14px;font-size:13px;color:var(--text-muted);text-align:center;">
+        <i class="ti ti-search-off" style="font-size:18px;display:block;margin-bottom:4px;"></i>No patients found${filterNote}</div>`;
+      resultsEl.classList.add('visible');
+      return;
+    }
+
+    const isGroup = state.apptType === 'group';
+    resultsEl.innerHTML = matches.map(p => {
+      const alreadyAdded = state.patients.some(sp => sp.id === p.id);
+      const conflict = patientHasConflict(p);
+      const conflictHtml = conflict
+        ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:700;color:#b91c1c;">
+             <i class="ti ti-alert-triangle" style="font-size:10px;"></i> Busy at ${state.timeSlot}
+           </span>`
+        : '';
+      const addBtn = alreadyAdded
+        ? `<span style="font-size:12px;color:var(--text-secondary);flex-shrink:0;">Added</span>`
+        : `<button class="btn btn-secondary btn-sm btn-add-pt" onclick="event.stopPropagation();addPatient2(${PATIENTS.indexOf(p)})">
+             <i class="ti ti-plus" style="font-size:11px;"></i> ${isGroup ? 'Add' : 'Select'}
+           </button>`;
+      return `
+        <div class="pt-result-row${alreadyAdded ? ' already-added' : ''}"
+             onclick="${alreadyAdded ? '' : `addPatient2(${PATIENTS.indexOf(p)})`}">
+          <div class="pt-result-photo">${p.initials}</div>
+          <div class="pt-result-info">
+            <div class="pt-result-name">${p.name} ${conflictHtml}</div>
+            <div class="pt-result-meta">ID #${p.id} · DOB: ${p.dob} · <span style="text-transform:capitalize;font-weight:500;color:${p.status==='lead'?'#9A3412':'#0C5E73'};">${p.status}</span> · <span style="text-transform:capitalize;">${p.gender}</span></div>
+          </div>
+          ${addBtn}
+        </div>`;
+    }).join('');
+    resultsEl.classList.add('visible');
+  }, 240);
+}
+
+function patientHasConflict(p) {
+  if (!state.timeSlot || !p?.id) return false;
+  return (PATIENT_CONFLICTS[p.id] || []).includes(state.timeSlot);
+}
+
+function addPatient2(idx) {
+  const p = PATIENTS[idx];
+  if (!p) return;
+  const isGroup = state.apptType === 'group';
+  if (isGroup) {
+    if (!state.patients.some(sp => sp.id === p.id)) {
+      state.patients.push(p);
+    }
+  } else {
+    state.patients = [p];
+    state.patient = p;
+    document.getElementById('step2PatientInput').value = '';
+    document.getElementById('ptSearchResults').classList.remove('visible');
+    // Update caretaker toggle label
+    if (p.caretaker) {
+      document.getElementById('caretakerToggleSub').textContent = `Sends summary to ${p.caretaker}`;
+    }
+  }
+  renderSelectedPatients();
+  renderTimeSlots();
+  syncConfirmBtn();
+}
+
+function removePatient2(idx) {
+  state.patients.splice(idx, 1);
+  state.patient = state.patients[0] || null;
+  renderSelectedPatients();
+  renderTimeSlots();
+  syncConfirmBtn();
+}
+
+function renderSelectedPatients() {
+  const container = document.getElementById('selectedPatientsList');
+  const countEl   = document.getElementById('groupPatientCount');
+  if (!container) return;
+
+  if (state.patients.length === 0) {
+    container.style.display = 'none';
+    if (countEl) countEl.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'flex';
+  if (state.apptType === 'group' && countEl) {
+    countEl.style.display = 'inline';
+    countEl.textContent = `${state.patients.length} added`;
+  } else if (countEl) {
+    countEl.style.display = 'none';
+  }
+
+  container.innerHTML = state.patients.map((p, i) => {
+    const conflict = patientHasConflict(p);
+    const conflictHtml = conflict
+      ? `<span class="conflict-chip"><i class="ti ti-alert-triangle" style="font-size:9px;"></i> Conflict at ${state.timeSlot}</span>`
+      : '';
+    return `
+      <div class="selected-pt-card${conflict ? ' has-conflict' : ''}">
+        <div class="selected-pt-photo">${p.initials}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="selected-pt-name">${p.name}</div>
+          <div class="selected-pt-meta">ID #${p.id} · DOB: ${p.dob}</div>
+          ${conflictHtml}
+        </div>
+        <button class="btn btn-ghost btn-remove-pt" onclick="removePatient2(${i})" title="Remove">
+          <i class="ti ti-x" style="font-size:13px;"></i>
+        </button>
+      </div>`;
+  }).join('');
+}
+
+function updatePatientSummary() {
+  if (state.type !== 'group') {
+    state.patient = state.patients[0] || null;
+  }
+  syncConfirmBtn();
+}
+
+// ─── RECURRENCE ──────────────────────────────────────────────────────────────
+function onRecurrenceToggle() {
+  state.recurrence.enabled = document.getElementById('toggleRecurrence').checked;
+  document.getElementById('recurrenceExpand').classList.toggle('visible', state.recurrence.enabled);
+  onRecurrenceChange();
+}
+
+function onRecurrenceChange() {
+  state.recurrence.freq    = document.getElementById('recurrenceFreq').value;
+  state.recurrence.endDate = document.getElementById('recurrenceEnd').value;
+  updatePreview();
+  const summaryEl  = document.getElementById('recurrenceSummary');
+  const summaryTxt = document.getElementById('recurrenceSummaryText');
+  if (state.recurrence.enabled && state.recurrence.endDate) {
+    const labels = { daily:'Daily', weekly:'Weekly', biweekly:'Bi-weekly', monthly:'Monthly' };
+    const endFmt = new Date(state.recurrence.endDate + 'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    summaryTxt.textContent = `${labels[state.recurrence.freq]} · ends ${endFmt}`;
+    summaryEl.style.display = 'block';
+  } else {
+    summaryEl.style.display = 'none';
+  }
+}
+
+// ─── CONFIRM BUTTON SYNC ──────────────────────────────────────────────────────
+function syncConfirmBtn() {
+  updatePreview();
+  const btn = document.getElementById('btnConfirm');
+  if (!btn) return;
+  const apptName = (document.getElementById('appointmentName')?.value || '').trim();
+  const hasDateTimeError = ['dateError','startTimeError','endTimeError'].some(id => {
+    const el = document.getElementById(id);
+    return el && el.style.display !== 'none' && el.style.display !== '';
+  });
+  const ready = !!(apptName && state.type && state.patients.length > 0 && state.timeSlot && state.roomId && !hasDateTimeError);
+  btn.disabled = !ready;
+  btn.style.opacity = ready ? '1' : '0.4';
+  btn.style.pointerEvents = ready ? 'auto' : 'none';
+}
+
+// ─── STEP 2: TIME SLOTS ───────────────────────────────────────────────────────
+
+function to12hr(t) {
+  const [h, m] = t.split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const hour   = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2,'0')}`;
+}
+
+// "8:00 – 8:30 AM" — period shown once at end; cross-period gets both e.g. "11:30 AM – 12:00 PM"
+function fmtSlotRange(start, end) {
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  const sP = sh >= 12 ? 'PM' : 'AM';
+  const eP = eh >= 12 ? 'PM' : 'AM';
+  const sH = sh % 12 || 12;
+  const eH = eh % 12 || 12;
+  const sStr = `${sH}:${String(sm).padStart(2,'0')}`;
+  const eStr = `${eH}:${String(em).padStart(2,'0')} ${eP}`;
+  return sP === eP ? `${sStr} – ${eStr}` : `${sStr} ${sP} – ${eStr}`;
+}
+
+// Derive slot duration from manual start/end selection; default 30 min
+function getSlotDuration() {
+  if (state.startTime && state.endTime) {
+    const diff = toMins(state.endTime) - toMins(state.startTime);
+    if (diff > 0 && diff <= 240) return diff;
+  }
+  return 30;
+}
+
+// Generate start times spaced by durationMins within clinic hours (08:00–17:00)
+function generateSlots(durationMins) {
+  const slots = [];
+  for (let s = DAY_START_MINS; s + durationMins <= DAY_END_MINS; s += durationMins) {
+    slots.push(`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`);
+  }
+  return slots;
+}
+
+/// Slot is blocked if any selected patient has a conflict OR the facilitator is still busy
+function isSlotBlocked(startT, durationMins) {
+  const sMin = toMins(startT);
+  const eMin = sMin + durationMins;
+
+  // Check all selected patients
+  for (const p of state.patients) {
+    const conflicts = PATIENT_CONFLICTS[p.id] || [];
+    for (const ct of conflicts) {
+      const ctStart = toMins(ct);
+      const ctEnd   = ctStart + 30; // each conflict entry is a 30-min block
+      if (sMin < ctEnd && eMin > ctStart) return true;
+    }
+  }
+
+  // Check selected facilitator
+  if (state.staffId) {
+    const staff = STAFF_DATA.find(s => s.id === state.staffId);
+    if (staff?.busyUntil && sMin < toMins(staff.busyUntil)) return true;
+  }
+
+  return false;
+}
+
+function renderTimeSlots() {
+  const container = document.getElementById('timeSlots');
+  if (!container) return;
+  const dur   = getSlotDuration();
+  const slots = generateSlots(dur);
+
+  // Update label with current duration
+  const labelEl = document.querySelector('.suggested-slots-label');
+  if (labelEl) {
+    const durLabel = dur % 60 === 0
+      ? `${dur/60}h`
+      : dur >= 60 ? `${Math.floor(dur/60)}h ${dur%60}m` : `${dur} min`;
+    labelEl.innerHTML = `<i class="ti ti-bolt"></i> Suggested Slots <span style="font-size:10px;font-weight:500;color:var(--text-muted);margin-left:4px;font-style:italic;">${durLabel} each</span>`;
+  }
+
+  const hasFilter = state.patients.length > 0 || !!state.staffId;
+  const available = hasFilter ? slots.filter(t => !isSlotBlocked(t, dur)) : slots;
+
+  if (available.length === 0 && hasFilter) {
+    const who = [];
+    if (state.patients.length > 0) who.push(state.patients.length === 1 ? state.patients[0].name : `${state.patients.length} patients`);
+    if (state.staffId) { const s = STAFF_DATA.find(x => x.id === state.staffId); if (s) who.push(s.name); }
+    container.innerHTML = `<div style="width:100%;padding:14px 0;text-align:center;font-size:13px;color:var(--text-muted);">
+      <i class="ti ti-calendar-off" style="font-size:20px;display:block;margin-bottom:6px;"></i>
+      No available slots for <strong>${who.join(' & ')}</strong> today.<br>
+      <span style="font-size:12px;">Try a different date or adjust the selection.</span>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = available.map(t => {
+    const endT  = addMins(t, dur);
+    const isSel = state.timeSlot === t;
+    return `<button class="time-slot${isSel?' selected':''}"
+              onclick="pickTime('${t}',${dur})">${fmtSlotRange(t, endT)}</button>`;
+  }).join('');
+
+  // If current selection is no longer in available set, clear it
+  if (state.timeSlot && !available.includes(state.timeSlot)) {
+    state.timeSlot = null;
+    state.startTime = null;
+    state.endTime   = null;
+    document.getElementById('bookStartTime').value = '';
+    document.getElementById('bookEndTime').value   = '';
+    syncConfirmBtn();
+  }
+}
+
+function addMins(t, mins) {
+  const [h, m] = t.split(':').map(Number);
+  const total = h * 60 + m + mins;
+  const hh = String(Math.floor(total / 60) % 24).padStart(2, '0');
+  const mm = String(total % 60).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+function pickTime(t, dur) {
+  const duration  = dur || getSlotDuration();
+  state.timeSlot  = t;
+  state.startTime = t;
+  state.endTime   = addMins(t, duration);
+  const startEl = document.getElementById('bookStartTime');
+  const endEl   = document.getElementById('bookEndTime');
+  if (startEl) startEl.value = state.startTime;
+  if (endEl)   endEl.value   = state.endTime;
+  renderTimeSlots();
+  triggerReverify();
+}
+
+// ─── helpers ─────────────────────────────────────────────────────────────────
+function setFieldError(errorSpanId, msgSpanId, inputId, message) {
+  const span = document.getElementById(errorSpanId);
+  const msg  = document.getElementById(msgSpanId);
+  const inp  = document.getElementById(inputId);
+  if (message) {
+    if (msg)  msg.textContent = message;
+    if (span) span.style.display = 'inline-flex';
+    if (inp)  inp.style.borderColor = '#ef4444';
+  } else {
+    if (span) span.style.display = 'none';
+    if (inp)  inp.style.borderColor = '';
+  }
+}
+
+function nowIST() {
+  // Returns { date:'YYYY-MM-DD', time:'HH:MM' } in IST
+  const now = new Date();
+  const date = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const time = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Kolkata', hour:'2-digit', minute:'2-digit' });
+  return { date, time };
+}
+
+function isDateInPast(dateStr) {
+  return dateStr < nowIST().date;
+}
+
+function isTimeInPast(timeStr) {
+  const { date, time } = nowIST();
+  return state.date === date && timeStr < time;
+}
+
+// ─── date / time change handlers ─────────────────────────────────────────────
+function onDateChange() {
+  const val = document.getElementById('bookDate').value;
+  if (isDateInPast(val)) {
+    setFieldError('dateError', 'dateErrorMsg', 'bookDate', 'Past dates cannot be booked.');
+    // Reset to today
+    const today = nowIST().date;
+    document.getElementById('bookDate').value = today;
+    state.date = today;
+  } else {
+    setFieldError('dateError', 'dateErrorMsg', 'bookDate', null);
+    state.date = val;
+    // Re-validate time fields when date changes (today vs future)
+    if (state.startTime) onStartTimeChange();
+  }
+  updatePreview();
+  if (state.timeSlot) triggerReverify();
+}
+
+function onStartTimeChange() {
+  const val = document.getElementById('bookStartTime').value;
+  if (!val) { state.startTime = null; state.timeSlot = null; return; }
+
+  if (isTimeInPast(val)) {
+    setFieldError('startTimeError', 'startTimeErrorMsg', 'bookStartTime',
+      'Start time is in the past. Please pick a future time.');
+    state.startTime = null;
+    state.timeSlot  = null;
+    renderTimeSlots();
+    syncConfirmBtn();
+    return;
+  }
+  const startMins = toMins(val);
+  if (startMins < DAY_START_MINS) {
+    setFieldError('startTimeError', 'startTimeErrorMsg', 'bookStartTime',
+      'Clinic opens at 8:00 AM.');
+    state.startTime = null; state.timeSlot = null;
+    renderTimeSlots(); syncConfirmBtn(); return;
+  }
+  if (startMins >= DAY_END_MINS) {
+    setFieldError('startTimeError', 'startTimeErrorMsg', 'bookStartTime',
+      'Start time must be before 5:00 PM.');
+    state.startTime = null; state.timeSlot = null;
+    renderTimeSlots(); syncConfirmBtn(); return;
+  }
+  setFieldError('startTimeError', 'startTimeErrorMsg', 'bookStartTime', null);
+  state.startTime = val;
+  state.timeSlot  = val;
+  // Auto-advance end time if not set or end <= start
+  const endEl  = document.getElementById('bookEndTime');
+  const curEnd = endEl ? endEl.value : '';
+  if (!curEnd || toMins(curEnd) <= toMins(val)) {
+    state.endTime = addMins(val, 30);
+    if (endEl) endEl.value = state.endTime;
+    setFieldError('endTimeError', 'endTimeErrorMsg', 'bookEndTime', null);
+  }
+  renderTimeSlots();
+  if (state.timeSlot) triggerReverify();
+}
+
+function onEndTimeChange() {
+  const val = document.getElementById('bookEndTime').value;
+  if (!val) { state.endTime = null; return; }
+
+  if (state.startTime && toMins(val) <= toMins(state.startTime)) {
+    setFieldError('endTimeError', 'endTimeErrorMsg', 'bookEndTime',
+      'End time must be after start time.');
+    state.endTime = null;
+    renderTimeSlots();
+    updatePreview();
+    return;
+  }
+  if (toMins(val) > DAY_END_MINS) {
+    setFieldError('endTimeError', 'endTimeErrorMsg', 'bookEndTime',
+      'End time cannot be after 5:00 PM.');
+    state.endTime = null;
+    renderTimeSlots();
+    updatePreview();
+    return;
+  }
+  setFieldError('endTimeError', 'endTimeErrorMsg', 'bookEndTime', null);
+  state.endTime = val;
+  renderTimeSlots();
+  updatePreview();
+}
+
+// ─── RE-VERIFY ANIMATION ─────────────────────────────────────────────────────
+let reverifyTimer;
+function triggerReverify() {
+  // Update slot selection immediately
+  renderTimeSlots();
+
+  // Show banner
+  const banner = document.getElementById('reverifyBanner');
+  banner.classList.add('visible');
+
+  // Add shimmer overlay to all room and staff cards
+  document.querySelectorAll('.room-card, .staff-card').forEach(c => c.classList.add('reverifying'));
+
+  clearTimeout(reverifyTimer);
+  reverifyTimer = setTimeout(() => {
+    banner.classList.remove('visible');
+    document.querySelectorAll('.room-card, .staff-card').forEach(c => c.classList.remove('reverifying'));
+
+    // Re-render with updated availability
+    renderRoomGrid();
+    renderStaffGrid('staffGridStep2', state.type, state.timeSlot);
+    renderSelectedPatients(); // refresh conflict state on patient cards
+    clearConflict();
+
+    // Check if selected room is now busy
+    if (state.roomId) {
+      const room = ROOMS_DATA.find(r => r.id === state.roomId);
+      if (room && room.busySlots[state.timeSlot]) {
+        state.roomId = null;
+        showConflict(`${room.name} is occupied at ${state.timeSlot}. Please choose a different room or time.`);
+      }
+    }
+
+    // Check if selected staff is now busy
+    if (state.staffId) {
+      const selStaff = STAFF_DATA.find(s => s.id === state.staffId);
+      if (selStaff && !staffIsAvailable(selStaff, state.timeSlot)) {
+        state.staffId = null;
+        renderSelectedStaff();
+        showConflict(`${selStaff.name} is unavailable at ${state.timeSlot}. Please choose another provider.`);
+      }
+    }
+
+    syncConfirmBtn();
+  }, 1400);
+}
+
+/// ─── STEP 2: ROOMS ───────────────────────────────────────────────────────────
+function renderRoomGrid() {
+  const container = document.getElementById('roomGrid');
+  const isLab  = state.type === 'medical';
+  const minCap = state.apptType === 'group' ? 8 : 0;
+
+  const visibleRooms = isLab
+    ? ROOMS_DATA.filter(r => !!r.labCapabilities)
+    : ROOMS_DATA.filter(r => !r.labCapabilities);
+
+  container.innerHTML = visibleRooms.map(r => {
+    const filtered = r.capacity < minCap || !r.tags.includes(state.type);
+    const busy     = state.timeSlot ? !!r.busySlots[state.timeSlot] : false;
+    const selClass  = state.roomId === r.id ? 'room-selected' : '';
+    const filtClass = filtered ? 'room-filtered' : '';
+    const busyClass = busy ? 'room-busy' : '';
+    const statusBadge = busy
+      ? `<span class="room-status-badge busy"><span class="avail-dot red"></span>Occupied${state.timeSlot ? ' at ' + state.timeSlot : ''}</span>`
+      : `<span class="room-status-badge avail"><span class="avail-dot green"></span>Available</span>`;
+    const busyLabel  = busy ? `<div class="room-busy-label">Next free: ${nextFree(r)}</div>` : '';
+    const checkIcon  = `<div class="room-selected-check"><i class="ti ti-check" style="font-size:10px;"></i></div>`;
+    const clickFn    = (!busy && !filtered) ? `pickRoom('${r.id}')` : '';
+    const tipAttr    = busy ? `data-tip="Schedule Conflict — occupied at ${state.timeSlot}"` : '';
+
+    // Lab-specific metadata
+    const labCapHtml = (isLab && r.labCapabilities)
+      ? `<div class="lab-capabilities">
+           <div class="lab-cap-label"><i class="ti ti-flask" style="font-size:11px;"></i> Capabilities</div>
+           <div class="lab-cap-list">${r.labCapabilities.map(c => `<span class="lab-cap-chip">${c}</span>`).join('')}</div>
+         </div>`
+      : '';
+
+    const featHtml = r.features.map(f => `<span class="room-feature">${f}</span>`).join('');
+
+    return `
+      <div class="card room-card ${selClass} ${filtClass} ${busyClass}${busy ? ' has-tip' : ''}" onclick="${clickFn}" ${tipAttr}>
+        <div class="reverifying-overlay"></div>
+        ${checkIcon}
+        ${statusBadge}
+        <div class="room-name">${r.name}</div>
+        <div class="room-type">${r.type}</div>
+        <div class="room-capacity"><i class="ti ti-users" style="font-size:13px;"></i> Up to ${r.capacity} people</div>
+        ${labCapHtml}
+        <div class="room-features">${featHtml}</div>
+        ${busyLabel}
+      </div>`;
+  }).join('') || `<div style="padding:16px;text-align:center;font-size:13px;color:var(--text-muted);">
+    <i class="ti ti-door-off" style="font-size:20px;display:block;margin-bottom:6px;"></i>No rooms available for this service type</div>`;
+}
+
+function nextFree(room) {
+  const busySet = new Set(Object.keys(room.busySlots));
+  for (const t of generateSlots(30)) {
+    if (!busySet.has(t)) return to12hr(t);
+  }
+  return 'Tomorrow';
+}
+
+function pickRoom(id) {
+  state.roomId = id;
+  renderRoomGrid();
+  clearConflict();
+  syncConfirmBtn();
+}
+
+// ─── CONFLICT ALERT — shown in preview sidebar ────────────────────────────────
+function showConflict(msg) {
+  const el = document.getElementById('previewConflict');
+  const msgEl = document.getElementById('previewConflictMsg');
+  if (!el || !msgEl) return;
+  msgEl.textContent = msg;
+  el.style.display = 'block';
+}
+function clearConflict() {
+  const el = document.getElementById('previewConflict');
+  if (el) el.style.display = 'none';
+}
+
+// ─── LIVE PREVIEW ─────────────────────────────────────────────────────────────
+function set(id, html, isEmpty) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = html;
+  el.className = 'preview-value' + (isEmpty ? ' empty' : '');
+}
+
+function updatePreview() {
+  // Name
+  const name = (document.getElementById('appointmentName')?.value || '').trim();
+  set('pvNameVal', name || 'Not entered', !name);
+
+  // Service type
+  const tm = state.type ? TYPE_META[state.type] : null;
+  if (tm) {
+    set('pvServiceVal',
+      `<span class="preview-type-pill" style="background:${tm.bg};color:${tm.color};">
+        <i class="ti ${tm.icon}" style="font-size:11px;"></i>${tm.label}
+      </span>`, false);
+  } else {
+    set('pvServiceVal', 'Not selected', true);
+  }
+
+  // Appointment type
+  const at = state.apptType;
+  set('pvApptTypeVal',
+    at ? `<i class="ti ti-${at === 'group' ? 'users' : 'user'}" style="font-size:13px;"></i>${at === 'group' ? 'Group' : 'Individual'}`
+       : 'Not selected', !at);
+
+  // Patients
+  if (state.patients.length === 0) {
+    set('pvPatientVal', 'Not selected', true);
+  } else if (state.patients.length === 1) {
+    const p = state.patients[0];
+    set('pvPatientVal',
+      `<span class="preview-patient-avatar">${p.initials}</span>${p.name}`, false);
+  } else {
+    const chips = state.patients.map(p =>
+      `<span class="preview-patient-chip"><span class="preview-patient-avatar">${p.initials}</span>${p.name}</span>`
+    ).join('');
+    set('pvPatientVal', `<div style="display:flex;flex-direction:column;gap:4px;width:100%;">${chips}</div>`, false);
+  }
+
+  // Facilitator
+  const staff = STAFF_DATA.find(s => s.id === state.staffId);
+  set('pvStaffVal',
+    staff
+      ? `<span style="width:24px;height:24px;border-radius:50%;background:${staff.color};display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;flex-shrink:0;">${staff.initials}</span>${staff.name}`
+      : 'Not selected', !staff);
+
+  // Date
+  if (state.date) {
+    const d = new Date(state.date + 'T00:00');
+    set('pvDateVal', d.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' }), false);
+  } else {
+    set('pvDateVal', 'Not selected', true);
+  }
+
+  // Time
+  if (state.startTime) {
+    const fmt = t => { const [h,m] = t.split(':'); const hr = +h; return `${hr>12?hr-12:hr||12}:${m} ${hr>=12?'PM':'AM'}`; };
+    const timeStr = state.endTime ? `${fmt(state.startTime)} – ${fmt(state.endTime)}` : fmt(state.startTime);
+    set('pvTimeVal', `<i class="ti ti-clock" style="font-size:13px;color:var(--text-muted);"></i>${timeStr}`, false);
+  } else {
+    set('pvTimeVal', 'Not selected', true);
+  }
+
+  // Room
+  const room = ROOMS_DATA.find(r => r.id === state.roomId);
+  set('pvRoomVal',
+    room
+      ? `<i class="ti ti-door" style="font-size:13px;color:var(--text-muted);"></i>${room.name} <span style="font-size:12px;color:var(--text-secondary);font-weight:400;">(${room.type})</span>`
+      : 'Not selected', !room);
+
+  // Recurrence
+  const recRow = document.getElementById('pvRecurrenceRow');
+  if (recRow) {
+    if (state.recurrence.enabled && state.recurrence.freq) {
+      recRow.style.display = 'flex';
+      set('pvRecurrenceVal',
+        `<i class="ti ti-refresh" style="font-size:13px;color:var(--text-muted);"></i>${state.recurrence.freq.charAt(0).toUpperCase()+state.recurrence.freq.slice(1)}${state.recurrence.endDate ? ' until ' + state.recurrence.endDate : ''}`, false);
+    } else {
+      recRow.style.display = 'none';
+    }
+  }
+}
+
+
+// ─── CONFIRM BOOKING ─────────────────────────────────────────────────────────
+function confirmBooking() {
+  const patName  = state.apptType === 'group'
+    ? `${state.patients.length} patients`
+    : (state.patients[0]?.name || state.patient?.name || 'New Lead');
+  const typeMeta = TYPE_META[state.type];
+  const room     = ROOMS_DATA.find(r => r.id === state.roomId);
+  const staff    = STAFF_DATA.find(s => s.id === state.staffId);
+  const dateStr  = state.date
+    ? new Date(state.date + 'T00:00').toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})
+    : '—';
+
+  // Build success overlay
+  const overlay = document.getElementById('successOverlay');
+  document.getElementById('successPatient').textContent  = patName;
+  document.getElementById('successType').innerHTML       = typeMeta ? `<i class="ti ${typeMeta.icon}" style="color:${typeMeta.color};"></i> ${typeMeta.label}` : '—';
+  document.getElementById('successDateTime').textContent = `${dateStr} at ${state.timeSlot || '—'}`;
+  document.getElementById('successRoom').textContent     = room?.name || '—';
+  document.getElementById('successStaff').textContent    = staff?.name || '—';
+  overlay.classList.add('show');
+
+  // Store for appointments2 page
+  sessionStorage.setItem('pendingAppointment', JSON.stringify({
+    patient: patName, type: typeMeta?.label, date: state.date,
+    time: state.timeSlot, room: room?.name || '', provider: staff?.name || '', status:'Upcoming',
+    recurrence: state.recurrence.enabled ? state.recurrence : null,
+  }));
+  sessionStorage.setItem('bookingToast', `Appointment confirmed for ${patName}`);
+}
+
+// ─── UTIL ─────────────────────────────────────────────────────────────────────
+function toMins(t) {
+  if (!t) return 9999;
+  const [h,m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show';
+  setTimeout(() => t.className = '', 3000);
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const bookDate = document.getElementById('bookDate');
+  if (bookDate) {
+    bookDate.value = todayIST;
+    bookDate.min   = todayIST;  // browser-level block on past dates
+  }
+  state.date = todayIST;
+
+  // Default: Individual selected
+  const individualRadio = document.querySelector('input[name="apptType"][value="individual"]');
+  if (individualRadio) { individualRadio.checked = true; selectApptType('individual'); }
+
+  // Render grids on load
+  renderTimeSlots();
+  renderRoomGrid();
+  renderSelectedStaff();
+  updatePreview();
+});
+
+// ESC — go back to appointments2
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') window.location.href = 'appointments2.html';
+});
+</script>
+</body>
+</html>

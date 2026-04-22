@@ -581,6 +581,52 @@ body { background: var(--bg-page); margin: 0; padding: 0; }
 #appBody { display: flex; padding-top: var(--header-height); }
 #appMain  { background: var(--bg-main); flex: 1; margin-left: var(--sidebar-width); min-height: calc(100vh - var(--header-height)); overflow-x: auto; }
 
+/* ── Designer Assistant Agent button ── */
+@keyframes da-glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(39, 178, 178, 0.45); }
+  50%       { box-shadow: 0 0 0 7px rgba(39, 178, 178, 0); }
+}
+
+.da-agent-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--cta-gradient);
+  color: #fff;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  transition: transform 150ms ease, box-shadow 150ms ease, opacity 150ms;
+  animation: da-glow-pulse 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.da-agent-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(39, 178, 178, 0.40);
+  opacity: 0.92;
+  animation: none;
+}
+
+.da-agent-btn i {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.da-agent-badge {
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
 /* ── Button component ── */
 .btn {
   display: inline-flex;
