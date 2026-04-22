@@ -1286,155 +1286,175 @@
     // ── Output Viewer ──────────────────────────────────────────────
     marked.setOptions({ breaks: true, gfm: true });
 
-    const _savedOutput = `## What Was Discussed
-
-### Session 1 — Deepa Patel: Surescripts & US Healthcare Overview
-
-**What Surescripts is:**
-- A **Health Information Network (HIN)** / middleware company
-- Sits between EHRs/EMRs and pharmacies/payers
-- Validates and routes electronic prescriptions across the US healthcare ecosystem
-- Hired by major EHRs (Epic, Cerner, Greenway, Aetna) to validate transactions
-- Known for extremely high quality — only **6 outstanding production defects** in ~20 years
-- **First time** engaging an external vendor (EMETS/the team) for development
-
-**The prescription workflow:**
-1. Doctor diagnoses patient → prescribes medication
-2. EHR sends **New RX** (new prescription) → hits Surescripts first
-3. Surescripts validates (age-appropriateness, drug safety, etc.)
-4. If valid → forwards to pharmacy; if invalid → rejects back to prescriber
-5. Patient refill → pharmacy sends **Renewal Request** → back through Surescripts → prescriber approves/modifies
-
-**NCPDP Certification:**
-- Stands for **National Council for Prescription Drug Programs**
-- Any EHR or pharmacy that connects to Surescripts must pass this certification
-- The team's project is building/supporting this certification tool
-
-**PPT — Patient Price Transparency (Team 36 project):**
-- Patients currently can't compare drug prices across pharmacies
-- Building an app where patients opt-in via SMS link
-- They can see medication prices + pharmacy distance to choose the cheapest option
-- Breaks the constraint of being locked to prescriber's chosen pharmacy
+    const _savedOutput = `# Problem Framing — Surescripts Certification Tool
+> Designer-Assistant · Problem Framing Mode · Sessions: Deepa Patel, Abhijit Joshi, Samantha Bailey Fast
 
 ---
 
-### Session 2 — Abhijit Joshi: Certification Tool Walkthrough
+## The Real Problem
 
-**The Certification Tool (Surescripts Workbench) — two user types:**
-- **Admin/Internal user** — can create test steps, test cases, test projects, assign to accounts
-- **External user (customer)** — limited view; can only execute assigned projects, see progress dashboard
+**Surface problem:** Customers need to certify their systems to connect to the Surescripts network.
 
-**Hierarchy of the certification structure:**
-\`\`\`
-Test Step → Test Case → Test Project → Account (Customer)
-\`\`\`
+**The real problem:** Every 5–7 years, a mandated NCPDP standard upgrade creates a massive, predictable workload spike. Previously this required **57 hours of manual effort per customer**. With hundreds of customers, this forced Surescripts to either expand their workforce or find a way to make the process self-service at scale. The Certification Testing Tool is the primary lever to solve this.
 
-**Test Step creation (key fields):**
-- Product type: E-prescribing, Dictionary, EPA, Eligibility, Medication History, Formulary, PBN, RTPB
-- Message version
-- Message type (New RX, Renewal Request, etc.)
-- Message direction: **Customer Sends** (prescriber → pharmacy) or **Customer Receives**
-- SPI (prescriber ID) or NCPDP ID (pharmacy ID)
-- Assertions (system assertions vs. user assertions)
-- Attachment support (optional or mandatory)
-
-**Assertions:**
-- Rules that validate incoming XML messages
-- Can check field presence, values (equals, not equals, contains, etc.)
-- Two failure types: **Error** (blocks execution) vs **Warning** (flags but continues)
-- Troubleshooting messages configurable per assertion
-
-**Execution screen:**
-- External customer executes assigned test cases here
-- Shows assertions, form fields, file upload prompts
-- Message ID + **Relate To** field links request-response pairs
-
-**RTPB Autoresponder (Team 32 work):**
-- Automatically triggers responses based on PBM Member ID or last name + ZIP code match
+> "It used to take us about 57 hours to do a project. Now it takes us about 18 hours. We're working to get to 9 hours by the end of 2026." — Samantha Bailey Fast
 
 ---
 
-## Domains to Understand
+## Who Has the Problem
 
-### 1. US Healthcare Ecosystem (Critical)
+| User | Who They Are | Their Pain |
+|---|---|---|
+| **Engineering customers** | Developers at EHRs/pharmacies updating XML code | Must rewrite integration code every upgrade cycle; need fast feedback on what's wrong |
+| **Non-engineering customers** | Business/ops side of customer org | Managing certification progress without deep technical knowledge |
+| **Surescripts cert team** | Internal staff shepherding customers | Manually guided every customer — 57 hrs each. Too labour-intensive at scale |
+| **Surescripts product/UX** | Samantha's team + Chandni + Asif | Improving a complex network tool with no traditional usability testing available |
 
-| Area | What to Know |
+---
+
+## What the Certification Testing Tool Does
+
+The tool converts a fully manual, Surescripts-guided process into a **self-service** one:
+
+\`\`\`
+OLD: Customer → Surescripts cert team (57 hrs manual) → Production
+NEW: Customer → Certification Tool (self-paced) → Sign-off → Production
+\`\`\`
+
+**Key mechanics:**
+- Admin (Surescripts internal) builds Test Steps → Test Cases → Test Projects → assigns to customer Account
+- External customer logs in, executes tests at their own pace in the Stage environment
+- Tool validates XML messages against assertions (field presence, values, error handling)
+- Real-time pass/fail feedback at each step
+- When ready → customer signals sign-off → moves to Production
+
+---
+
+## The NCPDP Standard — Why This Problem Recurs
+
+- **NCPDP** = National Council for Prescription Drug Programs — an independent non-profit
+- Maintains the standard that all prescription data flows on across the Surescripts network
+- Standards evolve: started with only **New RX** (new prescription), now handles refills, cancellations, pharmacy transfers, doctor transfers — richer every version
+- New standard adopted roughly every **5–7 years**
+- Every single customer must update their code each time — no exceptions
+- This creates a **wave of simultaneous upgrade projects** → the workload spike
+
+---
+
+## Hidden Assumptions to Surface
+
+1. **Self-service = better** — Some customers may actually need more guided support, not less. The 9-hour target assumes customers can operate independently, but non-engineering users may struggle.
+2. **Stage = production equivalent** — The tool tests in Stage, but Production can behave differently. Assumptions about parity may mask real issues.
+3. **One tool fits both personas** — Engineering and non-engineering users have fundamentally different mental models. The current tool may be designed primarily for engineers.
+4. **Reducing hours = reducing friction** — Hours saved may come from process efficiency, not necessarily from a better user experience. The two are not the same.
+5. **Good customer feedback = good UX** — v1 has good feedback, but that's relative to the 57-hour manual process. The bar may be low.
+
+---
+
+## Success Criteria
+
+| Type | Target |
 |---|---|
-| **Providers** | Physicians, nurse practitioners — prescribe medications |
-| **Pharmacies** | Dispense medications (Walgreens, CVS) |
-| **Payers** | Insurance companies (e.g., Aetna) — cover costs |
-| **EHR vs EMR** | EHR = whole health record, cross-org referrals, ambulatory; EMR = single org only |
-
-### 2. Electronic Prescribing (E-Rx) Flow
-Understand the end-to-end transaction flow: New RX → Surescripts → Pharmacy → Renewal Request cycle
-
-### 3. NCPDP Standards
-- The standard governing all e-prescribing message formats
-- Every party on the Surescripts network must conform to it
-- Message versions matter (field additions between versions)
-
-### 4. XML Message Structure
-- Prescriptions are exchanged as XML messages
-- Assertions validate specific XML paths/elements
-- Understanding XML path expressions is important for assertion configuration
+| **Quantitative** | 18 hours → **9 hours** per upgrade project by end of 2026 |
+| **Self-service rate** | Customers complete certification without Surescripts intervention |
+| **Qualitative** | Customers feel confident at each step; errors are clear and actionable |
+| **Design** | Both existing screen improvements AND new features shipped |
 
 ---
 
-## Key Terms
+## Constraints
+
+### Technical — The Network Problem
+- This is a **network product** — both the customer's system AND the Surescripts system must be live and communicating simultaneously
+- Cannot create canned or experimental usability testing scenarios
+- **Only research method available:** Observational — sit side by side with real users during actual sessions
+- This is a fundamental, non-negotiable constraint of how the product works
+
+### Organisational
+- Work tracked in **Aha** (temporary — moving to JIRA, timing unknown: maybe June, maybe August)
+- All work lives on **Workbench** platform
+- Design decisions need product team buy-in — they prioritise, not the UX team
+- Team capacity split: Galaxy/Hubble = 25–50% of time; Certification Tester = remaining bandwidth
+
+### Environment Pipeline
+\`\`\`
+Devint (dev/integration) → Stage (customer testing) → Production
+\`\`\`
+Team currently has access to Devint.
+
+---
+
+## Design Scope Confirmed by Samantha
+
+- **Improving existing screens** — UX friction reduction in current flows
+- **New screens** — additional functionality being built
+- **Approach:** Identify opportunities, surface them to product team — adoption is their call
+- **Glue** — Surescripts' internal design system — may be relevant for design work
+
+---
+
+## User Research Available
+
+- Persona work done for **non-engineering users**
+- Separate research done for **engineering users**
+- Not exhaustive, but a starting point — Samantha to share
+- No existing usability test recordings (not feasible given network constraints)
+
+---
+
+## Key Terms Reference
 
 | Term | Meaning |
 |---|---|
-| **Surescripts** | Health information network / middleware for e-prescriptions |
+| **Surescripts** | Health information network — middleware for e-prescriptions |
 | **NCPDP** | National Council for Prescription Drug Programs — the standard |
-| **New RX** | Transaction type for a new prescription |
-| **Renewal Request** | Transaction type when patient requests a refill |
+| **New RX** | Transaction for a new prescription |
+| **Renewal Request** | Transaction when patient requests a refill |
 | **EHR** | Electronic Health Record — cross-org, supports hospitalization |
 | **EMR** | Electronic Medical Record — single org only |
-| **HTV (Health Tech Vendor)** | Another name for EHR companies (Epic, Cerner, Greenway) |
-| **SPI** | Surescripts Prescriber ID — unique ID for a prescriber |
+| **HTV** | Health Tech Vendor — another name for EHR companies |
+| **SPI** | Surescripts Prescriber ID |
 | **NCPDP ID** | Unique ID for a pharmacy on the Surescripts network |
-| **NPI** | National Provider Identifier — standard US provider ID |
-| **ERX / E-Prescription** | Electronic prescription |
-| **Formulary** | List of medications covered by a patient's insurance |
-| **Co-pay** | Amount patient pays out-of-pocket when drug isn't fully covered |
-| **Eligibility Check** | Verifying patient's insurance coverage before prescribing |
-| **PBM** | Pharmacy Benefit Manager |
-| **RTPB** | Real-Time Pharmacy Benefit — checks drug coverage in real time |
+| **RTPB** | Real-Time Pharmacy Benefit |
 | **EPA** | Electronic Prior Authorization |
-| **Message Direction** | Whether customer sends or receives the message |
-| **Relate To** | Field linking a response message back to its request (by message ID) |
-| **Autoresponder** | System that auto-generates responses based on patient ID matching |
-| **PPT** | Patient Price Transparency — the Team 36 app project |
-| **QUM** | Quantity Unit of Measure (for drug quantities) |
-| **Days of Supply** | How many days a prescription covers |
-| **Ambulatory Care** | Outpatient care (small clinics, no hospitalization) |
-| **HL7** | Another healthcare interoperability standard |
-| **Interoperability** | Ability of different healthcare systems to exchange data |
+| **PPT** | Patient Price Transparency — Team 36 app |
+| **Onboarding Modernization** | Project to reduce 57 → 9 hrs per upgrade |
+| **Stage environment** | Test environment customers access for certification work |
+| **Devint** | Dev/integration environment — first step before Stage |
+| **Workbench** | Platform all certification work lives on |
+| **Aha** | Current work tracking tool (transitioning to JIRA) |
+| **Glue** | Surescripts' internal design system |
+| **Galaxy / Hubble** | Other projects the team also works on |
+| **Certification v1** | First version of the tool — already launched and working |
+| **Assertions** | Rules that validate XML message fields during test execution |
+| **Relate To** | Field linking a response message to its original request |
+| **Autoresponder** | RTPB feature that auto-generates responses based on patient ID |
 
 ---
 
-## Team Structure & Context
+## Team Structure
 
-- **Team 28** — built the original execution screen (now on another project)
-- **Team 30** — certification tool / test execution (carries on Team 28's work)
-- **Team 32** — RTPB autoresponder
-- **Team 36** — PPT (Patient Price Transparency) app
-- **EMETS** — the vendor org the user's team belongs to
-- Kamal's recording has the older KT; newer features (product dropdowns, message version dropdown, compose-from-execution-screen) are additions the team built
+| Team | Work |
+|---|---|
+| **Team 28** | Built original execution screen (moved on) |
+| **Team 30** | Certification tool / test execution |
+| **Team 32** | RTPB autoresponder |
+| **Team 36** | PPT (Patient Price Transparency) app |
+| **EMETS** | Vendor org the design team belongs to |
+| **Samantha Bailey Fast** | Surescripts product leader — primary client contact |
+| **Mohd Asif** | UX team member |
+| **Chandni** | UX designer |
 
-## Recent Feature Additions (not in Kamal's recording)
-- New product types added to test step creation
-- Message version dropdown
-- Compose messages directly from execution screen (previously required separate module navigation)
-- Copy feature for test steps, test cases, test projects
-- Inline validation messages on test step creation form
+---
 
-## What to Study Next
-1. NCPDP SCRIPT standard — read the spec overview
-2. Surescripts network — their public developer documentation
-3. XML basics — assertions validate XML paths
-4. US healthcare payer/provider/pharmacy triangle — foundational mental model
-5. HL7 / FHIR — adjacent standards worth knowing`;
+## What to Do Next
+
+1. **Get Stage/Devint access** — Can't design what you haven't seen. Request demo account from Samantha.
+2. **Get user personas** — Samantha confirmed these exist for engineering and non-engineering users. Request them.
+3. **Plan observational sessions** — No traditional usability testing possible. Start planning sit-alongside sessions with real customers early.
+4. **Map existing screens** — Before proposing improvements, document what's already built in Certification Tool v1.
+5. **Study NCPDP SCRIPT standard** — Read the spec overview to understand the XML message structure assertions are validating.
+6. **Understand Glue design system** — If design work will need to extend it, understand its current state.`;
 
     // Auto-load and render the saved output on page load
     window.addEventListener('DOMContentLoaded', () => {
