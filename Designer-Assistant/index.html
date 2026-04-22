@@ -1284,7 +1284,11 @@
     }
 
     // ── Output Viewer ──────────────────────────────────────────────
-    marked.setOptions({ breaks: true, gfm: true });
+    if (typeof marked.use === 'function') {
+      marked.use({ gfm: true, breaks: true });
+    } else if (typeof marked.setOptions === 'function') {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
 
     const _savedOutput = `# Surescripts KT Sessions — Full Combined Analysis
 > Designer-Assistant · Problem Framing Mode · July 2025
@@ -1744,13 +1748,14 @@ Devint → Stage (customer access) → Production
 6. **Understand Glue design system** — Request access or documentation for Surescripts' internal design system. Understand what components exist before designing new ones.
 7. **Map both user journeys** — Separately map the Admin (internal) journey and the External Customer journey to find friction points in each.\`;
 
-    // Auto-load and render the saved output on page load
-    window.addEventListener('DOMContentLoaded', () => {
+    // Auto-load and render the saved output — DOM is ready since script is at bottom of body
+    (function initViewer() {
       const ta = document.getElementById('rawOutput');
+      if (!ta) { window.addEventListener('DOMContentLoaded', initViewer); return; }
       ta.value = _savedOutput;
       onRawInput();
       renderAndSwitch();
-    });
+    })();
 
     function onRawInput() {
       const len = document.getElementById('rawOutput').value.length;
