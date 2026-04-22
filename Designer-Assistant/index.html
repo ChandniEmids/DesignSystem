@@ -712,6 +712,53 @@
       cursor: not-allowed;
     }
 
+    .read-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px var(--space-3);
+      background: var(--neutral-75, #F5F5FA);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+    }
+
+    .read-toolbar-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-copy-rich {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      font-family: var(--font-family-primary);
+      cursor: pointer;
+      transition: all 120ms;
+      white-space: nowrap;
+    }
+
+    .btn-copy-rich {
+      background: var(--brand-500);
+      border: 1.5px solid var(--brand-500);
+      color: #fff;
+    }
+
+    .btn-copy-rich:hover { background: var(--brand-700, #1e3a8a); border-color: var(--brand-700, #1e3a8a); }
+
+    .btn-copy-rich.copied {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #fff;
+    }
+
     /* ── Rendered markdown ── */
     .rendered-content {
       font-size: var(--font-size-sm);
@@ -1117,6 +1164,13 @@
 
         <!-- Read panel -->
         <div class="viewer-tab-body" id="panelRead" style="display:none;">
+          <div class="read-toolbar" id="readToolbar" style="display:none;">
+            <span class="read-toolbar-hint"><i class="ti ti-info-circle" style="font-size:13px;"></i> Paste into FigJam, Miro, Notion or Docs — tables and formatting preserved</span>
+            <button class="btn-copy-rich" onclick="copyRich()" id="btnCopyRich">
+              <i class="ti ti-copy" style="font-size:14px;"></i>
+              Copy
+            </button>
+          </div>
           <div id="renderedOutput" class="rendered-content">
             <div class="viewer-empty">
               <div class="viewer-empty-icon"><i class="ti ti-file-description"></i></div>
@@ -1777,9 +1831,22 @@ Devint → Stage (customer access) → Production
       if (!raw) return;
       document.getElementById('renderedOutput').innerHTML = marked.parse(raw);
       document.getElementById('readyBadge').style.display = 'inline-block';
+      document.getElementById('readToolbar').style.display = 'flex';
       switchViewerTab('read');
-      // Scroll to rendered panel smoothly
       document.getElementById('panelRead').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function copyRich() {
+      const btn = document.getElementById('btnCopyRich');
+      const text = document.getElementById('rawOutput').value;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = '<i class="ti ti-check" style="font-size:14px;"></i> Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="ti ti-copy" style="font-size:14px;"></i> Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
     }
 
     function clearViewer() {
@@ -1787,6 +1854,7 @@ Devint → Stage (customer access) → Production
       document.getElementById('charCount').textContent = '0 characters';
       document.getElementById('renderBtn').disabled = true;
       document.getElementById('readyBadge').style.display = 'none';
+      document.getElementById('readToolbar').style.display = 'none';
       document.getElementById('renderedOutput').innerHTML = `
         <div class="viewer-empty">
           <div class="viewer-empty-icon"><i class="ti ti-file-description"></i></div>
