@@ -1,0 +1,2314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DEX — ClearPath FDO</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../global.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .da-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 64px;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 16px;
+    }
+
+    .da-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .da-logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-700) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    .da-logo-text {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.2px;
+    }
+
+    .da-logo-badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--brand-500);
+      background: var(--brand-100);
+      padding: 2px 8px;
+      border-radius: 20px;
+      margin-left: 4px;
+    }
+
+    /* ── Page shell ── */
+    .da-page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    /* ── Hero ── */
+    .da-hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .da-hero-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--brand-500);
+      background: var(--brand-100);
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .da-hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+    }
+
+    .da-hero p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ── Mode grid ── */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    .mode-card {
+      background: var(--bg-surface);
+      border: 2px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      cursor: pointer;
+      transition: border-color 140ms, box-shadow 140ms, transform 100ms;
+      position: relative;
+    }
+
+    .mode-card:hover {
+      border-color: var(--brand-300);
+      box-shadow: 0 4px 16px rgba(39,178,178,0.10);
+      transform: translateY(-1px);
+    }
+
+    .mode-card.active {
+      border-color: var(--brand-500);
+      background: var(--brand-50);
+      box-shadow: 0 0 0 4px var(--brand-100);
+    }
+
+    .mode-card.active .mode-icon-wrap {
+      background: var(--brand-500);
+      color: #fff;
+    }
+
+    .mode-icon-wrap {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--brand-100);
+      color: var(--brand-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 12px;
+      transition: background 140ms, color 140ms;
+    }
+
+    .mode-cmd {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      color: var(--brand-500);
+      font-family: 'SF Mono', 'Menlo', monospace;
+      margin-bottom: 4px;
+    }
+
+    .mode-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .mode-desc {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .mode-check {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--brand-500);
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .mode-card.active .mode-check {
+      display: flex;
+    }
+
+    /* ── Composer ── */
+    .composer-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .composer-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .composer-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .composer-mode-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--brand-600);
+      background: var(--brand-100);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Menlo', monospace;
+    }
+
+    .composer-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .composer-body {
+      padding: 24px;
+    }
+
+    /* ── Context input ── */
+    .context-section {
+      margin-bottom: 20px;
+    }
+
+    .context-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .context-label span.optional {
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text-muted);
+    }
+
+    .context-input-wrap {
+      position: relative;
+    }
+
+    #contextInput {
+      width: 100%;
+      padding: 10px 40px 10px 14px;
+      border: 1.5px solid var(--input-border-default);
+      border-radius: var(--radius-md);
+      font-family: 'Manrope', sans-serif;
+      font-size: 13px;
+      color: var(--text-primary);
+      background: var(--input-bg-default);
+      transition: border-color 120ms, background 120ms;
+    }
+
+    #contextInput:focus {
+      outline: none;
+      border: 2px solid var(--input-border-focus);
+      background: var(--input-bg-focus);
+    }
+
+    #contextInput::placeholder {
+      color: var(--text-muted);
+    }
+
+    .context-clear-btn {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: none;
+      padding: 2px;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .context-clear-btn:hover { color: var(--text-secondary); }
+
+    /* Source type badge */
+    .source-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .source-badge.figma {
+      background: #f0e8ff;
+      color: #6b21a8;
+    }
+
+    .source-badge.figjam {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .source-badge.local {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .source-badge.unknown {
+      background: var(--bg-page);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* ── Divider ── */
+    .composer-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      margin: 20px 0;
+    }
+
+    /* ── Prompt area ── */
+    .composer-prompt-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .composer-prompt-prefix {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--brand-500);
+      font-family: 'SF Mono', 'Menlo', monospace;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #promptInput {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px 16px 12px 120px;
+      border: 1.5px solid var(--input-border-default);
+      border-radius: var(--radius-md);
+      font-family: 'Manrope', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      background: var(--input-bg-default);
+      resize: vertical;
+      transition: border-color 120ms, background 120ms;
+      line-height: 1.6;
+    }
+
+    #promptInput:focus {
+      outline: none;
+      border: 2px solid var(--input-border-focus);
+      background: var(--input-bg-focus);
+    }
+
+    #promptInput::placeholder { color: var(--text-muted); }
+
+    /* ── Output ── */
+    .composer-output-wrap {
+      background: var(--bg-page);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      min-height: 56px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .output-command {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 12px;
+      color: var(--text-primary);
+      word-break: break-all;
+      flex: 1;
+      line-height: 1.6;
+    }
+
+    .output-placeholder {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .composer-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 120ms;
+      background: var(--brand-500);
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    .btn-copy:hover { background: var(--brand-600); }
+
+    .btn-copy:disabled {
+      background: var(--btn-neutral-200);
+      color: var(--text-muted);
+      cursor: not-allowed;
+    }
+
+    .btn-copy.copied { background: #16a34a; }
+
+    .btn-clear {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1.5px solid var(--border-subtle);
+      transition: all 120ms;
+    }
+
+    .btn-clear:hover {
+      border-color: var(--border-dark);
+      color: var(--text-primary);
+    }
+
+    /* ── How to use ── */
+    .how-to {
+      margin-top: 48px;
+    }
+
+    .how-to h2 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 16px;
+    }
+
+    .steps {
+      display: flex;
+      gap: 0;
+      position: relative;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      height: 2px;
+      background: var(--border-subtle);
+      z-index: 0;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--brand-500);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+    }
+
+    .step-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .step-body {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding: 0 8px;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #111827;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 200ms, transform 200ms;
+      z-index: 999;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #noModeHint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Output Viewer section ── */
+    .viewer-section {
+      margin-top: var(--space-8);   /* 64px — 8px grid */
+    }
+
+    .viewer-section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--brand-600);
+      background: var(--brand-100);
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      margin-bottom: var(--space-2);
+    }
+
+    .viewer-section-title {
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      letter-spacing: -0.3px;
+      margin-bottom: var(--space-1);
+    }
+
+    .viewer-section-desc {
+      font-size: var(--font-size-sm);
+      color: var(--text-secondary);
+      line-height: var(--line-height-relaxed);
+      margin-bottom: var(--space-3);
+    }
+
+    .viewer-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .viewer-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-subtle);
+      background: var(--surface-base);    /* #F9F9FB — same as header */
+    }
+
+    .viewer-tab {
+      padding: 13px var(--space-3);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      cursor: pointer;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: color 120ms, border-color 120ms;
+      background: none;
+      font-family: var(--font-family-primary);
+    }
+
+    .viewer-tab:hover { color: var(--text-primary); }
+
+    .viewer-tab.active {
+      color: var(--brand-600);
+      border-bottom-color: var(--brand-500);
+    }
+
+    .viewer-tab-body {
+      padding: var(--space-3);
+    }
+
+    #rawOutput {
+      width: 100%;
+      min-height: 180px;
+      max-height: 380px;
+      padding: 14px var(--space-2);
+      border: 1.5px solid var(--input-border-default);
+      border-radius: var(--radius-md);
+      font-family: var(--font-family-mono);
+      font-size: var(--font-size-xs);
+      color: var(--text-primary);
+      background: var(--input-bg-default);
+      resize: vertical;
+      line-height: 1.7;
+      transition: border-color 120ms, background 120ms;
+    }
+
+    #rawOutput:focus {
+      outline: none;
+      border-color: var(--input-border-focus);
+      background: var(--input-bg-focus);
+    }
+
+    #rawOutput::placeholder {
+      color: var(--input-placeholder);
+      font-family: var(--font-family-primary);
+    }
+
+    .paste-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: var(--space-2);
+    }
+
+    .char-count {
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+    }
+
+    .btn-render {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: 10px var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      cursor: pointer;
+      border: none;
+      background: var(--btn-brand-500);
+      color: var(--btn-white);
+      transition: background 120ms;
+      font-family: var(--font-family-primary);
+    }
+
+    .btn-render:hover { background: var(--btn-brand-600); }
+
+    .btn-render:disabled {
+      background: var(--btn-neutral-100);
+      color: var(--btn-neutral-400);
+      cursor: not-allowed;
+    }
+
+    .read-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px var(--space-3);
+      background: var(--neutral-75, #F5F5FA);
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+    }
+
+    .read-toolbar-hint {
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-copy-rich {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: var(--radius-md);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      font-family: var(--font-family-primary);
+      cursor: pointer;
+      transition: all 120ms;
+      white-space: nowrap;
+    }
+
+    .btn-copy-rich {
+      background: var(--brand-500);
+      border: 1.5px solid var(--brand-500);
+      color: #fff;
+    }
+
+    .btn-copy-rich:hover { background: var(--brand-700, #1e3a8a); border-color: var(--brand-700, #1e3a8a); }
+
+    .btn-copy-rich.copied {
+      background: #16a34a;
+      border-color: #16a34a;
+      color: #fff;
+    }
+
+    /* ── Rendered markdown ── */
+    .rendered-content {
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-relaxed);
+      color: var(--text-primary);
+    }
+
+    .rendered-content h1 {
+      font-size: var(--font-size-3xl);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+      margin: 0 0 var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: 2px solid var(--border-subtle);
+      line-height: var(--line-height-tight);
+    }
+
+    .rendered-content h2 {
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      margin: var(--space-5) 0 var(--space-2);
+      padding-bottom: var(--space-1);
+      border-bottom: 1px solid var(--border-subtle);
+      line-height: var(--line-height-tight);
+    }
+
+    .rendered-content h2:first-child { margin-top: 0; }
+
+    .rendered-content h3 {
+      font-size: 11px;
+      font-weight: var(--font-weight-bold);
+      color: var(--brand-600);
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      margin: var(--space-3) 0 var(--space-1);
+    }
+
+    .rendered-content p {
+      margin: 0 0 var(--space-2);
+      color: var(--text-secondary);
+      line-height: var(--line-height-normal);
+    }
+
+    .rendered-content strong {
+      color: var(--text-primary);
+      font-weight: var(--font-weight-bold);
+    }
+
+    .rendered-content em {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .rendered-content ul,
+    .rendered-content ol {
+      margin: 0 0 var(--space-2);
+      padding-left: 22px;
+    }
+
+    .rendered-content li {
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+      padding-left: 4px;
+      line-height: var(--line-height-normal);
+    }
+
+    .rendered-content li strong { color: var(--text-primary); }
+
+    .rendered-content code {
+      background: var(--neutral-100);        /* #f3f4f6 — solid, not gradient */
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xs);
+      padding: 2px 7px;
+      font-family: var(--font-family-mono);
+      font-size: 11.5px;
+      color: var(--brand-dark-500);          /* #005461 — dark teal for code */
+    }
+
+    .rendered-content pre {
+      background: var(--neutral-75);         /* #f9fafb — solid surface */
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--space-2);
+      overflow-x: auto;
+      margin: 0 0 var(--space-2);
+    }
+
+    .rendered-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--text-primary);
+      font-size: var(--font-size-xs);
+    }
+
+    .rendered-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 var(--space-3);
+      font-size: var(--font-size-xs);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .rendered-content th {
+      background: var(--neutral-100);        /* #f3f4f6 — solid table header */
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .rendered-content td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      vertical-align: top;
+      line-height: var(--line-height-normal);
+    }
+
+    .rendered-content tr:last-child td { border-bottom: none; }
+
+    .rendered-content tbody tr:hover td {
+      background: var(--brand-100);          /* #E9F7F7 — brand-100 exists */
+    }
+
+    .rendered-content blockquote {
+      border-left: 3px solid var(--brand-500);
+      background: var(--brand-100);          /* #E9F7F7 */
+      padding: var(--space-2);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 0 0 var(--space-2);
+      color: var(--text-secondary);
+    }
+
+    .rendered-content hr {
+      border: none;
+      border-top: 1px solid var(--border-subtle);
+      margin: var(--space-4) 0;
+    }
+
+    /* empty state */
+    .viewer-empty {
+      text-align: center;
+      padding: var(--space-7) var(--space-3);
+    }
+
+    .viewer-empty-icon {
+      font-size: 36px;
+      color: var(--grey-30);
+      margin-bottom: var(--space-2);
+    }
+
+    .viewer-empty p {
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      line-height: var(--line-height-normal);
+    }
+
+    /* ready badge */
+    .ready-badge {
+      background: var(--brand-500);
+      color: var(--btn-white);
+      font-size: 10px;
+      font-weight: var(--font-weight-bold);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Nav ── */
+    .da-nav {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 4px;
+    }
+
+    .da-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .da-nav-btn:hover {
+      background: var(--brand-100);
+      color: var(--brand-500);
+    }
+
+    .da-nav-btn.active {
+      background: var(--brand-100);
+      color: var(--brand-500);
+    }
+
+    /* ── About page ── */
+    .about-page {
+      display: none;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 32px 80px;
+    }
+
+    .about-hero {
+      text-align: center;
+      margin-bottom: 48px;
+      padding: 48px 32px;
+      background: linear-gradient(180deg, #f0f3ff 0%, rgba(255,255,255,0) 100%);
+      border-radius: 20px;
+    }
+
+    .about-hero h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.4px;
+      margin-bottom: 12px;
+    }
+
+    .about-hero p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .about-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .about-card {
+      background: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .about-card h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .about-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Spectrum table */
+    .spectrum-table-wrap {
+      background: #f9f9fb;
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 24px;
+      overflow-x: auto;
+      margin-bottom: 32px;
+    }
+
+    .spectrum-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .spectrum-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      border-bottom: 2px solid var(--border-subtle);
+    }
+
+    .spectrum-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: top;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .spectrum-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .spectrum-table tr.highlight-row td {
+      background: var(--brand-100);
+      font-weight: 600;
+    }
+
+    .spectrum-table tr.highlight-row td:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+    .spectrum-table tr.highlight-row td:last-child {
+      border-radius: 0 8px 8px 0;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pill-free {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .pill-paid {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .pill-optional {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    /* Memory vs RAG comparison */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .compare-card {
+      background: #fff;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .compare-card.dex-card {
+      border-color: var(--brand-500);
+    }
+
+    .compare-card h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .compare-card ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .compare-card ul li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+
+    .compare-card ul li::before {
+      content: "·";
+      color: var(--brand-500);
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* KB cards */
+    .about-kb-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .kb-card {
+      background: #fff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .kb-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--brand-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--brand-500);
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .kb-card h5 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .kb-card p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="da-header">
+    <div class="da-logo">
+      <div class="da-logo-icon"><i class="ti ti-wand"></i></div>
+      <span class="da-logo-text">ClearPath FDO</span>
+      <span class="da-logo-badge">DEX</span>
+    </div>
+    <nav class="da-nav">
+      <button class="da-nav-btn active" id="navAgent" onclick="showPage('agent')">
+        <i class="ti ti-wand"></i> Agent
+      </button>
+      <button class="da-nav-btn" id="navAbout" onclick="showPage('about')">
+        <i class="ti ti-info-circle"></i> About
+      </button>
+    </nav>
+  </header>
+
+  <!-- Page -->
+  <main class="da-page">
+
+    <!-- Hero -->
+    <div class="da-hero">
+      <span class="da-hero-label">AI Design Agent</span>
+      <h1>DEX</h1>
+      <p>A multi-mode design thinking partner—choose a mode</p>
+    </div>
+
+    <!-- Mode Grid -->
+    <div class="mode-grid" id="modeGrid">
+
+      <div class="mode-card" data-cmd="/problem" data-name="Problem Framing" data-placeholder="Describe the problem you're trying to solve. E.g. Front desk staff can't find patient appointments quickly enough." onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-zoom-question"></i></div>
+        <div class="mode-cmd">/problem</div>
+        <div class="mode-name">Problem Framing</div>
+        <div class="mode-desc">Clarify the real problem, surface hidden assumptions, define success criteria.</div>
+      </div>
+
+      <div class="mode-card" data-cmd="/stakeholder" data-name="Stakeholder Alignment" data-placeholder="Describe who's involved, what meeting you're prepping for, or paste your meeting notes." onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-users"></i></div>
+        <div class="mode-cmd">/stakeholder</div>
+        <div class="mode-name">Stakeholder Alignment</div>
+        <div class="mode-desc">Map stakeholders, prep interview questions, surface conflicting priorities.</div>
+      </div>
+
+      <div class="mode-card" data-cmd="/user" data-name="User & Domain" data-placeholder="Describe the user role or workflow you need to understand. E.g. How does a front desk operator handle walk-in check-ins?" onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-user-circle"></i></div>
+        <div class="mode-cmd">/user</div>
+        <div class="mode-name">User & Domain</div>
+        <div class="mode-desc">Profile users, map clinical workflows, surface HIPAA and domain constraints.</div>
+      </div>
+
+      <div class="mode-card" data-cmd="/ideate" data-name="Ideation" data-placeholder="Describe what you're trying to solve. E.g. How might we handle double-booked rooms in the appointment system?" onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-bulb"></i></div>
+        <div class="mode-cmd">/ideate</div>
+        <div class="mode-name">Ideation</div>
+        <div class="mode-desc">Generate 3+ distinct solution approaches with tradeoffs. No UI yet.</div>
+      </div>
+
+      <div class="mode-card" data-cmd="/flow" data-name="UX Flow" data-placeholder="Describe the task or journey to map. E.g. Map out steps for a front desk operator to register a new patient and book their first appointment." onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-git-branch"></i></div>
+        <div class="mode-cmd">/flow</div>
+        <div class="mode-name">UX Flow</div>
+        <div class="mode-desc">Map end-to-end user journeys, IA, entry/exit points, and error states.</div>
+      </div>
+
+      <div class="mode-card" data-cmd="/critique" data-name="Critique" data-placeholder="Describe or paste what you want reviewed. E.g. Here is my proposed flow for rescheduling appointments: [describe it]" onclick="selectMode(this)">
+        <div class="mode-check"><i class="ti ti-check"></i></div>
+        <div class="mode-icon-wrap"><i class="ti ti-message-report"></i></div>
+        <div class="mode-cmd">/critique</div>
+        <div class="mode-name">Critique</div>
+        <div class="mode-desc">Structured review: what works, what's missing, what's risky, recommendations.</div>
+      </div>
+
+    </div>
+
+    <!-- Composer -->
+    <div class="composer-card">
+      <div class="composer-header">
+        <div class="composer-header-left">
+          <i class="ti ti-terminal-2" style="font-size:18px; color:var(--text-secondary)"></i>
+          <span class="composer-label">Compose your prompt</span>
+        </div>
+        <div id="noModeHint">
+          <i class="ti ti-arrow-up" style="font-size:14px;"></i>
+          Select a mode above to get started
+        </div>
+        <div id="activeModeTag" class="composer-mode-tag" style="display:none;">
+          <i class="ti ti-wand" style="font-size:12px;"></i>
+          <span id="activeModeLabel"></span>
+        </div>
+      </div>
+
+      <div class="composer-body">
+
+        <!-- Context Source -->
+        <div class="context-section">
+          <div class="context-label">
+            <i class="ti ti-link" style="font-size:14px;"></i>
+            Context source
+            <span class="optional">— optional</span>
+          </div>
+          <div class="context-input-wrap">
+            <input
+              id="contextInput"
+              type="text"
+              placeholder="Paste a Figma URL, FigJam URL, or local file path…"
+              oninput="onContextInput()"
+            />
+            <button class="context-clear-btn" id="contextClearBtn" onclick="clearContext()" title="Clear context">
+              <i class="ti ti-x"></i>
+            </button>
+          </div>
+          <div id="sourceBadge" style="display:none;"></div>
+        </div>
+
+        <div class="composer-divider"></div>
+
+        <!-- Prompt -->
+        <div class="composer-prompt-wrap">
+          <span class="composer-prompt-prefix" id="prefixDisplay">/mode</span>
+          <textarea
+            id="promptInput"
+            placeholder="Select a mode above, then type your prompt here…"
+            disabled
+          ></textarea>
+        </div>
+
+        <!-- Output -->
+        <div class="composer-output-wrap">
+          <div style="flex:1;">
+            <span class="output-placeholder" id="outputPlaceholder">Your formatted command will appear here</span>
+            <code class="output-command" id="outputCommand" style="display:none;"></code>
+          </div>
+          <button class="btn-copy" id="copyBtn" disabled onclick="copyCommand()">
+            <i class="ti ti-copy" style="font-size:15px;"></i>
+            Copy
+          </button>
+        </div>
+
+        <div class="composer-actions">
+          <button class="btn-clear" onclick="clearAll()">
+            <i class="ti ti-refresh" style="font-size:14px;"></i>
+            Clear all
+          </button>
+          <span style="font-size:12px; color:var(--text-muted);">
+            Paste the copied command into <strong>Claude Code</strong> to run the agent.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to use -->
+    <div class="how-to">
+      <h2>How to use</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Pick a mode</div>
+          <div class="step-body">Choose the design phase you're working in.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">Add context</div>
+          <div class="step-body">Optionally paste a Figma URL, FigJam URL, or local file path.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Write your prompt</div>
+          <div class="step-body">Describe your problem, flow, or design in plain language.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-title">Copy &amp; run</div>
+          <div class="step-body">Copy the command, paste it into Claude Code, and run it.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-title">Read output</div>
+          <div class="step-body">Paste the AI response below and render it for easy reading.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Output Viewer -->
+    <div class="viewer-section" id="outputViewer">
+      <span class="viewer-section-label">Output Viewer</span>
+      <h2 class="viewer-section-title">Read AI Output</h2>
+      <p class="viewer-section-desc">Paste the response from Claude Code below. It will be rendered in a clean, readable format — headings, tables, lists and all.</p>
+
+      <div class="viewer-card">
+
+        <!-- Tabs -->
+        <div class="viewer-tabs">
+          <button class="viewer-tab active" id="tab-paste" onclick="switchViewerTab('paste')">
+            <i class="ti ti-clipboard" style="font-size:14px;"></i>
+            Paste output
+          </button>
+          <button class="viewer-tab" id="tab-read" onclick="switchViewerTab('read')">
+            <i class="ti ti-book-2" style="font-size:14px;"></i>
+            Read
+            <span class="ready-badge" id="readyBadge" style="display:none;">Ready</span>
+          </button>
+        </div>
+
+        <!-- Paste panel -->
+        <div class="viewer-tab-body" id="panelPaste">
+          <textarea
+            id="rawOutput"
+            placeholder="Paste your Claude output here… markdown is supported (headings, tables, bold, code blocks, lists)"
+            oninput="onRawInput()"
+          ></textarea>
+          <div class="paste-footer">
+            <span class="char-count" id="charCount">0 characters</span>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="btn-clear" onclick="clearViewer()">
+                <i class="ti ti-trash" style="font-size:14px;"></i>
+                Clear
+              </button>
+              <button class="btn-render" id="renderBtn" onclick="renderAndSwitch()" disabled>
+                <i class="ti ti-eye" style="font-size:14px;"></i>
+                Render &amp; Read
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Read panel -->
+        <div class="viewer-tab-body" id="panelRead" style="display:none;">
+          <div class="read-toolbar" id="readToolbar" style="display:none;">
+            <span class="read-toolbar-hint"><i class="ti ti-info-circle" style="font-size:13px;"></i> Paste into FigJam, Miro, Notion or Docs — tables and formatting preserved</span>
+            <button class="btn-copy-rich" onclick="copyRich()" id="btnCopyRich">
+              <i class="ti ti-copy" style="font-size:14px;"></i>
+              Copy
+            </button>
+          </div>
+          <div id="renderedOutput" class="rendered-content">
+            <div class="viewer-empty">
+              <div class="viewer-empty-icon"><i class="ti ti-file-description"></i></div>
+              <p>Nothing here yet.<br>Paste your output in the <strong>Paste output</strong> tab and click <strong>Render &amp; Read</strong>.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── About Page ── -->
+  <section class="about-page" id="aboutPage">
+
+    <div class="about-hero">
+      <span class="da-hero-label">About DEX</span>
+      <h2>What kind of agent is DEX?</h2>
+      <p>DEX is a <strong>context-stuffed, file-memory agent</strong> — not a RAG agent. Here's what that means, how it compares to other agent types, and what DEX already knows about your project.</p>
+    </div>
+
+    <!-- Spectrum table -->
+    <p class="about-section-title">The 7 Agent Types — Full Spectrum</p>
+    <div class="spectrum-table-wrap">
+      <table class="spectrum-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>How it works</th>
+            <th>Free / Paid</th>
+            <th>Coding needed</th>
+            <th>Language</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>Prompt-only</strong></td>
+            <td>Single prompt, no memory, no tools</td>
+            <td><span class="pill pill-free">Free</span></td>
+            <td>None</td>
+            <td>Any</td>
+            <td>ChatGPT basic chat</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Custom Instructions</strong></td>
+            <td>System prompt baked in; model follows a persona every session</td>
+            <td><span class="pill pill-free">Free</span></td>
+            <td>None</td>
+            <td>Any</td>
+            <td>ChatGPT custom GPT, Claude Projects</td>
+          </tr>
+          <tr class="highlight-row">
+            <td>3</td>
+            <td><strong>Context-stuffed / File Memory ← DEX</strong></td>
+            <td>Agent reads markdown memory files at start of every session; knows everything in those files</td>
+            <td><span class="pill pill-free">Free</span></td>
+            <td>Minimal — write markdown files</td>
+            <td>Markdown</td>
+            <td>DEX (this agent), Claude Code sub-agents</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>RAG Agent</strong></td>
+            <td>Embeds docs into vectors; retrieves only relevant chunks per query — scales to huge knowledge bases</td>
+            <td><span class="pill pill-paid">Paid</span></td>
+            <td>Yes — embeddings + vector DB</td>
+            <td>Python / JS</td>
+            <td>Copilot with uploaded docs, LangChain RAG, GitHub Copilot Workspace</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Tool-use / Function-calling Agent</strong></td>
+            <td>Can call APIs, run code, query databases in real time</td>
+            <td><span class="pill pill-paid">Paid</span></td>
+            <td>Yes — tool definitions + API</td>
+            <td>Python / JS / TS</td>
+            <td>Claude with MCP tools, OpenAI function calling</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>Multi-agent / Orchestrator</strong></td>
+            <td>One agent spawns sub-agents; each specialist returns results to orchestrator</td>
+            <td><span class="pill pill-paid">Paid</span></td>
+            <td>Yes — agent orchestration code</td>
+            <td>Python / JS</td>
+            <td>Claude Code (spawns sub-agents), AutoGPT, CrewAI</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><strong>Autonomous / Agentic Loop</strong></td>
+            <td>Runs in a loop, takes actions, checks results, iterates without human input</td>
+            <td><span class="pill pill-paid">Paid</span></td>
+            <td>Yes — loop + state management</td>
+            <td>Python / JS</td>
+            <td>Devin, SWE-agent, Claude Computer Use</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Memory vs RAG -->
+    <p class="about-section-title">DEX (File Memory) vs RAG — Key Differences</p>
+    <div class="compare-grid">
+      <div class="compare-card dex-card">
+        <h4><i class="ti ti-wand" style="color:var(--brand-500)"></i> DEX — File Memory Agent</h4>
+        <ul>
+          <li>Reads all memory files every session (context stuffing)</li>
+          <li>No setup — just write markdown files</li>
+          <li>Works with Claude Code, 100% free</li>
+          <li>Best for: small-to-medium knowledge bases (project docs, KT notes, team context)</li>
+          <li>Limit: context window cap — can't handle thousands of docs</li>
+          <li>To add knowledge: drop a markdown file in <code>agent-memory/DEX/</code></li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <h4><i class="ti ti-database" style="color:#6b7280"></i> RAG Agent</h4>
+        <ul>
+          <li>Embeds documents into a vector database</li>
+          <li>Retrieves only the most relevant chunks per query</li>
+          <li>Scales to thousands of docs — no context window issue</li>
+          <li>Best for: large doc libraries, support bots, search over codebases</li>
+          <li>Requires: Python/JS code, embedding model, vector DB (Pinecone, Chroma, etc.)</li>
+          <li>Cost: API calls for embeddings + vector DB hosting</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- What DEX knows -->
+    <p class="about-section-title">What DEX Currently Knows</p>
+    <div class="about-kb-grid">
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-building-hospital"></i></div>
+        <h5>Surescripts Domain</h5>
+        <p>What Surescripts is, the prescription workflow, NCPDP standard, and certification lifecycle.</p>
+      </div>
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-clipboard-check"></i></div>
+        <h5>Certification Tool</h5>
+        <p>Workbench, test step → case → project hierarchy, assertions, RTPB autoresponder.</p>
+      </div>
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-target"></i></div>
+        <h5>Product Context</h5>
+        <p>57 → 18 → 9 hours journey, Onboarding Modernization, Samantha Bailey Fast's scope.</p>
+      </div>
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-users"></i></div>
+        <h5>Team &amp; Users</h5>
+        <p>Engineering vs non-engineering personas, team structure (Teams 28/30/32/36), Chandni + Asif as UX.</p>
+      </div>
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-vocabulary"></i></div>
+        <h5>Domain Glossary</h5>
+        <p>32 key terms — New RX, Renewal Request, SPI, NCPDP ID, RTPB, EPA, Devint, Workbench, and more.</p>
+      </div>
+      <div class="kb-card">
+        <div class="kb-card-icon"><i class="ti ti-palette"></i></div>
+        <h5>Design System</h5>
+        <p>ClearPath FDO tokens, Glue design system, typography, icons, spacing, and component rules.</p>
+      </div>
+    </div>
+
+    <!-- How to add more -->
+    <div class="about-card">
+      <h3><i class="ti ti-plus" style="color:var(--brand-500);margin-right:8px"></i>How to add more knowledge to DEX</h3>
+      <p>Create a new <code>.md</code> file in <code>.claude/agent-memory/DEX/</code> and add a line pointing to it in <code>MEMORY.md</code>. DEX will load it automatically next session. No embeddings, no pipelines — just drop a file.</p>
+    </div>
+
+  </section>
+
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="ti ti-circle-check" style="font-size:16px; color:#4ade80;"></i>
+    Command copied to clipboard!
+  </div>
+
+  <script>
+    let activeCmd = null;
+
+    // ── Source detection ──────────────────────────────────────────
+    function detectSourceType(value) {
+      if (!value) return null;
+      const v = value.trim();
+      if (v.includes('figma.com/board') || v.includes('figma.com/figjam')) {
+        return { type: 'figjam', label: 'FigJam board', icon: 'ti-layout-kanban', cls: 'figjam' };
+      }
+      if (v.includes('figma.com')) {
+        return { type: 'figma', label: 'Figma file', icon: 'ti-brand-figma', cls: 'figma' };
+      }
+      if (v.startsWith('/') || v.startsWith('~/') || /^[A-Za-z]:\\/.test(v)) {
+        return { type: 'local', label: 'Local file', icon: 'ti-file-code', cls: 'local' };
+      }
+      if (v.length > 0) {
+        return { type: 'unknown', label: 'Context attached', icon: 'ti-link', cls: 'unknown' };
+      }
+      return null;
+    }
+
+    function onContextInput() {
+      const val = document.getElementById('contextInput').value;
+      const clearBtn = document.getElementById('contextClearBtn');
+      const badge = document.getElementById('sourceBadge');
+
+      clearBtn.style.display = val ? 'block' : 'none';
+
+      const source = detectSourceType(val);
+      if (source) {
+        badge.style.display = 'block';
+        badge.innerHTML = `<span class="source-badge ${source.cls}"><i class="ti ${source.icon}" style="font-size:12px;"></i>${source.label} detected</span>`;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      rebuildOutput();
+    }
+
+    function clearContext() {
+      document.getElementById('contextInput').value = '';
+      document.getElementById('contextClearBtn').style.display = 'none';
+      document.getElementById('sourceBadge').style.display = 'none';
+      rebuildOutput();
+    }
+
+    // ── Mode selection ────────────────────────────────────────────
+    function selectMode(card) {
+      document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+
+      activeCmd = card.dataset.cmd;
+      const placeholder = card.dataset.placeholder;
+
+      const modeName = card.dataset.name;
+      document.getElementById('prefixDisplay').textContent = modeName + ':  ';
+
+      const input = document.getElementById('promptInput');
+      input.disabled = false;
+      input.placeholder = placeholder;
+      input.focus();
+
+      document.getElementById('noModeHint').style.display = 'none';
+      const tag = document.getElementById('activeModeTag');
+      tag.style.display = 'inline-flex';
+      document.getElementById('activeModeLabel').textContent = activeCmd;
+
+      rebuildOutput();
+    }
+
+    document.getElementById('promptInput').addEventListener('input', rebuildOutput);
+
+    // ── Build output command ──────────────────────────────────────
+    function rebuildOutput() {
+      const text        = document.getElementById('promptInput').value.trim();
+      const context     = document.getElementById('contextInput').value.trim();
+      const outputCmd   = document.getElementById('outputCommand');
+      const outputPlaceholder = document.getElementById('outputPlaceholder');
+      const copyBtn     = document.getElementById('copyBtn');
+
+      if (activeCmd && text) {
+        // Correct format for Claude Code:
+        // "Use the Designer-Assistant agent in [Mode Name] mode. [context if any] [prompt]"
+        const activeCard = document.querySelector('.mode-card.active');
+        const modeName   = activeCard ? activeCard.dataset.name : activeCmd;
+
+        let command = `Use the DEX agent in ${modeName} mode.`;
+        if (context) command += ` ${context}`;
+        command += ` ${text}`;
+
+        outputCmd.textContent = command;
+        outputCmd.style.display = 'block';
+        outputPlaceholder.style.display = 'none';
+        copyBtn.disabled = false;
+      } else {
+        outputCmd.style.display = 'none';
+        outputPlaceholder.style.display = 'block';
+        copyBtn.disabled = true;
+      }
+    }
+
+    // ── Copy ──────────────────────────────────────────────────────
+    function copyCommand() {
+      const cmd = document.getElementById('outputCommand').textContent;
+      if (!cmd) return;
+
+      navigator.clipboard.writeText(cmd).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.classList.add('copied');
+        btn.innerHTML = '<i class="ti ti-check" style="font-size:15px;"></i> Copied!';
+        showToast();
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          btn.innerHTML = '<i class="ti ti-copy" style="font-size:15px;"></i> Copy';
+        }, 2000);
+      });
+    }
+
+    // ── Clear all ─────────────────────────────────────────────────
+    function clearAll() {
+      document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+      activeCmd = null;
+
+      const input = document.getElementById('promptInput');
+      input.value = '';
+      input.disabled = true;
+      input.placeholder = 'Select a mode above, then type your prompt here…';
+
+      document.getElementById('prefixDisplay').textContent = 'Mode:  ';
+      document.getElementById('noModeHint').style.display = 'flex';
+      document.getElementById('activeModeTag').style.display = 'none';
+      document.getElementById('activeModeLabel').textContent = '';
+
+      clearContext();
+
+      document.getElementById('outputCommand').style.display = 'none';
+      document.getElementById('outputPlaceholder').style.display = 'block';
+      document.getElementById('copyBtn').disabled = true;
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ── Output Viewer ──────────────────────────────────────────────
+    if (typeof marked.use === 'function') {
+      marked.use({ gfm: true, breaks: true });
+    } else if (typeof marked.setOptions === 'function') {
+      marked.setOptions({ breaks: true, gfm: true });
+    }
+
+    const _savedOutput = `# Surescripts KT Sessions — Full Combined Analysis
+> Designer-Assistant · Problem Framing Mode · July 2025
+> Sessions: Deepa Patel · Abhijit Joshi · Samantha Bailey Fast
+
+---
+
+## Session 1 — Deepa Patel: Surescripts & US Healthcare Overview
+
+### What Surescripts Is
+
+Surescripts is a **Health Information Network (HIN)** — also called a middleware company. It sits between prescribers (doctors/EHRs), pharmacies, and payers (insurance companies), validating and routing electronic prescriptions across the entire US healthcare ecosystem.
+
+- **Who hires Surescripts:** Major EHRs like Epic, Cerner, Greenway; payers like Aetna
+- **What Surescripts does:** Validates e-prescription messages (age-appropriateness, drug safety, formulary checks) before forwarding to pharmacies
+- **Quality bar:** Only **6 outstanding production defects** in approximately 20 years of operation — extremely high quality standard
+- **First-time vendor engagement:** The EMETS team is the **first external vendor** Surescripts has ever engaged for development work
+
+---
+
+### The US Healthcare Ecosystem
+
+The system connects four key player types:
+
+| Player | Role |
+|---|---|
+| **Prescribers** | Doctors/clinicians who write prescriptions |
+| **EHR / EMR** | Software that manages patient records and sends prescriptions |
+| **Surescripts** | The network hub — validates and routes all prescription messages |
+| **Pharmacies** | Receive, fill, and process prescriptions |
+| **Payers / PBMs** | Insurance companies and Pharmacy Benefit Managers — handle coverage and formulary |
+
+**EHR vs EMR distinction (important):**
+- **EMR** (Electronic Medical Record) — single organisation only (one hospital, one practice)
+- **EHR** (Electronic Health Record) — cross-organisation, supports hospitalisation records across providers
+- Sometimes called **HTV** (Health Tech Vendor) — same as EHR companies in Surescripts context
+
+---
+
+### How a Prescription Flows
+
+\`\`\`
+1. Doctor diagnoses patient → decides to prescribe medication
+2. Doctor's EHR creates a New RX (new prescription) message
+3. New RX hits Surescripts first — validation layer
+4. Surescripts checks: age-appropriateness, drug safety, formulary status, prescriber credentials
+5. If VALID → Surescripts forwards to the patient's pharmacy
+6. If INVALID → Surescripts sends rejection back to the prescriber with reason
+7. Pharmacy dispenses medication to patient
+\`\`\`
+
+**Refill/Renewal flow:**
+\`\`\`
+Patient needs refill → Pharmacy sends Renewal Request to Surescripts
+→ Surescripts routes to prescriber → Prescriber approves, modifies, or denies
+→ Response flows back through Surescripts → Pharmacy fills or notifies patient
+\`\`\`
+
+**Key transaction types:**
+- **New RX** — New prescription from doctor to pharmacy
+- **Renewal Request** — Refill request initiated by pharmacy on patient's behalf
+- **ERX** — General term for electronic prescription
+- **Cancellation** — Cancelling an active prescription
+- **Transfer** — Moving a prescription between pharmacies or between doctors
+
+---
+
+### What Is NCPDP?
+
+**NCPDP = National Council for Prescription Drug Programs**
+
+- An independent **non-profit organisation** that maintains the standard for electronic prescription data exchange
+- Any EHR, pharmacy, or system that connects to Surescripts must comply with this standard
+- The certification process tests whether a customer's system correctly implements the standard
+- The team's entire project is about building and improving the **NCPDP Certification Testing Tool**
+
+---
+
+### PPT — Patient Price Transparency (Team 36)
+
+A separate Surescripts initiative:
+- **Problem:** Patients currently cannot compare drug prices across pharmacies before filling
+- **Solution:** An app where patients **opt-in via SMS link** sent to their phone
+- **What the app does:** Shows medication prices at nearby pharmacies + pharmacy distance so patients can choose the best option
+- **Team:** Team 36 owns this (separate from certification tool)
+
+---
+
+## Session 2 — Abhijit Joshi: Certification Tool Walkthrough
+
+### Two User Types on Workbench
+
+The Certification Testing Tool lives on a platform called **Workbench**. Two types of users access it:
+
+| User Type | Who They Are | What They Can Do |
+|---|---|---|
+| **Admin / Internal** | Surescripts employees | Create test steps, test cases, test projects; assign to customer accounts; see everything |
+| **External / Customer** | Engineers at EHR companies, pharmacies | Execute assigned test projects; see their own progress dashboard only |
+
+External users have a **read + execute only** view — they cannot create or edit the test structure itself.
+
+---
+
+### The Hierarchy: How Tests Are Organised
+
+\`\`\`
+Test Step  →  (grouped into)  Test Case  →  (grouped into)  Test Project  →  (assigned to)  Account
+\`\`\`
+
+- **Test Step** — the atomic unit. One message exchange (e.g. "send a New RX and receive a valid response")
+- **Test Case** — a logical group of test steps that together test a scenario
+- **Test Project** — a collection of test cases that represents a full certification run for a customer
+- **Account** — the customer entity. A test project is assigned to a specific account (customer org)
+
+---
+
+### Creating a Test Step — All Fields
+
+When an admin creates a test step, they fill in:
+
+| Field | What It Is |
+|---|---|
+| **Product** | Which Surescripts product is being tested (e.g. NCPDP SCRIPT, RTPB) |
+| **Message Version** | Which version of the NCPDP standard (e.g. 10.6, 2017071) |
+| **Message Type** | The transaction type (New RX, Renewal Request, Cancellation, etc.) |
+| **Direction** | Who sends and who receives — see below |
+| **SPI** | Surescripts Prescriber ID — used when the customer is a prescriber/EHR |
+| **NCPDP ID** | Unique pharmacy identifier — used when the customer is a pharmacy |
+| **Assertions** | Rules to validate the message — see Assertions section below |
+| **Attachments** | Sample files or reference materials attached to the step |
+| **Instructions** | Human-readable guidance for the external user on what to do |
+
+**Direction field — two options:**
+- **Customer Sends** → The customer's system sends the message; Surescripts (the tool) receives and validates it → uses **SPI** (prescriber identifier)
+- **Customer Receives** → Surescripts sends a message to the customer's system; customer must respond correctly → uses **NCPDP ID** (pharmacy identifier)
+
+---
+
+### Assertions — How Validation Works
+
+Assertions are the rules that define what a valid message looks like. They run against the XML message the customer sends.
+
+**Two assertion types by source:**
+- **System assertions** — Built in by Surescripts, always present, cannot be removed
+- **User-defined assertions** — Added manually by the admin for specific test requirements
+
+**Two assertion severity levels:**
+- **Error** — Message fails if this assertion fails. Blocks progress. Customer must fix and resend.
+- **Warning** — Message continues but a warning is flagged. Customer is informed but not blocked.
+
+**Mandatory vs Optional assertions:**
+- Some assertions are marked mandatory (always checked)
+- Others are optional (can be toggled by the admin for specific scenarios)
+
+---
+
+### Message ID and Relate To
+
+These two fields link request and response messages together:
+
+- **Message ID** — A unique identifier assigned to every outbound message
+- **Relate To** — When creating a response step, this field references the Message ID of the original request — linking them as a request/response pair
+
+Example flow:
+\`\`\`
+Step 1: Customer sends New RX → Message ID = "MSG-001"
+Step 2: Customer receives Response → Relate To = "MSG-001" (links it back to step 1)
+\`\`\`
+
+This is how the tool tracks which messages belong together in a conversation.
+
+---
+
+### Test Execution — What the External User Sees
+
+When a customer logs into Workbench and opens their assigned test project:
+
+1. They see a **progress dashboard** — which steps are complete, pending, failed
+2. They click a test step → see instructions + expected message structure
+3. They trigger the message from their system
+4. The tool receives it, runs all assertions
+5. Result is shown: **Pass** (green) or **Fail** (red) with which assertion failed and why
+6. On fail → customer reads the error, fixes their code, resends
+7. On pass → step marked complete, move to next
+
+The tool gives **real-time feedback** — no waiting for a Surescripts person to review.
+
+---
+
+### RTPB Autoresponder (Team 32)
+
+RTPB = **Real-Time Pharmacy Benefit** — a different Surescripts product (not NCPDP certification).
+
+The autoresponder feature automatically generates responses to RTPB queries based on matching rules:
+
+**Matching logic — two methods:**
+- **PBM Member ID** — If the incoming query contains a specific Member ID, auto-respond with a preset response
+- **Last name + ZIP code** — If last name and ZIP match, auto-respond
+
+This is used in testing to simulate PBM responses without a real PBM system being live.
+
+---
+
+### Copy Feature
+
+When creating test steps, admins can **copy an existing step** and modify it — useful when creating many similar steps that differ only in one or two fields (e.g. same message type, different assertion set).
+
+---
+
+## Session 3 — Samantha Bailey Fast: Product Context & Problem Framing
+
+### Who Samantha Is
+
+**Samantha Bailey Fast** is the Product Leader at Surescripts who owns the certification tool roadmap. She is the **primary client contact** for the UX engagement. Decisions on which improvements to prioritise go through her.
+
+---
+
+### The NCPDP Standard Lifecycle — Why This Keeps Happening
+
+This is the most important strategic context for understanding the product:
+
+- NCPDP is a non-profit that maintains the standard
+- The standard is updated roughly every **5–7 years**
+- Each new version adds richer transaction types — started with just New RX, now includes refills, cancellations, transfers between pharmacies, transfers between doctors
+- **Every single customer must update their code every time** — no exceptions, no opt-outs
+- This creates a **predictable, massive workload wave** every few years
+
+This is not a one-time problem. It will recur. The certification tool is a long-term infrastructure investment.
+
+---
+
+### The 57 → 18 → 9 Hour Journey
+
+| Phase | Hours per Customer | What Changed |
+|---|---|---|
+| **Before the tool** | 57 hours | Fully manual — Surescripts staff guided every customer by hand |
+| **After Certification Tool v1** | 18 hours | Self-service tool launched; customers do much of the work themselves |
+| **Target by end of 2026** | 9 hours | Continued UX improvement + new automation features |
+
+This initiative is called **Onboarding Modernization**.
+
+> "It used to take us about 57 hours to do a project. Now it takes us about 18 hours. We're working to get to 9 hours by the end of 2026." — Samantha Bailey Fast
+
+v1 is already launched and performing well. Customer feedback is good. The UX engagement is about pushing from 18 → 9 hours.
+
+---
+
+### Self-Service Certification — How It Works Now
+
+\`\`\`
+OLD: Customer → Surescripts cert team shepherds every step (57 hrs) → Production sign-off
+NEW: Customer → Logs into Workbench → Runs test steps → Gets real-time pass/fail → Signs off → Production
+\`\`\`
+
+Customers test in the **Stage environment** — Samantha called this unusual: most companies do not let customers directly into their staging environment. Surescripts made this choice intentionally to enable realistic self-service testing.
+
+**Pipeline:**
+\`\`\`
+Devint (dev/integration) → Stage (customer testing) → Production
+\`\`\`
+
+---
+
+### The Usability Testing Constraint — Critical for Design
+
+This is the most important research constraint:
+
+**Why traditional usability testing is impossible:**
+- The certification tool is a **network product**
+- Both the customer's live system AND Surescripts' live system must be active simultaneously for any real test to happen
+- You cannot create fake or canned test scenarios because the messages are real XML flowing across two live systems
+
+**The only research method available:**
+- **Observational research** — sit physically (or virtually) side by side with a real user during an actual certification session
+- Watch them use the tool in context, note friction, ask questions between steps
+- There is no lab testing, no recorded prototypes, no A/B testing in the traditional sense
+
+This shapes everything about how the design team must gather insights.
+
+---
+
+### Design Scope — What Was Confirmed
+
+Samantha confirmed the design engagement covers:
+
+1. **Improving existing screens** — Identifying and reducing UX friction in current certification flows
+2. **New screens and functionality** — Designing for features not yet built
+3. **Approach:** Designers surface opportunities → product team decides what to prioritise and build
+4. **Glue** — Surescripts' internal design system — design work may need to reference or extend it
+
+---
+
+### User Research That Exists
+
+- Persona work done for **non-engineering users** (business/ops side of customer orgs)
+- Separate research done for **engineering users** (developers updating XML integration code)
+- These are not exhaustive but are a starting point — Samantha will share
+- No usability test recordings exist (not feasible given the network constraint)
+
+---
+
+### Work Tracking & Platform
+
+| Tool | Status |
+|---|---|
+| **Aha** | Current work tracking tool — temporary |
+| **JIRA** | Transitioning to this — timing unknown (maybe June, maybe August) |
+| **Workbench** | The platform where all certification work lives |
+| **Glue** | Surescripts' internal design system |
+
+---
+
+### Team Capacity
+
+- Galaxy and Hubble (other Surescripts projects) take **25–50% of the team's time**, never a full day
+- Certification Tester work fills the remaining bandwidth
+- Capacity ebbs and flows — some periods are heavier certification, some heavier Galaxy/Hubble
+
+---
+
+## Problem Framing Analysis
+
+### The Real Problem
+
+**Surface:** Customers need to certify their systems to connect to the Surescripts network.
+
+**Real:** Every 5–7 years, a mandated NCPDP standard upgrade creates a massive, predictable workload spike. Previously this required **57 hours of manual effort per customer per upgrade cycle**. With hundreds of customers upgrading simultaneously, Surescripts couldn't scale its workforce to match. The Certification Testing Tool is the primary lever to absorb this spike through self-service automation. The current engagement pushes from 18 → 9 hours.
+
+---
+
+### Who Has the Problem
+
+| User | Who They Are | Their Pain |
+|---|---|---|
+| **Engineering customers** | Developers at EHRs/pharmacies updating XML integration code | Must rewrite code every upgrade cycle; need fast, clear feedback on what failed and why |
+| **Non-engineering customers** | Business/ops side of customer org | Managing certification progress without deep technical knowledge of XML or NCPDP |
+| **Surescripts cert team** | Internal staff previously shepherding customers | Manually guided every customer — 57 hrs each. Not scalable as customer base grows |
+| **Surescripts product/UX** | Samantha's team + Chandni + Asif | Improving a complex network tool with no traditional usability testing available |
+
+---
+
+### Hidden Assumptions to Surface
+
+1. **Self-service = always better** — Some customers may need more guided support, not less. The 9-hour target assumes customers can operate independently, but non-engineering users may struggle.
+2. **Stage = production equivalent** — Customers test in Stage, but Production can behave differently. Assumptions about parity may mask real issues.
+3. **One tool fits both personas** — Engineering and non-engineering users have fundamentally different mental models. The current tool may be implicitly designed for engineers.
+4. **Reducing hours = reducing friction** — Hours saved may come from process streamlining, not UX improvement. The two are not the same thing.
+5. **Good customer feedback = good UX** — v1 has good feedback, but that's relative to the 57-hour manual baseline. The bar may be low.
+
+---
+
+### Success Criteria
+
+| Type | Target |
+|---|---|
+| **Quantitative** | 18 hours → **9 hours** per upgrade project by end of 2026 |
+| **Self-service rate** | Customers complete certification without Surescripts staff intervention |
+| **Qualitative** | Customers feel confident at each step; errors are clear and actionable |
+| **Design output** | Both existing screen improvements AND new functionality shipped |
+
+---
+
+### Constraints
+
+**Technical — The Network Problem:**
+- Network product — both customer's system AND Surescripts system must be live simultaneously
+- Cannot create canned or simulated usability testing scenarios
+- **Only research method available:** Observational — sit alongside real users during real sessions
+- Non-negotiable constraint of the product architecture
+
+**Organisational:**
+- Work tracked in Aha (moving to JIRA — timing unknown)
+- All work lives on Workbench platform
+- Design decisions need product team buy-in — Samantha and team prioritise, not UX
+- Team capacity split across Galaxy / Hubble / Certification Tester
+
+**Environment Pipeline:**
+\`\`\`
+Devint → Stage (customer access) → Production
+\`\`\`
+
+---
+
+### Design Opportunities
+
+1. **Error and warning messages** — Assertions fail with technical XML errors. Make them readable and actionable for non-engineering users.
+2. **Progress visibility** — Customers need a clear view of where they are in the project, what's done, what's blocking them.
+3. **Instructions clarity** — Step-level instructions guide customers on what to do. These may be inconsistent or too technical.
+4. **Self-service sign-off flow** — Currently Surescripts still manually moves customers to Production. A proper sign-off UX could remove this step.
+5. **Non-engineering user experience** — The tool may be optimised for developers. The business/ops persona may need a different view or simplified summary layer.
+
+---
+
+## Key Terms Reference
+
+| Term | Meaning |
+|---|---|
+| **Surescripts** | Health Information Network — middleware for e-prescriptions in the US |
+| **NCPDP** | National Council for Prescription Drug Programs — the standard |
+| **New RX** | Transaction for a brand-new prescription from doctor to pharmacy |
+| **Renewal Request** | Transaction when a patient's pharmacy requests a refill from the prescriber |
+| **ERX** | Electronic prescription — general term |
+| **EHR** | Electronic Health Record — cross-organisation, supports hospitalisation |
+| **EMR** | Electronic Medical Record — single organisation only |
+| **HTV** | Health Tech Vendor — another term for EHR companies |
+| **PBM** | Pharmacy Benefit Manager — handles insurance formulary and drug coverage |
+| **SPI** | Surescripts Prescriber ID — identifies prescriber/EHR on the network |
+| **NCPDP ID** | Unique ID for a pharmacy on the Surescripts network |
+| **RTPB** | Real-Time Pharmacy Benefit |
+| **EPA** | Electronic Prior Authorization |
+| **PPT** | Patient Price Transparency — Team 36 app |
+| **Onboarding Modernization** | Initiative to reduce 57 → 9 hrs per upgrade cycle |
+| **Stage environment** | Customer-accessible test environment for certification work |
+| **Devint** | Dev/integration environment — internal first step before Stage |
+| **Production** | Live environment — where customers go after successful certification |
+| **Workbench** | Platform where all certification work lives |
+| **Aha** | Current work tracking tool (transitioning to JIRA) |
+| **Glue** | Surescripts' internal design system |
+| **Galaxy / Hubble** | Other Surescripts projects the team also works on |
+| **Certification v1** | First version of the certification tool — already launched |
+| **Test Step** | Atomic unit — one message exchange |
+| **Test Case** | Logical group of test steps |
+| **Test Project** | Full collection of test cases for one customer's certification run |
+| **Account** | The customer entity a test project is assigned to |
+| **Assertions** | Rules that validate XML message fields during test execution |
+| **Message ID** | Unique identifier on every outbound message |
+| **Relate To** | Field linking a response step to its original request by Message ID |
+| **Autoresponder** | RTPB feature that auto-generates responses based on patient ID matching |
+| **Direction** | Which side sends — Customer Sends (SPI) vs Customer Receives (NCPDP ID) |
+
+---
+
+## Team Structure
+
+| Team / Person | Role |
+|---|---|
+| **Team 28** | Built the original execution screen — moved on |
+| **Team 30** | Certification tool / test execution (current team) |
+| **Team 32** | RTPB autoresponder |
+| **Team 36** | PPT (Patient Price Transparency) app |
+| **EMETS** | Vendor organisation the design team belongs to |
+| **Samantha Bailey Fast** | Surescripts Product Leader — primary client contact, owns cert tool roadmap |
+| **Deepa Patel** | Surescripts — provided domain/ecosystem overview (Session 1) |
+| **Abhijit Joshi** | Surescripts — provided certification tool walkthrough (Session 2) |
+| **Mohd Asif** | UX team member on the engagement |
+| **Chandni** | UX designer on the engagement |
+
+---
+
+## What to Do Next
+
+1. **Get Stage/Devint access** — Cannot design what you haven't seen. Request a demo account from Samantha to explore the live tool.
+2. **Get user personas** — Samantha confirmed persona work exists for both engineering and non-engineering users. Request these files.
+3. **Plan observational research sessions** — No traditional usability testing is possible. Schedule sit-alongside sessions with real customers during actual certification runs as early as possible.
+4. **Audit existing screens** — Before proposing improvements, document the full current state of Certification Tool v1: all screens, flows, error states.
+5. **Study NCPDP SCRIPT standard overview** — Understand the XML message structure that assertions are validating. Enough to interpret test step fields and error messages.
+6. **Understand Glue design system** — Request access or documentation for Surescripts' internal design system. Understand what components exist before designing new ones.
+7. **Map both user journeys** — Separately map the Admin (internal) journey and the External Customer journey to find friction points in each.`;
+
+    // Auto-load and render the saved output — DOM is ready since script is at bottom of body
+    (function initViewer() {
+      const ta = document.getElementById('rawOutput');
+      if (!ta) { window.addEventListener('DOMContentLoaded', initViewer); return; }
+      ta.value = _savedOutput;
+      onRawInput();
+      renderAndSwitch();
+    })();
+
+    function onRawInput() {
+      const len = document.getElementById('rawOutput').value.length;
+      document.getElementById('charCount').textContent =
+        len.toLocaleString() + ' character' + (len !== 1 ? 's' : '');
+      document.getElementById('renderBtn').disabled = len === 0;
+    }
+
+
+    function showPage(page) {
+      // toggle main vs about
+      document.querySelector('.da-page').style.display = page === 'agent' ? 'block' : 'none';
+      document.getElementById('aboutPage').style.display = page === 'about' ? 'block' : 'none';
+      // update nav active state
+      document.getElementById('navAgent').classList.toggle('active', page === 'agent');
+      document.getElementById('navAbout').classList.toggle('active', page === 'about');
+    }
+
+    function switchViewerTab(tab) {
+      ['paste', 'read'].forEach(t => {
+        document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+        const panelId = 'panel' + t.charAt(0).toUpperCase() + t.slice(1);
+        document.getElementById(panelId).style.display = t === tab ? 'block' : 'none';
+      });
+    }
+
+    function renderAndSwitch() {
+      const raw = document.getElementById('rawOutput').value.trim();
+      if (!raw) return;
+      document.getElementById('renderedOutput').innerHTML = marked.parse(raw);
+      document.getElementById('readyBadge').style.display = 'inline-block';
+      document.getElementById('readToolbar').style.display = 'flex';
+      switchViewerTab('read');
+      document.getElementById('panelRead').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function copyRich() {
+      const btn = document.getElementById('btnCopyRich');
+      const text = document.getElementById('rawOutput').value;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.innerHTML = '<i class="ti ti-check" style="font-size:14px;"></i> Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = '<i class="ti ti-copy" style="font-size:14px;"></i> Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    function clearViewer() {
+      document.getElementById('rawOutput').value = '';
+      document.getElementById('charCount').textContent = '0 characters';
+      document.getElementById('renderBtn').disabled = true;
+      document.getElementById('readyBadge').style.display = 'none';
+      document.getElementById('readToolbar').style.display = 'none';
+      document.getElementById('renderedOutput').innerHTML = `
+        <div class="viewer-empty">
+          <div class="viewer-empty-icon"><i class="ti ti-file-description"></i></div>
+          <p>Nothing here yet.<br>Paste your output in the <strong>Paste output</strong> tab and click <strong>Render &amp; Read</strong>.</p>
+        </div>`;
+      switchViewerTab('paste');
+    }
+  </script>
+</body>
+</html>
