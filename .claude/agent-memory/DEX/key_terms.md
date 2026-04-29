@@ -40,3 +40,12 @@ type: project
 | Direction | Which side sends — Customer Sends (SPI) vs Customer Receives (NCPDP ID) |
 | HIN | Health Information Network — what Surescripts is |
 | EMETS | Vendor organisation the design team belongs to |
+| SCRIPT (XML) | NCPDP message format for e-prescribing — "doctor sends prescription to pharmacy" |
+| Telecom D.0 | NCPDP message format for pharmacy claims billing — compact string format |
+| Certification Tester | UI area in Workbench used by external (customer) users to execute tests |
+| Test Manager | UI area in Workbench used by internal Surescripts users to build and manage certification |
+| Test Reviewer | Internal Surescripts role that reviews and approves/rejects customer certification runs |
+| QA Test Designer | Internal role that builds reusable QA templates and assertion sets |
+| RWE | Real-World Evidence — life sciences use case for NCPDP data |
+| CMS | Centers for Medicare & Medicaid Services — mandates healthcare standards compliance |
+| ONC | Office of the National Coordinator for Health IT — mandates interoperability standards |

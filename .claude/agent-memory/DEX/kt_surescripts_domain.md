@@ -51,6 +51,23 @@ Patient needs refill → Pharmacy sends Renewal Request → Surescripts routes t
 
 NCPDP = National Council for Prescription Drug Programs — an independent non-profit that maintains the standard for electronic prescription data exchange. Any EHR, pharmacy, or system connecting to Surescripts must comply with and certify against this standard.
 
+## Who Uses NCPDP Standards
+
+- Retail and specialty pharmacies
+- PBMs (Pharmacy Benefit Managers)
+- Payers (Medicaid, Medicare, commercial insurance)
+- EHR / eRx vendors
+- Life sciences companies (analytics, access, adherence, RWE use cases)
+
+## Two NCPDP Message Formats
+
+| Format | Plain English |
+|---|---|
+| **SCRIPT (XML)** | "Doctor sends the prescription to the pharmacy." — rich, structured, verbose |
+| **Telecom D.0 (compact string)** | "Pharmacy bills the insurance and gets the copay/approval." — compact, claims-focused |
+
+SCRIPT is used for e-prescribing. Telecom D.0 is used for pharmacy claims billing and adjudication.
+
 ## PPT — Patient Price Transparency (Team 36)
 
 Separate initiative. Patients currently can't compare drug prices across pharmacies. Building an opt-in app via SMS link — shows medication prices + pharmacy distance. Owned by Team 36, separate from certification tool.

@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CT Basics — Certification Tester Reference</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../global.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Manrope', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    .ct-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      height: 64px;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      padding: 0 32px;
+      gap: 16px;
+    }
+    .ct-header-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: var(--radius-md);
+      transition: background 120ms, color 120ms;
+    }
+    .ct-header-back:hover { background: var(--neutral-100); color: var(--text-primary); }
+    .ct-header-divider { width: 1px; height: 20px; background: var(--border-subtle); }
+    .ct-header-title { display: flex; align-items: center; gap: 10px; }
+    .ct-header-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand-500) 0%, var(--brand-600) 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 16px;
+    }
+    .ct-header-name { font-size: 15px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.2px; }
+    .ct-header-badge {
+      font-size: 11px; font-weight: 700;
+      color: var(--brand-600);
+      background: var(--brand-100);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    /* ── Shell ── */
+    .ct-shell { display: flex; padding-top: 64px; min-height: 100vh; }
+
+    /* ── Left Nav ── */
+    .ct-nav {
+      position: fixed;
+      top: 64px; left: 0;
+      width: 256px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      padding: 24px 16px 32px;
+      border-right: 1px solid var(--border-subtle);
+      background: var(--bg-header);
+    }
+    .ct-nav-label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 1.2px;
+      color: var(--text-muted);
+      padding: 0 8px;
+      margin-bottom: 8px;
+    }
+    .ct-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 13px; font-weight: 500;
+      transition: background 120ms, color 120ms;
+      margin-bottom: 2px;
+    }
+    .ct-nav-item:hover { background: var(--neutral-100); color: var(--text-primary); }
+    .ct-nav-item.active { background: var(--brand-100); color: var(--brand-600); font-weight: 700; }
+    .ct-nav-num {
+      width: 20px; height: 20px;
+      border-radius: var(--radius-xs);
+      background: var(--neutral-100);
+      font-size: 10px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+    .ct-nav-item.active .ct-nav-num { background: var(--brand-500); color: #fff; }
+    .ct-nav::-webkit-scrollbar { width: 4px; }
+    .ct-nav::-webkit-scrollbar-track { background: transparent; }
+    .ct-nav::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 2px; }
+
+    /* ── Main ── */
+    .ct-main {
+      margin-left: 256px;
+      padding: 48px 64px 96px;
+      max-width: 1080px;
+      flex: 1;
+    }
+
+    /* ── Section ── */
+    .ct-section { margin-bottom: 80px; scroll-margin-top: 88px; }
+    .ct-section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 32px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .ct-section-num {
+      font-size: 12px; font-weight: 800;
+      color: var(--brand-600);
+      background: var(--brand-100);
+      border: 1.5px solid var(--brand-300);
+      width: 32px; height: 32px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .ct-section-title { font-size: 22px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.3px; margin-bottom: 4px; }
+    .ct-section-subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Cards ── */
+    .card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 20px; }
+    .card-grid { display: grid; gap: 16px; }
+    .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    /* ── Callout ── */
+    .callout {
+      border-left: 3px solid var(--brand-500);
+      background: var(--brand-100);
+      padding: 16px 20px;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin-bottom: 24px;
+    }
+    .callout-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--brand-600); margin-bottom: 6px; }
+    .callout-body { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
+    .callout.warning { border-color: var(--amber-300); background: var(--amber-50); }
+    .callout.warning .callout-title { color: var(--amber-900); }
+    .callout.success { border-color: var(--green-200); background: var(--green-50); }
+    .callout.success .callout-title { color: var(--green-700); }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
+    .stat-card.highlight { background: var(--brand-100); border-color: var(--brand-300); }
+    .stat-value { font-size: 36px; font-weight: 800; color: var(--brand-600); letter-spacing: -1px; }
+    .stat-label { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-top: 6px; }
+    .stat-sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; line-height: 1.4; }
+
+    /* ── Flow chain ── */
+    .flow-chain {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding: 4px 0;
+      flex-wrap: wrap;
+      row-gap: 12px;
+    }
+    .flow-node {
+      background: var(--bg-surface);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      text-align: center;
+      flex-shrink: 0;
+      min-width: 120px;
+    }
+    .flow-node.accent { background: var(--brand-100); border-color: var(--brand-300); }
+    .flow-node-icon { font-size: 20px; color: var(--brand-500); margin-bottom: 6px; }
+    .flow-node-label { font-size: 12px; font-weight: 700; color: var(--text-primary); }
+    .flow-node-sub { font-size: 11px; color: var(--text-secondary); margin-top: 3px; line-height: 1.4; }
+    .flow-arrow { font-size: 16px; color: var(--text-muted); padding: 0 8px; flex-shrink: 0; }
+
+    /* ── Table ── */
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .ref-table th {
+      text-align: left;
+      padding: 10px 16px;
+      font-size: 11px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--text-secondary);
+      background: var(--neutral-100);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .ref-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .ref-table tr:last-child td { border-bottom: none; }
+    .ref-table tr:hover td { background: var(--neutral-75); }
+
+    /* ── Split 2 ── */
+    .split-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+    /* ── Role cards ── */
+    .role-card { background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); overflow: hidden; }
+    .role-card-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      flex-wrap: wrap;
+      row-gap: 8px;
+    }
+    .role-card-icon {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .role-card-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .role-card-type { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-top: 1px; }
+    .role-card-body { padding: 16px 20px; font-size: 13px; }
+    .role-section-label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.7px;
+      color: var(--text-muted);
+      margin-bottom: 6px; margin-top: 12px;
+    }
+    .role-section-label:first-child { margin-top: 0; }
+    .role-item { display: flex; align-items: flex-start; gap: 8px; color: var(--text-primary); margin-bottom: 5px; line-height: 1.4; }
+    .role-item i { font-size: 14px; margin-top: 1px; flex-shrink: 0; }
+    .role-item.can i { color: var(--green-700); }
+    .role-item.cannot i { color: var(--red-500); }
+    .role-external .role-card-icon { background: var(--blue-100); color: var(--blue-600); }
+    .role-manager .role-card-icon { background: var(--brand-100); color: var(--brand-600); }
+    .role-reviewer .role-card-icon { background: var(--green-50); color: var(--green-700); }
+    .role-qa .role-card-icon { background: var(--purple-50); color: var(--purple-800); }
+    .role-admin .role-card-icon { background: var(--amber-50); color: var(--amber-900); }
+    .role-readonly .role-card-icon { background: var(--neutral-100); color: var(--text-secondary); }
+
+    /* ── Step walkthrough ── */
+    .steps-list { display: flex; flex-direction: column; gap: 0; }
+    .step-row { display: flex; gap: 16px; position: relative; }
+    .step-row:not(:last-child) .step-connector {
+      position: absolute;
+      left: 20px; top: 40px; bottom: -8px;
+      width: 2px;
+      background: var(--border-subtle);
+    }
+    .step-num-wrap { flex-shrink: 0; }
+    .step-num {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-pill);
+      background: var(--brand-100);
+      border: 2px solid var(--brand-300);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800;
+      color: var(--brand-600);
+      position: relative; z-index: 1;
+    }
+    .step-content {
+      flex: 1;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 8px;
+    }
+    .step-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .step-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Tag ── */
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 12px; font-weight: 600; }
+    .tag-teal { background: var(--brand-100); color: var(--brand-600); }
+    .tag-blue { background: var(--blue-100); color: var(--blue-600); }
+
+    /* ── Inline note ── */
+    .inline-note {
+      padding: 10px 14px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .inline-note.amber { background: var(--amber-50); border-left: 3px solid var(--amber-300); color: var(--amber-900); }
+    .inline-note.brand { background: var(--brand-100); border-left: 3px solid var(--brand-500); color: var(--text-primary); }
+    .inline-note.neutral { background: var(--neutral-100); border-left: 3px solid var(--border-subtle); color: var(--text-secondary); font-style: italic; }
+
+    /* ── Hierarchy visual ── */
+    .hier-level {
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      margin-bottom: 0;
+    }
+    .hier-level-num { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 2px; }
+    .hier-level-title { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+    .hier-level-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .hier-connector { width: 2px; background: var(--border-subtle); }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="ct-header">
+    <a href="./index.html" class="ct-header-back">
+      <i class="ti ti-arrow-left"></i>
+      DEX
+    </a>
+    <div class="ct-header-divider"></div>
+    <div class="ct-header-title">
+      <div class="ct-header-icon"><i class="ti ti-certificate"></i></div>
+      <span class="ct-header-name">CT Basics</span>
+      <span class="ct-header-badge">Reference</span>
+    </div>
+  </header>
+
+  <div class="ct-shell">
+
+    <!-- Left Nav -->
+    <aside class="ct-nav">
+      <div class="ct-nav-label">Sections</div>
+      <a href="#big-picture" class="ct-nav-item active" data-section="big-picture">
+        <span class="ct-nav-num">1</span>The Big Picture
+      </a>
+      <a href="#ecosystem" class="ct-nav-item" data-section="ecosystem">
+        <span class="ct-nav-num">2</span>The Ecosystem
+      </a>
+      <a href="#message-formats" class="ct-nav-item" data-section="message-formats">
+        <span class="ct-nav-num">3</span>Message Formats
+      </a>
+      <a href="#what-gets-certified" class="ct-nav-item" data-section="what-gets-certified">
+        <span class="ct-nav-num">4</span>What Gets Certified
+      </a>
+      <a href="#workbench" class="ct-nav-item" data-section="workbench">
+        <span class="ct-nav-num">5</span>The Tool: Workbench
+      </a>
+      <a href="#hierarchy" class="ct-nav-item" data-section="hierarchy">
+        <span class="ct-nav-num">6</span>Test Hierarchy
+      </a>
+      <a href="#assertions" class="ct-nav-item" data-section="assertions">
+        <span class="ct-nav-num">7</span>Assertions
+      </a>
+      <a href="#e2e-flow" class="ct-nav-item" data-section="e2e-flow">
+        <span class="ct-nav-num">8</span>End-to-End Flow
+      </a>
+      <a href="#user-roles" class="ct-nav-item" data-section="user-roles">
+        <span class="ct-nav-num">9</span>User Roles
+      </a>
+      <a href="#glossary" class="ct-nav-item" data-section="glossary">
+        <span class="ct-nav-num">10</span>Glossary
+      </a>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ct-main">
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 1. The Big Picture -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="big-picture" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">1</div>
+          <div>
+            <div class="ct-section-title">The Big Picture</div>
+            <div class="ct-section-subtitle">What this tool is, why it exists, and the business problem it solves</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-bottom:24px">
+          <div class="callout-title">One-line summary</div>
+          <div class="callout-body"><strong>Surescripts</strong> is the Health Information Network (HIN) that routes all electronic prescriptions across the US. Before any system can connect to it, that system must <strong>certify</strong> — prove it speaks the NCPDP standard correctly. The Certification Tester is the tool that runs those proofs.</div>
+        </div>
+
+        <h3 style="font-size:15px;font-weight:700;color:var(--text-primary);margin-bottom:12px">The recurring problem</h3>
+        <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:24px">NCPDP updates its standard every <strong style="color:var(--text-primary)">5–7 years</strong>. Every update means every single customer — EHRs, pharmacies, PBMs — must update their integration code and re-certify. Hundreds of customers all at once. This created a predictable, massive workload crisis. The Certification Tester was built to absorb it.</p>
+
+        <div class="card-grid card-grid-3" style="margin-bottom:24px">
+          <div class="stat-card">
+            <div class="stat-value">57 hrs</div>
+            <div class="stat-label">Before the tool</div>
+            <div class="stat-sub">Fully manual. Surescripts staff guided every certification run.</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">18 hrs</div>
+            <div class="stat-label">After v1 launched</div>
+            <div class="stat-sub">Self-service tool. Customers run tests independently.</div>
+          </div>
+          <div class="stat-card highlight">
+            <div class="stat-value">9 hrs</div>
+            <div class="stat-label">Target — end of 2026</div>
+            <div class="stat-sub">Ongoing UX work + automation. This is the design team's goal.</div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">Design context</div>
+          <div class="callout-body">This is <strong>not a one-time project</strong>. The NCPDP upgrade cycle means this problem recurs every 5–7 years at scale. Design decisions made now affect hundreds of customers across multiple certification cycles. The initiative is called <strong>Onboarding Modernization</strong>.</div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 2. The Ecosystem -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="ecosystem" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">2</div>
+          <div>
+            <div class="ct-section-title">The Ecosystem</div>
+            <div class="ct-section-subtitle">Who the players are, how they connect, and who the NCPDP standard affects</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Who uses NCPDP standards</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px">
+          <span class="tag tag-teal"><i class="ti ti-building-store"></i>Retail &amp; specialty pharmacies</span>
+          <span class="tag tag-teal"><i class="ti ti-shield-check"></i>PBMs</span>
+          <span class="tag tag-teal"><i class="ti ti-heart"></i>Payers (Medicaid, Medicare, commercial)</span>
+          <span class="tag tag-teal"><i class="ti ti-device-desktop"></i>EHR / eRx vendors</span>
+          <span class="tag tag-teal"><i class="ti ti-microscope"></i>Life sciences companies</span>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:16px">How a prescription travels</h3>
+        <div class="card" style="margin-bottom:24px">
+          <div class="flow-chain">
+            <div class="flow-node">
+              <div class="flow-node-icon"><i class="ti ti-stethoscope"></i></div>
+              <div class="flow-node-label">Prescriber</div>
+              <div class="flow-node-sub">Doctor diagnoses, decides to prescribe</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node">
+              <div class="flow-node-icon"><i class="ti ti-device-desktop"></i></div>
+              <div class="flow-node-label">EHR / EMR</div>
+              <div class="flow-node-sub">Creates a NewRx XML message</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node accent">
+              <div class="flow-node-icon"><i class="ti ti-network"></i></div>
+              <div class="flow-node-label">Surescripts</div>
+              <div class="flow-node-sub">Validates: age, drug safety, formulary, credentials</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node">
+              <div class="flow-node-icon"><i class="ti ti-building-store"></i></div>
+              <div class="flow-node-label">Pharmacy</div>
+              <div class="flow-node-sub">Receives, fills, dispenses</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node">
+              <div class="flow-node-icon"><i class="ti ti-user"></i></div>
+              <div class="flow-node-label">Patient</div>
+              <div class="flow-node-sub">Picks up medication</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border-subtle)">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-muted);margin-bottom:8px">Also connected to Surescripts</div>
+            <div style="display:flex;gap:8px">
+              <div class="flow-node" style="min-width:unset;flex:1">
+                <div class="flow-node-icon"><i class="ti ti-shield"></i></div>
+                <div class="flow-node-label">Payer / PBM</div>
+                <div class="flow-node-sub">Formulary, coverage, copay decisions — eligibility checks via Surescripts</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Player quick reference</h3>
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="ref-table">
+            <thead><tr><th>Player</th><th>Role</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Prescribers</strong></td><td>Doctors / clinicians who write prescriptions</td><td>Use EHR software to send prescriptions electronically</td></tr>
+              <tr><td><strong>EHR / EMR</strong></td><td>Software managing patient records and sending prescriptions</td><td>EMR = single org only. EHR = cross-org. Also called HTV.</td></tr>
+              <tr><td><strong>Surescripts</strong></td><td>Network hub — validates and routes all prescription messages</td><td>Only 6 outstanding production defects in ~20 years. Extremely high quality bar.</td></tr>
+              <tr><td><strong>Pharmacies</strong></td><td>Receive, fill, and process prescriptions</td><td>Identified on the network by their NCPDP ID</td></tr>
+              <tr><td><strong>Payers / PBMs</strong></td><td>Insurance and Pharmacy Benefit Managers</td><td>Handle formulary checks, drug coverage, copay adjudication</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 3. Message Formats -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="message-formats" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">3</div>
+          <div>
+            <div class="ct-section-title">Message Formats</div>
+            <div class="ct-section-subtitle">Two distinct NCPDP message formats — different jobs, different structures</div>
+          </div>
+        </div>
+
+        <div class="split-2">
+          <div class="card" style="border-top:3px solid var(--brand-500)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--brand-100);display:flex;align-items:center;justify-content:center;color:var(--brand-600);font-size:18px;flex-shrink:0"><i class="ti ti-file-code"></i></div>
+              <div>
+                <div style="font-size:15px;font-weight:800;color:var(--text-primary)">SCRIPT (XML)</div>
+                <div style="font-size:11px;font-weight:700;color:var(--brand-600);text-transform:uppercase;letter-spacing:0.5px">e-Prescribing</div>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px">Rich, structured, verbose XML format. Used for all prescription transactions between prescribers, EHRs, pharmacies, and Surescripts.</p>
+            <div class="callout" style="margin-bottom:16px">
+              <div class="callout-title">Simple analogy</div>
+              <div class="callout-body" style="font-size:13px">"Doctor sends the prescription to the pharmacy."</div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Transaction types</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <span class="tag tag-teal" style="font-size:11px">NewRx</span>
+              <span class="tag tag-teal" style="font-size:11px">CancelRx</span>
+              <span class="tag tag-teal" style="font-size:11px">Renewal Request</span>
+              <span class="tag tag-teal" style="font-size:11px">Transfer</span>
+            </div>
+          </div>
+
+          <div class="card" style="border-top:3px solid var(--indigo-500)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--blue-100);display:flex;align-items:center;justify-content:center;color:var(--blue-600);font-size:18px;flex-shrink:0"><i class="ti ti-receipt"></i></div>
+              <div>
+                <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Telecom D.0</div>
+                <div style="font-size:11px;font-weight:700;color:var(--blue-600);text-transform:uppercase;letter-spacing:0.5px">Claims / Billing</div>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px">Compact string format. Used for pharmacy claims billing and adjudication — the insurance side after the prescription is received.</p>
+            <div style="background:var(--blue-100);border-left:3px solid var(--blue-500);padding:12px 16px;border-radius:0 var(--radius-md) var(--radius-md) 0;margin-bottom:16px">
+              <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--blue-600);margin-bottom:4px">Simple analogy</div>
+              <div style="font-size:13px;color:var(--text-primary)">"Pharmacy bills the insurance and gets the copay/approval."</div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:8px">Use cases</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px">
+              <span class="tag tag-blue" style="font-size:11px">Claims billing</span>
+              <span class="tag tag-blue" style="font-size:11px">Eligibility checks</span>
+              <span class="tag tag-blue" style="font-size:11px">Copay adjudication</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 4. What Gets Certified -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="what-gets-certified" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">4</div>
+          <div>
+            <div class="ct-section-title">What Gets Certified</div>
+            <div class="ct-section-subtitle">Why certification is mandatory, what it proves, and what it's actually tied to</div>
+          </div>
+        </div>
+
+        <div class="callout success" style="margin-bottom:24px">
+          <div class="callout-title">Key mental model</div>
+          <div class="callout-body" style="font-size:15px;font-weight:700">"We don't certify people. We certify customer systems for specific products and message types."</div>
+        </div>
+
+        <div class="split-2" style="margin-bottom:24px">
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Why certification is mandatory</h3>
+            <p style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px">Healthcare standards are mandated by CMS, ONC, payers, and PBMs. Before a system can send e-prescriptions, submit pharmacy claims, or exchange prior authorizations — it must prove it:</p>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-primary)"><i class="ti ti-circle-check" style="color:var(--green-700);margin-top:1px;flex-shrink:0"></i>Sends messages in the correct format</div>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-primary)"><i class="ti ti-circle-check" style="color:var(--green-700);margin-top:1px;flex-shrink:0"></i>Handles error cases correctly</div>
+              <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--text-primary)"><i class="ti ti-circle-check" style="color:var(--green-700);margin-top:1px;flex-shrink:0"></i>Follows NCPDP rules exactly</div>
+            </div>
+            <div class="inline-note neutral">This is machine-to-machine testing — not human training. No clinicians involved.</div>
+          </div>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">What certification is tied to</h3>
+            <div class="card" style="padding:0;overflow:hidden">
+              <table class="ref-table">
+                <tbody>
+                  <tr><td style="font-weight:600;color:var(--text-primary);width:45%">Customer Account</td><td style="color:var(--text-secondary)">The organisation</td></tr>
+                  <tr><td style="font-weight:600;color:var(--text-primary)">Application Name</td><td style="color:var(--text-secondary)">The specific system being certified</td></tr>
+                  <tr><td style="font-weight:600;color:var(--text-primary)">Application Version</td><td style="color:var(--text-secondary)">Changing version may require re-cert</td></tr>
+                  <tr><td style="font-weight:600;color:var(--text-primary)">Certified Product(s)</td><td style="color:var(--text-secondary)">e.g. ePrescribing, Eligibility, RTPB</td></tr>
+                  <tr><td style="font-weight:600;color:var(--text-primary)">Message Types</td><td style="color:var(--text-secondary)">e.g. NewRx, CancelRx, RenewalRequest</td></tr>
+                  <tr><td style="font-weight:600;color:var(--text-primary)">Date of certification</td><td style="color:var(--text-secondary)">Logged for compliance records</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="inline-note amber" style="margin-top:12px"><strong>Note:</strong> Adding new products or message types requires additional certification runs.</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Who is NOT the certification target</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--red-50);border:1px solid var(--red-200);border-radius:var(--radius-md);font-size:13px;color:var(--red-600)"><i class="ti ti-x"></i>Clinicians</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--red-50);border:1px solid var(--red-200);border-radius:var(--radius-md);font-size:13px;color:var(--red-600)"><i class="ti ti-x"></i>End users of the EHR</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--red-50);border:1px solid var(--red-200);border-radius:var(--radius-md);font-size:13px;color:var(--red-600)"><i class="ti ti-x"></i>The person running the tests</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--green-50);border:1px solid var(--green-200);border-radius:var(--radius-md);font-size:13px;color:var(--green-700)"><i class="ti ti-check"></i>The customer's application / system</div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 5. Workbench -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="workbench" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">5</div>
+          <div>
+            <div class="ct-section-title">The Tool: Workbench</div>
+            <div class="ct-section-subtitle">Platform overview, the two main UI areas, and the environment pipeline</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-bottom:24px">
+          <div class="callout-title">Platform</div>
+          <div class="callout-body">All certification work lives on a platform called <strong>Workbench</strong>. It has two distinct UI areas — one for customer teams, one for internal Surescripts teams. These are separate spaces with different permissions and different jobs.</div>
+        </div>
+
+        <div class="split-2" style="margin-bottom:32px">
+          <div class="card" style="border-top:3px solid var(--brand-500)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--brand-100);display:flex;align-items:center;justify-content:center;color:var(--brand-600);font-size:18px;flex-shrink:0"><i class="ti ti-player-play"></i></div>
+              <div>
+                <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Certification Tester</div>
+                <span style="font-size:11px;background:var(--brand-100);color:var(--brand-600);padding:2px 8px;border-radius:var(--radius-pill);font-weight:700">External Users</span>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px">Where customer teams (EHRs, pharmacies, PBMs) log in and execute their certification test runs. They see only their own projects.</p>
+            <div style="font-size:12px;color:var(--text-muted);font-style:italic">Customers execute tests here. They cannot create or edit test content.</div>
+          </div>
+          <div class="card" style="border-top:3px solid var(--indigo-500)">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+              <div style="width:36px;height:36px;border-radius:var(--radius-md);background:var(--blue-100);display:flex;align-items:center;justify-content:center;color:var(--blue-600);font-size:18px;flex-shrink:0"><i class="ti ti-settings"></i></div>
+              <div>
+                <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Test Manager</div>
+                <span style="font-size:11px;background:var(--blue-100);color:var(--blue-600);padding:2px 8px;border-radius:var(--radius-pill);font-weight:700">Internal — Surescripts</span>
+              </div>
+            </div>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px">Where Surescripts certification teams build test cases, manage assertions, review customer submissions, and approve or reject certification runs.</p>
+            <div style="font-size:12px;color:var(--text-muted);font-style:italic">Surescripts defines, manages, and approves certification here.</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:16px">Environment pipeline</h3>
+        <div class="card" style="margin-bottom:16px">
+          <div class="flow-chain">
+            <div class="flow-node">
+              <div class="flow-node-icon"><i class="ti ti-code"></i></div>
+              <div class="flow-node-label">Devint</div>
+              <div class="flow-node-sub">Dev / integration. Internal only.</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node accent">
+              <div class="flow-node-icon"><i class="ti ti-test-pipe"></i></div>
+              <div class="flow-node-label">Stage</div>
+              <div class="flow-node-sub">Customer certification testing. Real messages, real systems.</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node" style="border-color:var(--green-200);background:var(--green-50)">
+              <div class="flow-node-icon" style="color:var(--green-700)"><i class="ti ti-rocket"></i></div>
+              <div class="flow-node-label" style="color:var(--green-700)">Production</div>
+              <div class="flow-node-sub">Live. Customer reaches here after successful certification.</div>
+            </div>
+          </div>
+        </div>
+        <div class="inline-note amber"><strong>Design note:</strong> Customers test in Stage — unusual in the industry. Most companies don't expose staging to external users. Surescripts does this deliberately to enable realistic self-service testing with real message flows.</div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 6. Test Hierarchy -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="hierarchy" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">6</div>
+          <div>
+            <div class="ct-section-title">Test Hierarchy</div>
+            <div class="ct-section-subtitle">The 4-level structure every certification project is built on</div>
+          </div>
+        </div>
+
+        <div class="split-2" style="margin-bottom:32px">
+          <!-- Visual hierarchy -->
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:16px">The 4 levels</h3>
+            <div class="card">
+              <!-- Account -->
+              <div class="hier-level" style="background:var(--neutral-100);border:1.5px solid var(--border-subtle)">
+                <div class="hier-level-num" style="color:var(--text-muted)">Level 4</div>
+                <div class="hier-level-title">Account</div>
+                <div class="hier-level-desc">The customer organisation</div>
+              </div>
+              <div style="width:2px;height:16px;background:var(--border-subtle);margin-left:20px"></div>
+              <!-- Project -->
+              <div class="hier-level" style="background:var(--neutral-100);border:1.5px solid var(--border-subtle);margin-left:16px">
+                <div class="hier-level-num" style="color:var(--text-muted)">Level 3</div>
+                <div class="hier-level-title">Test Project</div>
+                <div class="hier-level-desc">Full collection of test cases for one certification run</div>
+              </div>
+              <div style="width:2px;height:16px;background:var(--border-subtle);margin-left:36px"></div>
+              <!-- Case -->
+              <div class="hier-level" style="background:var(--neutral-100);border:1.5px solid var(--border-subtle);margin-left:32px">
+                <div class="hier-level-num" style="color:var(--text-muted)">Level 2</div>
+                <div class="hier-level-title">Test Case</div>
+                <div class="hier-level-desc">Logical group of steps testing one scenario</div>
+              </div>
+              <div style="width:2px;height:16px;background:var(--border-subtle);margin-left:52px"></div>
+              <!-- Step -->
+              <div class="hier-level" style="background:var(--brand-100);border:1.5px solid var(--brand-300);margin-left:48px">
+                <div class="hier-level-num" style="color:var(--brand-600)">Level 1 — Atomic</div>
+                <div class="hier-level-title">Test Step</div>
+                <div class="hier-level-desc">One message exchange — the smallest unit of work</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Step fields -->
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:16px">Test Step — all fields</h3>
+            <div class="card" style="padding:0;overflow:hidden">
+              <table class="ref-table">
+                <thead><tr><th>Field</th><th>What it is</th></tr></thead>
+                <tbody>
+                  <tr><td><strong>Product</strong></td><td>Which Surescripts product (e.g. NCPDP SCRIPT, RTPB)</td></tr>
+                  <tr><td><strong>Message Version</strong></td><td>NCPDP standard version (e.g. 10.6, 2017071)</td></tr>
+                  <tr><td><strong>Message Type</strong></td><td>Transaction type (NewRx, Renewal, Cancellation…)</td></tr>
+                  <tr><td><strong>Direction</strong></td><td>Customer Sends or Customer Receives</td></tr>
+                  <tr><td><strong>SPI</strong></td><td>Surescripts Prescriber ID — used when customer is an EHR</td></tr>
+                  <tr><td><strong>NCPDP ID</strong></td><td>Pharmacy identifier — used when customer is a pharmacy</td></tr>
+                  <tr><td><strong>Assertions</strong></td><td>Rules to validate the message</td></tr>
+                  <tr><td><strong>Attachments</strong></td><td>Sample files or reference materials</td></tr>
+                  <tr><td><strong>Instructions</strong></td><td>Human-readable guidance for the external user</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="inline-note brand" style="margin-top:12px"><strong>Direction field:</strong> Customer Sends → tool receives and validates (uses SPI). Customer Receives → tool sends to customer, customer must respond (uses NCPDP ID).</div>
+          </div>
+        </div>
+
+        <!-- Message ID / Relate To -->
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">Linking messages: Message ID and Relate To</h3>
+        <div class="card">
+          <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:16px">Every outbound message has a unique <strong style="color:var(--text-primary)">Message ID</strong>. When a response step references that original message, it uses a <strong style="color:var(--text-primary)">Relate To</strong> field containing that ID. This links the request and response together for validation.</p>
+          <div style="background:var(--neutral-100);border-radius:var(--radius-md);padding:16px;font-family:'Courier New',monospace;font-size:12px;color:var(--text-secondary);line-height:1.8">
+            Step 1: Customer sends NewRx → Message ID = "MSG-001"<br>
+            Step 2: Customer receives Response → Relate To = "MSG-001"
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 7. Assertions -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="assertions" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">7</div>
+          <div>
+            <div class="ct-section-title">Assertions</div>
+            <div class="ct-section-subtitle">The pass/fail gatekeepers — understanding these is core to understanding the tool</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-bottom:24px">
+          <div class="callout-title">Definition</div>
+          <div class="callout-body">An <strong>assertion</strong> is a specific yes/no rule that verifies one expected condition during a test. If it fails, the test step fails — regardless of whether everything else passed. Assertions are deliberately granular so failures are pinpointed, not vague.</div>
+        </div>
+
+        <div class="split-2" style="margin-bottom:24px">
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">By source</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="card" style="padding:16px;border-left:3px solid var(--brand-500)">
+                <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">System assertions</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Built in by Surescripts. Always present. Cannot be removed or bypassed.</div>
+              </div>
+              <div class="card" style="padding:16px;border-left:3px solid var(--neutral-400)">
+                <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">User-defined assertions</div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Added manually by a Test Manager admin for specific or custom requirements.</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">By severity</h3>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div class="card" style="padding:16px;border-left:3px solid var(--red-500)">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:700;color:var(--text-primary)">Error</span>
+                  <span style="font-size:10px;font-weight:700;background:var(--red-50);color:var(--red-600);padding:2px 6px;border-radius:var(--radius-pill);text-transform:uppercase;letter-spacing:0.5px">Blocks progress</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Message fails. Customer must fix and resend. Cannot proceed past this step.</div>
+              </div>
+              <div class="card" style="padding:16px;border-left:3px solid var(--amber-300)">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+                  <span style="font-size:13px;font-weight:700;color:var(--text-primary)">Warning</span>
+                  <span style="font-size:10px;font-weight:700;background:var(--amber-50);color:var(--amber-900);padding:2px 6px;border-radius:var(--radius-pill);text-transform:uppercase;letter-spacing:0.5px">Non-blocking</span>
+                </div>
+                <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Execution continues. Warning is flagged and customer is informed, but not stopped.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- What assertions validate -->
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">What assertions validate</h3>
+        <div class="card-grid card-grid-3" style="margin-bottom:24px">
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Required fields present</div>
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Field values match expected</div>
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Message structure is correct</div>
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Error handling as expected</div>
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Correct response type returned</div>
+          <div style="padding:12px 16px;background:var(--neutral-100);border-radius:var(--radius-md);font-size:13px;color:var(--text-primary)"><i class="ti ti-check" style="color:var(--brand-500);margin-right:6px"></i>Business rules followed</div>
+        </div>
+
+        <!-- Rollup chain -->
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:16px">How failures roll up to certification</h3>
+        <div class="card" style="margin-bottom:16px">
+          <div class="flow-chain">
+            <div class="flow-node" style="background:var(--red-50);border-color:var(--red-200);min-width:130px">
+              <div class="flow-node-icon" style="color:var(--red-500)"><i class="ti ti-alert-circle"></i></div>
+              <div class="flow-node-label" style="color:var(--red-600)">Assertion fails</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node" style="background:var(--red-50);border-color:var(--red-200)">
+              <div class="flow-node-icon" style="color:var(--red-500)"><i class="ti ti-x"></i></div>
+              <div class="flow-node-label" style="color:var(--red-600)">Step fails</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node" style="background:var(--red-50);border-color:var(--red-200)">
+              <div class="flow-node-icon" style="color:var(--red-500)"><i class="ti ti-x"></i></div>
+              <div class="flow-node-label" style="color:var(--red-600)">Case fails</div>
+            </div>
+            <div class="flow-arrow"><i class="ti ti-arrow-right"></i></div>
+            <div class="flow-node" style="background:var(--red-50);border-color:var(--red-200);min-width:130px">
+              <div class="flow-node-icon" style="color:var(--red-500)"><i class="ti ti-certificate"></i></div>
+              <div class="flow-node-label" style="color:var(--red-600)">Certification blocked</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout warning">
+          <div class="callout-title">The passport analogy</div>
+          <div class="callout-body">
+            Passport valid? ✅ &nbsp; Ticket valid? ✅ &nbsp; Name matches? ❌ → You don't board the flight.<br><br>
+            A system can be "mostly working" — message sent, workflow runs to completion — and still fail certification because one required field was missing or one value was the wrong format. <strong>There is no partial credit at the certification level.</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 8. End-to-End Flow -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="e2e-flow" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">8</div>
+          <div>
+            <div class="ct-section-title">End-to-End: One Message Through a Test Step</div>
+            <div class="ct-section-subtitle">What actually happens when a customer sends a message — using NewRx as the example. Same pattern applies to all message types.</div>
+          </div>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">1</div></div>
+            <div class="step-content">
+              <div class="step-title">Test step is activated</div>
+              <div class="step-desc">The external customer user opens the step in Certification Tester, reads the instructions, and sees what message to send. No validation happens yet — the tool is waiting.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">2</div></div>
+            <div class="step-content">
+              <div class="step-title">Customer system sends the message</div>
+              <div class="step-desc">The customer's actual system sends a NewRx XML message into the Stage environment. This is a real outbound message — it is not typed into the UI. It comes from their live integration code.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">3</div></div>
+            <div class="step-content">
+              <div class="step-title">Message is captured and displayed</div>
+              <div class="step-desc">The tool detects the message and displays it. The user confirms it to associate it with the active test step. At this point, the tool knows: "this is the message to validate."</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">4</div></div>
+            <div class="step-content">
+              <div class="step-title">Assertions execute against the message</div>
+              <div class="step-desc">Each assertion runs independently — checking message type, required fields, content validity, message ID references, business rule compliance. Each returns pass or fail on its own.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">5</div></div>
+            <div class="step-content">
+              <div class="step-title">Step result is calculated</div>
+              <div class="step-desc">All required assertions must pass. One failure = step fails, even if everything else passed. The UI shows exactly which assertion failed, why it failed, and which field caused it.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">6</div></div>
+            <div class="step-content">
+              <div class="step-title">Results roll up through the hierarchy</div>
+              <div class="step-desc">Step result feeds into the Test Case, which feeds into the Project, which determines the overall certification status. Until this step passes, the test case cannot pass.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-connector"></div>
+            <div class="step-num-wrap"><div class="step-num">7</div></div>
+            <div class="step-content">
+              <div class="step-title">Fix and re-execute</div>
+              <div class="step-desc">Customer fixes the issue in their integration code, sends a corrected message, and re-executes the same step. Assertions run again. Real-time feedback — no waiting for a Surescripts person to manually review.</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num-wrap">
+              <div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)"><i class="ti ti-check"></i></div>
+            </div>
+            <div class="step-content" style="border-color:var(--green-200);background:var(--green-50)">
+              <div class="step-title" style="color:var(--green-700)">All assertions pass — step complete</div>
+              <div class="step-desc">Move to the next step. Repeat until all required test cases are complete. Then certification can proceed.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 9. User Roles -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="user-roles" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">9</div>
+          <div>
+            <div class="ct-section-title">User Roles</div>
+            <div class="ct-section-subtitle">Who uses the tool, what they can do, and which UI area they live in</div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-bottom:24px">
+          <div class="callout-title">Mental model</div>
+          <div class="callout-body"><strong>Customers execute tests.</strong> Surescripts defines, reviews, and approves tests. External users live in Certification Tester. Internal users live in Test Manager.</div>
+        </div>
+
+        <!-- External -->
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:12px">External — Customer users</div>
+        <div style="margin-bottom:32px">
+          <div class="role-card role-external">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-building"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">External Customer User</div>
+                <div class="role-card-type">EHR teams, pharmacies, PBMs, vendors — developers, testers, analysts</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--brand-100);color:var(--brand-600);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">Certification Tester</span>
+            </div>
+            <div class="role-card-body">
+              <div class="split-2">
+                <div>
+                  <div class="role-section-label">Can do</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>Execute test cases in their assigned project</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>View execution results and certification progress</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>Submit intake forms and test data</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>Download certification artifacts</div>
+                </div>
+                <div>
+                  <div class="role-section-label">Cannot do</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>Create or edit test cases</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>Modify assertions</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>Approve or reject certification</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>See other customers' projects</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Internal -->
+        <div style="font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:12px">Internal — Surescripts employees</div>
+        <div class="card-grid card-grid-2" style="gap:16px">
+
+          <div class="role-card role-manager">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-tool"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">Test Manager</div>
+                <div class="role-card-type">Certification Analysts, Test Designers, QA Engineers</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--blue-100);color:var(--blue-600);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">Test Manager UI</span>
+            </div>
+            <div class="role-card-body">
+              <div class="role-section-label">Primary builder role</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Create and manage certification projects</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Build test cases, test steps, and assertions</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Review results and override execution status</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Configure test data and assertion parameters</div>
+            </div>
+          </div>
+
+          <div class="role-card role-reviewer">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-eye"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">Test Reviewer</div>
+                <div class="role-card-type">Certification Reviewers, Certification Managers</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--blue-100);color:var(--blue-600);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">Test Manager UI</span>
+            </div>
+            <div class="role-card-body">
+              <div class="role-section-label">Approval role</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Review customer test executions</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Approve or reject certification submissions</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Add review comments, request re-execution</div>
+              <div class="role-item cannot"><i class="ti ti-x"></i>Cannot create or edit test content</div>
+            </div>
+          </div>
+
+          <div class="role-card role-qa">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-template"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">QA Test Designer</div>
+                <div class="role-card-type">QA Analysts, Test Automation Engineers</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--blue-100);color:var(--blue-600);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">Test Manager UI</span>
+            </div>
+            <div class="role-card-body">
+              <div class="role-section-label">Template / QA role</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Create reusable QA templates and test assets</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Build test cases and assertions for QA projects</div>
+              <div class="role-item cannot"><i class="ti ti-x"></i>Customer projects are read-only</div>
+              <div class="role-item cannot"><i class="ti ti-x"></i>Cannot modify live certification projects</div>
+            </div>
+          </div>
+
+          <div class="role-card role-admin">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-shield"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">System Administrator</div>
+                <div class="role-card-type">DevOps, System Administrators</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--blue-100);color:var(--blue-600);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">All screens</span>
+            </div>
+            <div class="role-card-body">
+              <div class="role-section-label">Full access role</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Manage users and roles</div>
+              <div class="role-item can"><i class="ti ti-check"></i>Configure environments and integrations</div>
+              <div class="role-item can"><i class="ti ti-check"></i>View system logs, perform maintenance</div>
+            </div>
+          </div>
+
+          <div class="role-card role-readonly" style="grid-column:span 2">
+            <div class="role-card-header">
+              <div class="role-card-icon"><i class="ti ti-eye-off"></i></div>
+              <div style="flex:1">
+                <div class="role-card-name">Read-Only User (Internal)</div>
+                <div class="role-card-type">Reporting, observation — no execution or editing rights</div>
+              </div>
+              <span style="font-size:11px;font-weight:700;background:var(--neutral-100);color:var(--text-secondary);padding:3px 10px;border-radius:var(--radius-pill);flex-shrink:0">Test Manager (read-only)</span>
+            </div>
+            <div class="role-card-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+                <div>
+                  <div class="role-section-label">Can do</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>View projects, test cases, executions, reports</div>
+                  <div class="role-item can"><i class="ti ti-check"></i>Export data for reporting</div>
+                </div>
+                <div>
+                  <div class="role-section-label">Cannot do</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>Execute tests</div>
+                  <div class="role-item cannot"><i class="ti ti-x"></i>Edit content or approve / reject certification</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 10. Glossary -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="glossary" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">10</div>
+          <div>
+            <div class="ct-section-title">Glossary</div>
+            <div class="ct-section-subtitle">All domain-specific terms — reference this before meetings, reviews, or walkthroughs</div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:0;overflow:hidden">
+          <table class="ref-table">
+            <thead><tr><th style="width:28%">Term</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Surescripts</strong></td><td>Health Information Network (HIN) — the middleware that routes all electronic prescriptions in the US</td></tr>
+              <tr><td><strong>NCPDP</strong></td><td>National Council for Prescription Drug Programs — the independent non-profit that maintains the e-prescription data exchange standard</td></tr>
+              <tr><td><strong>SCRIPT (XML)</strong></td><td>NCPDP message format for e-prescribing — rich structured XML ("doctor sends prescription to pharmacy")</td></tr>
+              <tr><td><strong>Telecom D.0</strong></td><td>NCPDP message format for pharmacy claims billing — compact string ("pharmacy bills insurance for copay")</td></tr>
+              <tr><td><strong>Workbench</strong></td><td>The platform where all certification work lives. Contains two UI areas: Certification Tester and Test Manager.</td></tr>
+              <tr><td><strong>Certification Tester</strong></td><td>The UI area used by external customer users to execute their certification test runs</td></tr>
+              <tr><td><strong>Test Manager</strong></td><td>The UI area used by internal Surescripts staff to build, manage, and approve certification content</td></tr>
+              <tr><td><strong>Test Step</strong></td><td>Atomic unit of certification — one message exchange (e.g. send a NewRx, receive a response)</td></tr>
+              <tr><td><strong>Test Case</strong></td><td>A logical group of test steps that together test one scenario</td></tr>
+              <tr><td><strong>Test Project</strong></td><td>A full collection of test cases for one customer's certification run, assigned to an Account</td></tr>
+              <tr><td><strong>Account</strong></td><td>The customer entity a test project is assigned to</td></tr>
+              <tr><td><strong>Assertion</strong></td><td>A yes/no validation rule on a message field or structure. Fails the step if not met.</td></tr>
+              <tr><td><strong>NewRx</strong></td><td>Transaction for a brand-new prescription from doctor to pharmacy</td></tr>
+              <tr><td><strong>Renewal Request</strong></td><td>Transaction when a patient's pharmacy requests a refill from the prescriber</td></tr>
+              <tr><td><strong>EHR / EMR</strong></td><td>Electronic Health Record (cross-org) / Electronic Medical Record (single org). Also called HTV (Health Tech Vendor).</td></tr>
+              <tr><td><strong>PBM</strong></td><td>Pharmacy Benefit Manager — handles insurance formulary and drug coverage decisions</td></tr>
+              <tr><td><strong>SPI</strong></td><td>Surescripts Prescriber ID — unique identifier for a prescriber or EHR on the network</td></tr>
+              <tr><td><strong>NCPDP ID</strong></td><td>Unique identifier for a pharmacy on the Surescripts network</td></tr>
+              <tr><td><strong>RTPB</strong></td><td>Real-Time Pharmacy Benefit — a separate Surescripts product (owned by Team 32)</td></tr>
+              <tr><td><strong>EPA</strong></td><td>Electronic Prior Authorization</td></tr>
+              <tr><td><strong>Message ID</strong></td><td>Unique identifier on every outbound message — used to link request and response steps</td></tr>
+              <tr><td><strong>Relate To</strong></td><td>Field on a response step referencing the Message ID of the original request</td></tr>
+              <tr><td><strong>Direction</strong></td><td>Which side sends the message — Customer Sends (uses SPI) vs Customer Receives (uses NCPDP ID)</td></tr>
+              <tr><td><strong>Stage environment</strong></td><td>Customer-accessible test environment — unusual in the industry, Surescripts intentionally opened this to customers</td></tr>
+              <tr><td><strong>Devint</strong></td><td>Development / integration environment — internal first step before Stage</td></tr>
+              <tr><td><strong>Production</strong></td><td>Live environment — where customers connect after successful certification</td></tr>
+              <tr><td><strong>Onboarding Modernization</strong></td><td>The initiative to reduce certification effort from 57 → 9 hours per customer per upgrade cycle</td></tr>
+              <tr><td><strong>Glue</strong></td><td>Surescripts' internal design system</td></tr>
+              <tr><td><strong>EMETS</strong></td><td>The vendor organisation the design team belongs to</td></tr>
+              <tr><td><strong>CMS</strong></td><td>Centers for Medicare &amp; Medicaid Services — mandates healthcare standards compliance</td></tr>
+              <tr><td><strong>ONC</strong></td><td>Office of the National Coordinator for Health IT — mandates interoperability standards</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // Active nav on scroll
+    const sections = document.querySelectorAll('.ct-section');
+    const navItems = document.querySelectorAll('.ct-nav-item');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navItems.forEach(item => {
+            item.classList.toggle('active', item.dataset.section === id);
+          });
+        }
+      });
+    }, { rootMargin: '-10% 0px -75% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+
+    // Smooth scroll
+    navItems.forEach(item => {
+      item.addEventListener('click', e => {
+        e.preventDefault();
+        const id = item.dataset.section;
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+</html>

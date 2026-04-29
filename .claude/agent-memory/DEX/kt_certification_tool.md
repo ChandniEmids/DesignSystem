@@ -4,6 +4,17 @@ description: How the NCPDP Certification Testing Tool works — user types, hier
 type: project
 ---
 
+## Why Certification Exists
+
+In healthcare, standards are mandated by CMS, ONC, payers, and PBMs. Before a system can:
+- Send e-prescriptions
+- Submit pharmacy claims
+- Exchange prior authorization messages
+
+…it must prove it sends messages in the correct format, handles error cases correctly, and follows NCPDP rules exactly. That's what the Certification Tester is for.
+
+Certification is **machine-to-machine testing**, not human training.
+
 ## Platform: Workbench
 
 All certification work lives on a platform called **Workbench**. Two user types access it:
@@ -46,7 +57,7 @@ Test Step → Test Case → Test Project → Account (Customer)
 
 ## Assertions — How Validation Works
 
-Rules that define what a valid XML message looks like.
+An assertion is a specific yes/no rule that verifies one expected condition during a test. If it fails, the test fails. Assertions are the smallest unit of validation — granular by design so failures are pinpointed, not vague.
 
 **By source:**
 - System assertions — built in by Surescripts, always present, cannot be removed
@@ -57,6 +68,26 @@ Rules that define what a valid XML message looks like.
 - **Warning** — message continues, warning flagged, customer informed but not blocked
 
 **Mandatory vs Optional:** Some always checked, some can be toggled by admin.
+
+**What assertions validate:**
+- Required fields are present
+- Field values match expected values
+- Message structure is correct
+- Error handling behaves as expected
+- Correct response type was returned
+- Business rules were followed for that scenario
+
+**How assertions roll up to certification:**
+```
+Assertion fails → Test Step fails
+Test Step fails → Test Case fails
+Any required Test Case fails → Certification is not complete
+All required assertions pass → Certification can proceed
+```
+
+A system can be "mostly working" — message sent, workflow complete — and still fail certification because one required field was missing or one value was formatted incorrectly. There is no partial credit at the certification level.
+
+**Passport analogy:** Passport valid ✅ / Ticket valid ✅ / Name matches ❌ → you don't board the flight.
 
 ## Message ID and Relate To
 
@@ -91,6 +122,52 @@ Auto-generates responses to RTPB queries based on:
 - **Last name + ZIP code** — if last name and ZIP match, auto-respond
 
 Used to simulate PBM responses without a real PBM system being live.
+
+## Who Gets Certified
+
+Certification is granted to the **customer's application/system**, not to a person or user.
+
+It is associated with:
+- Customer Account
+- Application Name + Version
+- Certified Product(s) (e.g. ePrescribing, Eligibility)
+- Message Types
+- Date of certification
+
+Changing the application version may require re-certification. Adding new products or message types requires additional certification.
+
+Simple rule: *"We don't certify people. We certify customer systems for specific products and message types."*
+
+## What "Messages" Mean in Certification Tester
+
+Messages are the actual healthcare transactions that a customer system sends or receives and that the tool validates during certification. They are the core thing being tested.
+
+Types: NewRx, CancelRx, Renewal Request, Eligibility query, RTPB query, EPA request — etc.
+
+## End-to-End: One Message Through a Test Step
+
+Using NewRx as the example (same pattern applies to all message types):
+
+1. **Test step is activated** — external user opens step in Certification Tester, reads instructions, sees what message to send
+2. **Customer system sends the message** — real outbound XML from the customer system into the Surescripts test environment; NOT typed into the UI
+3. **Message is captured** — tool detects the message, displays it; user confirms it to associate with the step
+4. **Assertions execute** — each assertion runs independently against the message:
+   - Was message type correct?
+   - Were required fields present?
+   - Were content/values valid?
+   - Were message IDs and references correct?
+5. **Step result calculated** — ALL required assertions must pass; one failure = step fails, even if everything else passed
+6. **Results roll up** — step → test case → project → certification status
+7. **Fix and re-execute** — customer fixes their system, sends corrected message, assertions run again
+
+Real-time feedback — no waiting for a Surescripts person to review manually.
+
+## Two Main UI Areas (Navigation Model)
+
+| UI Area | Who Uses It | Purpose |
+|---|---|---|
+| **Certification Tester** | External (customer) users | Execute certification tests |
+| **Test Manager** | Internal (Surescripts) users | Build, manage, and approve certification content |
 
 ## Copy Feature
 
