@@ -371,8 +371,11 @@
       <a href="#user-roles" class="ct-nav-item" data-section="user-roles">
         <span class="ct-nav-num">9</span>User Roles
       </a>
+      <a href="#certification-journey" class="ct-nav-item" data-section="certification-journey">
+        <span class="ct-nav-num">10</span>Certification Journey
+      </a>
       <a href="#glossary" class="ct-nav-item" data-section="glossary">
-        <span class="ct-nav-num">10</span>Glossary
+        <span class="ct-nav-num">11</span>Glossary
       </a>
     </aside>
 
@@ -1098,11 +1101,340 @@
       </section>
 
       <!-- ─────────────────────────────────────────── -->
-      <!-- 10. Glossary -->
+      <!-- 10. Certification Journey -->
+      <!-- ─────────────────────────────────────────── -->
+      <section id="certification-journey" class="ct-section">
+        <div class="ct-section-header">
+          <div class="ct-section-num">10</div>
+          <div>
+            <div class="ct-section-title">The Certification Journey</div>
+            <div class="ct-section-subtitle">End-to-end flow from the customer tester's point of view — login to certified</div>
+          </div>
+        </div>
+
+        <!-- Grounding example -->
+        <div class="callout" style="margin-bottom:16px">
+          <div class="callout-title">Real-world example</div>
+          <div class="callout-body">
+            <strong>Role:</strong> External customer tester at an EHR company &nbsp;·&nbsp;
+            <strong>Goal:</strong> Get e-Prescribing certified &nbsp;·&nbsp;
+            <strong>Test:</strong> QA eRX / Prescriber / Fernandez / Amoxicillin — covering NewRx, Change, Refill, and Cancel transactions
+          </div>
+        </div>
+
+        <!-- Key rule -->
+        <div class="inline-note amber" style="margin-bottom:24px;font-size:14px">
+          <strong>Core rule:</strong> The customer tester <strong>never creates tests</strong>. Their only job is to:
+          &nbsp;<strong>Execute</strong> &nbsp;·&nbsp; <strong>Attest</strong> &nbsp;·&nbsp; <strong>Submit</strong> &nbsp;·&nbsp; <strong>Respond to review feedback</strong>
+        </div>
+
+        <!-- 4 Phase overview strip -->
+        <h3 style="font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:12px">The 4 phases at a glance</h3>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px">
+          <div class="card" style="padding:16px;border-top:3px solid var(--blue-600)">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--blue-600);margin-bottom:6px">Phase 1</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Access &amp; Readiness</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Log in, check dashboard, complete Test Data Setup if required</div>
+          </div>
+          <div class="card" style="padding:16px;border-top:3px solid var(--green-700)">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--green-700);margin-bottom:6px">Phase 2</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Test Execution</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Execute test cases step by step, attest results, mark pass or fail</div>
+          </div>
+          <div class="card" style="padding:16px;border-top:3px solid var(--amber-500)">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--amber-700);margin-bottom:6px">Phase 3</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Submission &amp; Review</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Submit the project for review — project locks while a Surescripts reviewer evaluates</div>
+          </div>
+          <div class="card" style="padding:16px;border-top:3px solid var(--brand-500)">
+            <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--brand-600);margin-bottom:6px">Phase 4</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:4px">Outcome</div>
+            <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Approved → certified. Changes required → fix and resubmit</div>
+          </div>
+        </div>
+
+        <!-- Flow diagram -->
+        <div style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <h3 style="font-size:14px;font-weight:700;color:var(--text-primary)">Full flow diagram</h3>
+            <button onclick="toggleDiagram()" id="diagramToggleBtn" style="font-size:12px;font-weight:600;color:var(--brand-500);background:var(--brand-100);border:1px solid var(--brand-300);border-radius:var(--radius-md);padding:5px 12px;cursor:pointer;display:flex;align-items:center;gap:6px">
+              <i class="ti ti-eye" id="diagramToggleIcon" style="font-size:14px"></i> Show diagram
+            </button>
+          </div>
+          <div id="diagramWrap" style="display:none">
+            <div class="card" style="padding:16px;text-align:center">
+              <img src="./swimlane.png" alt="Surescripts Certification Journey — End User Flow" style="max-width:100%;height:auto;border-radius:var(--radius-md)" />
+              <div style="font-size:11px;color:var(--text-muted);margin-top:10px">Surescripts Certification Journey — End User Flow &nbsp;·&nbsp; 4 phases &nbsp;·&nbsp; 28 steps</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 1 -->
+        <div style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="background:var(--blue-100);color:var(--blue-600);width:28px;height:28px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0">1</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--text-primary)">Phase 1 — Access &amp; Readiness</h3>
+          </div>
+          <div class="steps-list">
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">1</div></div>
+              <div class="step-content">
+                <div class="step-title">Log in to Certification Tool</div>
+                <div class="step-desc">Customer accesses Workbench using their account credentials.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">2</div></div>
+              <div class="step-content">
+                <div class="step-title">Certification Dashboard loads</div>
+                <div class="step-desc">All assigned test projects are visible. The user sees their progress at a glance — no access to Test Manager or other accounts.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">3</div></div>
+              <div class="step-content">
+                <div class="step-title"><i class="ti ti-diamond" style="font-size:13px;color:var(--amber-500)"></i> Decision: Test Data Setup required?</div>
+                <div class="step-desc">Some certification runs require pre-test data to be submitted before execution can begin. If not required, skip to step 6.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">4</div></div>
+              <div class="step-content">
+                <div class="step-title">Complete Test Data Setup</div>
+                <div class="step-desc">User fills and submits the required forms. This data is reviewed by Surescripts before the project can proceed.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">5</div></div>
+              <div class="step-content">
+                <div class="step-title"><i class="ti ti-diamond" style="font-size:13px;color:var(--amber-500)"></i> Decision: Data approved?</div>
+                <div class="step-desc">If rejected, user revises and resubmits. Loop continues until approved.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--blue-100);border-color:var(--blue-300);color:var(--blue-600)">6</div></div>
+              <div class="step-content">
+                <div class="step-title">Return to Dashboard — ready to execute</div>
+                <div class="step-desc">All setup complete. The user can now open their project and begin test execution.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="background:var(--green-50);color:var(--green-700);width:28px;height:28px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0">2</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--text-primary)">Phase 2 — Test Execution</h3>
+          </div>
+          <div class="steps-list">
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">7</div></div>
+              <div class="step-content">
+                <div class="step-title">Open Certification Project</div>
+                <div class="step-desc">User selects the assigned project from the dashboard to see all test cases inside it.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">8</div></div>
+              <div class="step-content">
+                <div class="step-title">Select a Test Case</div>
+                <div class="step-desc">e.g. "Fernandez / Amoxicillin — NewRx". Each test case contains multiple test steps to be executed in order.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">9</div></div>
+              <div class="step-content">
+                <div class="step-title"><i class="ti ti-diamond" style="font-size:13px;color:var(--amber-500)"></i> Decision: Status = "Update Requires Restart"?</div>
+                <div class="step-desc">If the test case content was updated after execution began, the tool flags it. User must restart before continuing.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">10</div></div>
+              <div class="step-content">
+                <div class="step-title">Restart Test Case (if required)</div>
+                <div class="step-desc">Resets execution state. User returns to step 8 and selects the case again to begin fresh.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">11</div></div>
+              <div class="step-content">
+                <div class="step-title">Start Test Execution</div>
+                <div class="step-desc">User initiates execution for the test case. Each step is now presented in sequence.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">12</div></div>
+              <div class="step-content">
+                <div class="step-title">Read Test Step Instructions</div>
+                <div class="step-desc">Instructions written by the Test Manager admin tell the user exactly what message to send (e.g. "Send a NewRx for patient Fernandez with drug Amoxicillin 500mg").</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">13</div></div>
+              <div class="step-content">
+                <div class="step-title">Perform action in own system</div>
+                <div class="step-desc">User triggers the transaction from their <strong>own EHR or pharmacy system</strong> — not typed into the tool. The tool receives it on the other end and validates it.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">14</div></div>
+              <div class="step-content">
+                <div class="step-title"><i class="ti ti-diamond" style="font-size:13px;color:var(--amber-500)"></i> Decision: System assertion auto-passes?</div>
+                <div class="step-desc">All automated validation rules run instantly. If they all pass, the system marks the step as auto-passed and the user moves to attestation. If any fail, validation errors are shown.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">15</div></div>
+              <div class="step-content">
+                <div class="step-title">Review validation errors (if auto-pass fails)</div>
+                <div class="step-desc">Tool shows exactly which assertion failed and why — e.g. "Required field DEA number missing". User fixes their system and resends.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">16</div></div>
+              <div class="step-content">
+                <div class="step-title">User Attestation</div>
+                <div class="step-desc">User manually confirms via checkbox that they have reviewed the result and accept it as accurate.</div>
+                <!-- Attestation explainer -->
+                <div style="margin-top:12px;background:var(--brand-100);border:1px solid var(--brand-300);border-radius:var(--radius-md);padding:14px 16px">
+                  <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.7px;color:var(--brand-600);margin-bottom:10px">What is User Attestation?</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div style="background:white;border-radius:var(--radius-sm);padding:12px;border:1px solid var(--brand-200)">
+                      <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">System auto-pass</div>
+                      <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Technical checks passed automatically. All assertions validated by the tool.</div>
+                    </div>
+                    <div style="background:white;border-radius:var(--radius-sm);padding:12px;border:1px solid var(--brand-200)">
+                      <div style="font-size:11px;font-weight:700;color:var(--brand-600);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.5px">User Attestation</div>
+                      <div style="font-size:12px;color:var(--text-secondary);line-height:1.5">Human sign-off. The user confirms they've reviewed the result and accepts responsibility for its accuracy. Required for compliance and audit.</div>
+                    </div>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-secondary);margin-top:10px;line-height:1.5">Even when a step auto-passes, attestation is still required. A technical pass alone is not sufficient for certification — a human must acknowledge the outcome.</div>
+                </div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">17</div></div>
+              <div class="step-content">
+                <div class="step-title"><i class="ti ti-diamond" style="font-size:13px;color:var(--amber-500)"></i> Decision: Did the step pass?</div>
+                <div class="step-desc">If yes → mark step passed and move on. If no → add failure comments and evidence before proceeding.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">18</div></div>
+              <div class="step-content">
+                <div class="step-title">Add failure comments &amp; evidence</div>
+                <div class="step-desc">Required when a step fails. User documents what went wrong and attaches any supporting files. Reviewer will use this during evaluation.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">19</div></div>
+              <div class="step-content">
+                <div class="step-title">Mark Step Passed</div>
+                <div class="step-desc">Step is complete. Result rolls up: step → test case → project → certification status.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--green-50);border-color:var(--green-200);color:var(--green-700)">20</div></div>
+              <div class="step-content">
+                <div class="step-title">Repeat for all remaining steps</div>
+                <div class="step-desc">Steps 12–19 repeat for each test step in the case. Once all steps are done, the test case execution is complete.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div style="margin-bottom:32px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="background:var(--amber-50);color:var(--amber-700);width:28px;height:28px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0">3</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--text-primary)">Phase 3 — Submission &amp; Review</h3>
+          </div>
+          <div class="steps-list">
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-700)">21</div></div>
+              <div class="step-content">
+                <div class="step-title">Complete Test Case Execution</div>
+                <div class="step-desc">All steps in the test case are done. User repeats steps 8–20 for each remaining test case in the project.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-700)">22</div></div>
+              <div class="step-content">
+                <div class="step-title">Download Execution Report (optional)</div>
+                <div class="step-desc">User can download a full report of all test case results before submitting — useful for internal review or records.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-connector"></div>
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-700)">23</div></div>
+              <div class="step-content">
+                <div class="step-title">Submit Project for Review</div>
+                <div class="step-desc">User submits the entire project. <strong>The project is now locked</strong> — no further edits possible until the reviewer returns a decision.</div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num-wrap"><div class="step-num" style="background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-700)">24</div></div>
+              <div class="step-content">
+                <div class="step-title">Reviewer evaluates results</div>
+                <div class="step-desc">A Surescripts Test Reviewer inspects all execution results, comments, and evidence. They will either approve or request changes.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div style="margin-bottom:8px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+            <div style="background:var(--brand-100);color:var(--brand-600);width:28px;height:28px;border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0">4</div>
+            <h3 style="font-size:15px;font-weight:700;color:var(--text-primary)">Phase 4 — Outcome</h3>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="card" style="padding:20px;border-left:4px solid var(--green-700)">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <i class="ti ti-circle-check" style="font-size:20px;color:var(--green-700)"></i>
+                <div style="font-size:15px;font-weight:700;color:var(--green-700)">Approved</div>
+              </div>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">Certification is complete. The customer's application is now certified for the tested product and message types. They can connect to the production environment.</div>
+            </div>
+            <div class="card" style="padding:20px;border-left:4px solid var(--amber-500)">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <i class="ti ti-refresh" style="font-size:20px;color:var(--amber-600)"></i>
+                <div style="font-size:15px;font-weight:700;color:var(--amber-700)">Changes Required</div>
+              </div>
+              <div style="font-size:13px;color:var(--text-secondary);line-height:1.5">Project is unlocked. User fixes the flagged issues, re-executes the failed test cases, and resubmits from step 8. The cycle repeats until approved.</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ─────────────────────────────────────────── -->
+      <!-- 11. Glossary -->
       <!-- ─────────────────────────────────────────── -->
       <section id="glossary" class="ct-section">
         <div class="ct-section-header">
-          <div class="ct-section-num">10</div>
+          <div class="ct-section-num">11</div>
           <div>
             <div class="ct-section-title">Glossary</div>
             <div class="ct-section-subtitle">All domain-specific terms — reference this before meetings, reviews, or walkthroughs</div>
@@ -1144,6 +1476,11 @@
               <tr><td><strong>EMETS</strong></td><td>The vendor organisation the design team belongs to</td></tr>
               <tr><td><strong>CMS</strong></td><td>Centers for Medicare &amp; Medicaid Services — mandates healthcare standards compliance</td></tr>
               <tr><td><strong>ONC</strong></td><td>Office of the National Coordinator for Health IT — mandates interoperability standards</td></tr>
+              <tr><td><strong>User Attestation</strong></td><td>Manual sign-off by the customer tester confirming they've reviewed a test result and accept responsibility for its accuracy — required even when the system auto-passes. A compliance and audit requirement, separate from system assertions.</td></tr>
+              <tr><td><strong>Test Data Setup</strong></td><td>A pre-execution step where the customer submits required data forms before test execution can begin. Must be approved by Surescripts before the project proceeds.</td></tr>
+              <tr><td><strong>Update Requires Restart</strong></td><td>A test case status indicating the content was updated after execution began. The user must restart the test case before continuing.</td></tr>
+              <tr><td><strong>Execution Report</strong></td><td>A downloadable report of all test case results, available after execution is complete. Optional — used for internal records before submission.</td></tr>
+              <tr><td><strong>Project Submission</strong></td><td>The customer action that locks the project and sends it to a Surescripts reviewer for approval or rejection. No edits are possible while the project is locked.</td></tr>
             </tbody>
           </table>
         </div>
@@ -1153,6 +1490,17 @@
   </div>
 
   <script>
+    function toggleDiagram() {
+      const wrap = document.getElementById('diagramWrap');
+      const btn  = document.getElementById('diagramToggleBtn');
+      const icon = document.getElementById('diagramToggleIcon');
+      const visible = wrap.style.display !== 'none';
+      wrap.style.display = visible ? 'none' : 'block';
+      btn.innerHTML = visible
+        ? '<i class="ti ti-eye" style="font-size:14px"></i> Show diagram'
+        : '<i class="ti ti-eye-off" style="font-size:14px"></i> Hide diagram';
+    }
+
     // Active nav on scroll
     const sections = document.querySelectorAll('.ct-section');
     const navItems = document.querySelectorAll('.ct-nav-item');

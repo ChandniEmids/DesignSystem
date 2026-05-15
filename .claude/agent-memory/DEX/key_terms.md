@@ -49,3 +49,8 @@ type: project
 | RWE | Real-World Evidence — life sciences use case for NCPDP data |
 | CMS | Centers for Medicare & Medicaid Services — mandates healthcare standards compliance |
 | ONC | Office of the National Coordinator for Health IT — mandates interoperability standards |
+| User Attestation | Manual sign-off by the customer tester confirming they've reviewed a test result — required even when the system auto-passes. Compliance and audit requirement. Distinct from system assertions (automatic) |
+| Test Data Setup | Pre-execution step where customer fills and submits forms to configure test data — must be approved before test execution begins |
+| Update Requires Restart | Test case status indicating the test must be restarted before execution — triggered when test content was updated after execution began |
+| Execution Report | Downloadable report of a completed test case execution — optional, available after test case is complete |
+| Project Submission | Customer action that locks the project and sends it to a Surescripts reviewer for approval or rejection |

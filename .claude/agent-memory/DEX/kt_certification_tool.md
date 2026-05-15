@@ -172,3 +172,94 @@ Real-time feedback — no waiting for a Surescripts person to review manually.
 ## Copy Feature
 
 Admins can copy an existing test step and modify it — useful for creating many similar steps differing only in one or two fields.
+
+---
+
+## End-to-End Certification Journey (Customer Tester POV)
+
+The customer tester **never creates tests**. Their job is to: execute, attest, submit, and respond to review feedback.
+
+### Visual Reference
+Full end-user flow diagram (28 steps, 4 phases) is saved at:
+`Designer-Assistant/swimlane.png`
+It is embedded in `ct-basics.html` Section 11 with a show/hide toggle.
+
+### Grounding Example
+- **Role:** External customer tester (EHR / Prescriber system)
+- **Goal:** Run all assigned test cases, submit for review, get approved
+- **Example:** QA eRX / Prescriber / Fernandez / Amoxicillin (NewRx, Change, Refill, Cancel)
+
+---
+
+### Phase 1 — Access & Readiness (Steps 1–6)
+
+| Step | Action |
+|---|---|
+| 1 | Customer logs in to Certification Tool |
+| 2 | Certification Dashboard loads — assigned projects visible |
+| 3 | Decision: Is Test Data Setup required? |
+| 4 | If yes → fill and submit Test Data Setup forms |
+| 5 | Decision: Data approved? If no → revise and resubmit |
+| 6 | If approved (or no setup needed) → return to Dashboard |
+
+---
+
+### Phase 2 — Test Execution (Steps 7–21) — Core Work
+
+| Step | Action |
+|---|---|
+| 7 | Open Certification Project |
+| 8 | Select a Test Case |
+| 9 | Decision: Is test case status = "Update Requires Restart"? |
+| 10 | If yes → Restart Test Case, then return to step 8 |
+| 11 | Start Test Execution |
+| 12 | Read Test Step Instructions |
+| 13 | Perform action in own system (send NewRx, Change, Refill, Cancel, etc.) |
+| 14 | Decision: Does system assertion auto-pass? |
+| 15 | If no → Review validation errors |
+| 16 | **User Attestation** — checkbox / manual confirmation (see note below) |
+| 17 | Decision: Did the step pass? |
+| 18 | If no → Add failure comments and evidence |
+| 19 | If yes → Mark Step Passed |
+| 20 | Move to Next Test Step |
+| 21 | Decision: More steps? If yes → return to step 12 |
+
+**User Attestation (Step 16):**
+Even when the system auto-passes a test (all automated validations satisfied), the tool may still require the user to manually confirm they have:
+- Reviewed the auto-pass result
+- Confirmed the result is accurate and acceptable
+- Accepted responsibility for the outcome
+
+> System auto-pass = technical checks passed automatically
+> User Attestation = human acknowledgment and sign-off (compliance + audit requirement)
+
+This is distinct from assertions: assertions are system-level validation rules; attestation is a human compliance checkpoint.
+
+---
+
+### Phase 3 — Submission & Review (Steps 22–26)
+
+| Step | Action |
+|---|---|
+| 22 | Complete Test Case Execution |
+| 23 | Download Execution Report (optional) |
+| 24 | Decision: More test cases in project? If yes → return to step 8 |
+| 25 | Submit Project for Review (project is now locked) |
+| 26 | Reviewer Decision |
+
+---
+
+### Phase 4 — Outcome (Steps 27–28)
+
+| Step | Outcome |
+|---|---|
+| 27 | Approved → Certification Complete |
+| 28 | Changes Required → Project unlocked → user re-executes failed tests → resubmits from step 8 |
+
+---
+
+### Legend (from flow diagram)
+- **Blue boxes** — System actions (performed by the Certification Tool: validations, status updates, locking projects)
+- **Green boxes** — User actions (performed by the customer tester: execute steps, attest, submit)
+- **Orange/yellow diamonds** — Decision points (Yes/No conditions)
+- **Purple** — Key outcomes (Certification Complete or Changes Required)
